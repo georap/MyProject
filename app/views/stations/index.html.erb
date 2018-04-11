@@ -1,0 +1,9 @@
+<h1>Station Items</h1>
+
+<% @station_items.each do|station_item| %>
+	<p><%= station_item.name %></p>
+	<p><%= station_item.address %></p>
+	<p><%= station_item.latitude %></p>
+	<p><%= station_item.longitude %></p>
+	<hr>
+<% end %>
