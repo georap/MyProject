@@ -1,0 +1,42 @@
+
+<h2><%=@station_items.find_by_name("Σπυρίδων Ζαφειρόπουλος του Αλεξάνδρου").address%></h2>
+
+<h1>Pages#home</h1>
+<p>Find me in app/views/pages/home.html.erb</p>
+<p>IP=<%=request.location %></p>
+<!DOCTYPE html>
+<html>
+  <head>
+    <style>
+      #map {
+        height: 400px;
+        width: 100%;
+       }
+    </style>
+  </head>
+  <body>
+    <h3>My Google Maps Demo</h3>
+    <div id="map"></div>
+    <script>
+
+      function initMap() {
+      	var array=<%= @addresses.inspect.html_safe %>
+      	console.log(array);
+ 		var latitude1=<%=@station_items.find_by_name("Σπυρίδων Ζαφειρόπουλος του Αλεξάνδρου").latitude%>;
+ 		var longitude2=<%=@station_items.find_by_name("Σπυρίδων Ζαφειρόπουλος του Αλεξάνδρου").longitude%>;
+        var uluru = {lat: latitude1, lng: longitude2};
+        var map = new google.maps.Map(document.getElementById('map'), {
+          zoom: 10,
+          center: uluru
+        });
+        var marker = new google.maps.Marker({
+          position: uluru,
+          map: map
+        });
+      }
+    </script>
+    <script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBTPNZMICiZQnbeVX5k51gzdfhWFnzlI-s&callback=initMap">
+    </script>
+  </body>
+</html>
