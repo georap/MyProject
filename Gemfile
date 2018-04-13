@@ -52,3 +52,5 @@ gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 gem 'rubyXL', '~> 3.3', '>= 3.3.21'
 gem 'redis', '~> 3.3', '>= 3.3.3'
 gem 'geocoder'
+gem 'json_pure', '~> 2.1'
+gem 'freegeoip-ruby'

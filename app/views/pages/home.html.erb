@@ -1,0 +1,89 @@
+<h1>Pages#home</h1>
+<p>Find me in app/views/pages/home.html.erb</p>
+
+<!DOCTYPE html>
+<html>
+<a href="link" class='dynamicLink'>link</a>
+  <head>
+    <style>
+      #map {
+        height: 400px;
+        width: 100%;
+       }
+    </style>
+  </head>
+  <body>
+    <h3>My Google Maps Demo</h3>
+    <div id="map"></div>
+    <script>
+
+      function initMap() {
+
+      	var locations = <%=@addresses%>;
+      	var center1 = <%=@ip.latitude%>;
+      	var center2 = <%=@ip.longitude%>;
+
+        var userPos = {lat: center1, lng: center2};
+        var map = new google.maps.Map(document.getElementById('map'), {
+          zoom: 15,
+          center: userPos
+        });
+		var iconBase = 'https://maps.google.com/mapfiles/kml/shapes/';
+		var markerUser = new google.maps.Marker({
+			position: userPos,
+		    map: map,
+		    icon: iconBase + 'arrow.png'
+		});
+		//Initialize the Stations from database
+        var marker, i;
+        for (i = 0; i < locations.length; i++) { 
+	    	var latit=locations[i].latitude;
+	    	var long=locations[i].longitude;
+	    	var tmp={lat: latit, lng: long};
+	    	var message=locations[i].name.toString()+" \n"+locations[i].address.toString();
+	    	//PUT HERE THE REFERENCE OF THE REVIEW-Station TABLE with the specific id
+	    	var id=locations[i].id;
+            var result=message.link(href="http://localhost:3000/stations/"+id);
+	      	marker = new google.maps.Marker({
+		        position: new google.maps.LatLng(latit, long),
+		        map: map
+	      	});
+	      	messageListener(marker,result);
+	    }
+	    // This event listener calls addMarker() when the map is clicked.
+	    var newMarker,posMarker;
+	    google.maps.event.addListener(map, 'dblclick', function(event) {
+	    	posMarker=event.latLng+"";
+          	newMarker= new google.maps.Marker({
+          	position: event.latLng,
+          	map: map
+
+        });
+          
+          //MAKE NEW STATION with REFERENCE posMarker has the lat and long
+          
+        var msg="Νέος Σταθμός Υγρών Καυσίμων;";
+        var result=msg.link("http://localhost:3000/stations/new?latlng="+posMarker);
+        messageListener(newMarker,result);
+
+        });
+        
+
+      }
+
+    	function messageListener(marker,message){
+      		var infowindow = new google.maps.InfoWindow({
+		    content: message
+		  	});
+
+		  	marker.addListener('click', function() {
+		    infowindow.open(marker.get('map'), marker);
+		  	});
+      	}
+
+    </script>
+    <script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBTPNZMICiZQnbeVX5k51gzdfhWFnzlI-s&callback=initMap">
+    </script>
+  </body>
+</html>
