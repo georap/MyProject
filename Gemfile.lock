@@ -54,6 +54,7 @@ GEM
     erubi (1.7.1)
     execjs (2.7.0)
     ffi (1.9.23)
+    freegeoip-ruby (0.1.4)
     geocoder (1.4.7)
     globalid (0.4.1)
       activesupport (>= 4.2.0)
@@ -166,6 +167,7 @@ PLATFORMS
 DEPENDENCIES
   byebug
   coffee-rails (~> 4.2)
+  freegeoip-ruby
   geocoder
   jbuilder (~> 2.5)
   json_pure (~> 2.1)
