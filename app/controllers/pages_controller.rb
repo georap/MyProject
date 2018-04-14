@@ -14,7 +14,7 @@ class PagesController < ApplicationController
   		end
   	end
   	@addresses=@addresses.to_json.html_safe
-  	puts @addresses
+
   end
 
   def UserProfile
