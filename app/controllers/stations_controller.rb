@@ -14,7 +14,7 @@ class StationsController < ApplicationController
 		@newLatLong=string.split(',')
 		@newLatLong[0].to_f
 		@newLatLong[1].to_f
-		puts "PARAMETERES: #{@newLatLong}"
+
 	end
 
 	def create
