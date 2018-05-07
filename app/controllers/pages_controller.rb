@@ -1,14 +1,7 @@
 class PagesController < ApplicationController
 	#IP panepisthmiou 195.130.121.45 ----> request.location
-
 	require 'freegeoip'
   def home
-    @user_auth=false
-    if (current_user.is_a?(GuestUser))
-      @user_auth=false
-    else
-      @user_auth=true
-    end
   	@ip=Freegeoip.get('195.130.121.45')
   	@addresses=Array.new
   	@station_items=Station.all
