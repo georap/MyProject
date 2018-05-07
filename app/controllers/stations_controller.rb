@@ -5,7 +5,9 @@ class StationsController < ApplicationController
 	end
 
 	def show
-		@station_item=Station.find(params[:id])
+		@station_item=Station.includes(:reviews).find(params[:id])
+		@review=Review.new
+
 	end
 
 	def new
