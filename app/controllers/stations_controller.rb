@@ -7,6 +7,7 @@ class StationsController < ApplicationController
 	def show
 		@station_item=Station.includes(:reviews).find(params[:id])
 		@review=Review.new
+
 	end
 
 	def new
@@ -22,7 +23,7 @@ class StationsController < ApplicationController
 		@station_item=Station.new(station_params)
 		respond_to do |format|
 			if @station_item.save
-				format.html{redirect_to root_path, notice: 'Your Station is now Live.'}
+				format.html{redirect_to stations_path, notice: 'Your Station is now Live.'}
 			else
 				format.html{render :new}
 			end
