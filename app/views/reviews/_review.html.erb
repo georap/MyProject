@@ -10,7 +10,7 @@
             <%= review.content %>
           </div>
 
-          <div class="comment-attribution">
+          <div class="review-attribution">
             Review posted by <span class="review-name"><%= review.user.first_name %></span> <%= distance_of_time_in_words(review.created_at, Time.now) %> ago
           </div>
         </div>
