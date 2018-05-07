@@ -1,5 +1,18 @@
-<h1><%= @station_item.name %></h1>
+<div class="col-sm-8 blog-main">
+	<h1><%= @station_item.name %></h1>
 
-<em>Address:  <%= @station_item.address %></em>
-<p>Latitde:  <%= @station_item.latitude %></p>
-<p>Longitude:  <%= @station_item.longitude %></p>
+	<em>Address:  <%= @station_item.address %></em>
+	<p>Latitde:  <%= @station_item.latitude %></p>
+	<p>Longitude:  <%= @station_item.longitude %></p>
+
+
+
+	<!-- reviews form-->
+	<%= render 'reviews/review_form' %>
+
+
+
+ 	<div id="reviews" data-station-id="<%= @station_item.id%>">
+		<%=render @station_item.reviews.order(created_at: :desc) %>
+	</div>
+</div>

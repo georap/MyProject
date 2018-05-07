@@ -3,13 +3,10 @@
 <%= form_for(@station_item) do |f| %>
 	<div class="field">
 	<%=f.label :name%>
-	<%= f.text_field :name%>
+	<%= f.text_field :name,:required => true%>
 	</div>
 
-	<div class="field">
-	<%=f.label :address%>
-	<%= f.text_field :address%>
-	</div>
+	
 
 	<div class="field">
 	<%=f.label :latitude%>
