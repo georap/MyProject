@@ -7,6 +7,9 @@ class StationsController < ApplicationController
 	def show
 		@station_item=Station.includes(:reviews).find(params[:id])
 		@review=Review.new
+		@flag=current_user.id
+		#print "the reviews for current_user #{@station_item.reviews.where(user_id: 4).inspect()}"
+
 	end
 
 	def new

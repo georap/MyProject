@@ -9,7 +9,9 @@ Rails.application.routes.draw do
 
   get 'pages/contact'
 
-  resources :stations
+  resources :stations do
+  	resources :reviews
+  end
 
   mount ActionCable.server => '/cable'
   root to: 'pages#home'

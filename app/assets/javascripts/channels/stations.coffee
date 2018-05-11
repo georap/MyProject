@@ -1,5 +1,6 @@
 jQuery(document).on 'turbolinks:load', ->
   reviews = $('#reviews')
+  aboveCom=$('#above')
   if reviews.length > 0
     App.global_chat = App.cable.subscriptions.create {
       channel: "StationsChannel"
@@ -8,7 +9,7 @@ jQuery(document).on 'turbolinks:load', ->
     connected: ->
     disconnected: ->
     received: (data) ->
-      reviews.append data['review']
+      aboveCom.append data['review']
     send_review: (review, station_id) ->
       @perform 'send_review', review: review, station_id: station_id
   $('#new_review').submit (e) ->

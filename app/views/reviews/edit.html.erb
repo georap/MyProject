@@ -1,0 +1,13 @@
+<h1> Edit Review </h1>
+
+<%= form_for([@review.station, @review]) do |f| %>
+	<div class="field">
+		<%=f.label :content%>
+		<%= f.text_field :content%>
+	</div>
+
+	<div class="actions">
+		<%=f.submit %>
+	</div>
+
+<%end %>
