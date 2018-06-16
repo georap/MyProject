@@ -45,6 +45,7 @@
   	    	//PUT HERE THE REFERENCE OF THE REVIEW-Station TABLE with the specific id
   	    	var id=locations[i].id;
               var result=message.link(href="http://localhost:3000/stations/"+id);
+              //result=result+" "+"Did you fuel here?".link(href="http://localhost:3000/about");
   	      	marker = new google.maps.Marker({
   		        position: new google.maps.LatLng(latit, long),
   		        map: map

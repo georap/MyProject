@@ -1,5 +1,7 @@
 class Station < ApplicationRecord
 	has_many :reviews, dependent: :destroy
+	has_many :vehicles, dependent: :destroy
+	
 	if(:address != nil)
 		geocoded_by :address
 		after_validation :geocode, if: :address_changed?

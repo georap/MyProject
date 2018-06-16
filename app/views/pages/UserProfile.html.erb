@@ -1,2 +1,18 @@
-<h1>Pages#UserProfile</h1>
-<p>Find me in app/views/pages/UserProfile.html.erb</p>
+<h1>UserProfile</h1>
+
+<%=link_to "Vehicles", vehicles_path%>
+<p>Τα οχήματα μου και οι καταχωρήσεις μου</p>
+
+<div>
+<% @vehicle.each do|vehicle| %>
+	NAME<p><%= vehicle.name %></p>
+	KM<p><%= vehicle.kilometers %></p>
+	LITERS<p><%= vehicle.liters %></p>
+	DATE<p><%= vehicle.fuel_date.strftime("%d/%m/%Y") %></p>
+	FUEL TYPE<p><%= vehicle.fuel_type %></p>
+	LOCATION<p><%= vehicle.area %></p>
+	<%= link_to "Edit", edit_vehicle_path(vehicle.id)%>
+	<%= link_to "Delete", vehicle, method: :delete, data: { confirm: 'Are you sure?' }%>
+	<hr>
+<% end %>
+</div>

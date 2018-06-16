@@ -9,7 +9,7 @@ jQuery(document).on 'turbolinks:load', ->
     connected: ->
     disconnected: ->
     received: (data) ->
-      aboveCom.append data['review']
+      reviews.prepend data['review']
     send_review: (review, station_id) ->
       @perform 'send_review', review: review, station_id: station_id
   $('#new_review').submit (e) ->

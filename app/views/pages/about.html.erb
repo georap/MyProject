@@ -1,2 +1,17 @@
 <h1>Pages#about</h1>
 <p>Find me in app/views/pages/about.html.erb</p>
+
+
+
+
+
+<% @vehicle.each do|vehicle| %>
+	<div class="field">
+	<%=vehicle.label :fuel_type%>
+	<%= vehicle.collection_select :name%>
+	</div>
+
+	<div class="actions">
+	<%=vehicle.submit %>
+	</div>
+<%end%>

@@ -4,8 +4,9 @@
 	<em>Address:  <%= @station_item.address %></em>
 	<p>Latitde:  <%= @station_item.latitude %></p>
 	<p>Longitude:  <%= @station_item.longitude %></p>
-
-	
+	<% unless current_user.is_a? GuestUser %>
+		<%= link_to "Bάλατε Καύσιμα σε αυτόν τον σταθμό;", new_vehicle_path(:my_station => @station_item,:location => @station_item.address) %>
+	<% end%>
 	<!-- reviews form-->
 	<%= render 'reviews/review_form' %>
 

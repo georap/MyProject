@@ -1,0 +1,27 @@
+
+<div>
+<%# if(@katanalwsh_mhna!=0.0) %>
+	Katanalwsh mhna
+	<%#=@katanalwsh_mhna%>
+<%#end%>
+<%# if(@katanalwsh_xronou!=0.0) %>
+	katanalwsh xronou
+	<%#=@katanalwsh_xronou%>
+	<div>
+		Analutika gia ka8e mhna
+		<%#for i in 0..11%>
+
+			<%#if @lt_per_km_monthly[i]!=0%>
+				<div>
+					<%#="Katanalwsh gia ton #{i+1}o mhna #{@lt_per_km_monthly[i]}" %>
+				</div>
+			<%#else%>
+				<div>
+					<%#="Den eparkoun ta dedomena gia upologismo ths Katanalwshs gia ton #{i+1}o mhna " %>
+				</div>
+			<%#end%>
+
+		<%#end%>
+	</div>
+<%#end%>
+</div>

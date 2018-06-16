@@ -1,0 +1,40 @@
+<h1> Καταχώρηση εγγραφής καυσίμου </h1>
+<%= form_for(@vehicle) do |f| %>
+	<div class="field">
+	<%=f.label :name%>
+	<%= f.text_field :name,:required => true%>
+	</div>
+
+	<div class="field">
+	<%=f.label :kilometers%>
+	<%= f.text_field :kilometers,:required => true%>
+	</div>
+
+	<div class="field">
+	<%=f.label :liters%>
+	<%= f.text_field :liters,:required => true%>
+	</div>
+
+	<div class="field">
+	<%=f.label :fuel_date%>
+	ex dd/mm/yyyy
+	<%= f.text_field :fuel_date,:required => true%>
+	</div>
+
+	<div class="field">
+	<%=f.label :fuel_type%>
+	<%= f.select :fuel_type,["Βενζίνη", "Πετρέλαιο", "Αέριο"]%>
+	</div>
+
+	<div class="field">
+	<%=f.label :area %>
+	<%= f.text_field :area,:value => @area,:readonly => true%>
+	</div>
+	<%= f.hidden_field :user_id, :value => current_user.id %>
+	<%= f.hidden_field :station_id, :value => params[:my_station] %>
+
+	<div class="actions">
+	<%=f.submit %>
+	</div>
+
+<%end %>
