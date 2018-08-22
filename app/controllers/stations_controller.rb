@@ -1,7 +1,33 @@
 class StationsController < ApplicationController
+	include ApplicationHelper
+	before_action :check_guest_user, only: [:new,:create,:index, :edit, :update, :destroy]
+	access site_admin: :all, user: [:new,:create,:show]
 
 	def index
 		@station_items=Station.all
+	end
+
+	def edit
+		@station_item=Station.find(params[:id])
+	end
+
+	def update
+		@station_item=Station.find(params[:id])
+		respond_to do |format|
+	      	if @station_item.update(station_params)
+	        	format.html { redirect_to stations_path, notice: 'The record successfully updated.' }
+	      	else
+	       	 	format.html { render :edit }
+	      	end
+	    end
+	end
+
+	def destroy
+		@station_item=Station.find(params[:id])
+    	@station_item.destroy
+    	respond_to do|format|
+      		format.html{redirect_to stations_path, notice: 'The record successfully deleted'}
+      	end
 	end
 
 	def show
@@ -37,5 +63,5 @@ class StationsController < ApplicationController
 	def station_params
 		params.require(:station).permit(:name, :address, :latitude, :longitude)
 	end
-
+	
 end

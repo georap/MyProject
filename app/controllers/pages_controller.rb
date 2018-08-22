@@ -1,7 +1,14 @@
 class PagesController < ApplicationController
-	#IP panepisthmiou 195.130.121.45 ----> request.location
+  include ApplicationHelper
+  #access all: [:home,:about,:contact], user: :all, site_admin: :all
+  before_action :check_guest_user, only: [:UserProfile,:statistics]
 
+  
+	#IP panepisthmiou 195.130.121.45 ----> request.location
+  require 'net/http'
 	require 'freegeoip'
+  require 'json'
+
   def home
     @user_auth=false
     if (current_user.is_a?(GuestUser))
@@ -9,7 +16,11 @@ class PagesController < ApplicationController
     else
       @user_auth=true
     end
-  	@ip=Freegeoip.get('195.130.121.45')
+    text=ipRequest()
+    data=JSON.parse(text)
+    lat='latitude'
+    long='longitude'
+    @ip=[data[lat],data[long]]
   	@addresses=Array.new
   	@station_items=Station.all
   	@station_items.each do|station_item|
@@ -26,21 +37,7 @@ class PagesController < ApplicationController
 
   def UserProfile
     @vehicle=Vehicle.where(user_id: current_user.id)
-    @oxhmata=Array.new
-    @mhnes=Array.new
-    @stations=Array.new
-    @vehicle.each do|vehicle| 
-      if(!@oxhmata.include?(vehicle.name))
-        @oxhmata.insert(0,vehicle.name)
-      end
-      if(!@mhnes.include?(vehicle.fuel_date.month))
-        @mhnes.insert(0,vehicle.fuel_date.month)
-      end
-      #if(!@stations.include?(vehicle.station_id))
-        #@stations.insert(0,vehicle.station_id)
-      #end
-    end
-      @mhnes.insert(0,"all")
+    
   end
 
   def about
@@ -50,7 +47,12 @@ class PagesController < ApplicationController
 
   end
 
-  def statistics 
+  def statistics
+    @case=0
+    @error_message=''
+    @lt_per_km_monthly=Array.new
+    @katanalwsh_mhna=0.0
+    @katanalwsh_xronou=0.0
     string=params[:q]
     array=string.split(',')
     xronos=array[0]
@@ -58,22 +60,25 @@ class PagesController < ApplicationController
     station=array[2]
     fuel_type=array[3]
     sugkrish=array[4]
-    puts "edwwwww #{sugkrish}"
+    if(sugkrish.include?("true"))
+      sugkrish= true
+    else
+      sugkrish=false
+    end
     #prepei na pros8esw anazhtsh me perioxh
     if(station.include?("none"))
-      #otan einai none mporei na upologisei aneksarthta apo to prathrio gia sugkekrimeno xrhsth 
-      if(!oxhma.include?("none"))
-        #APOTELESMATA GIA XRONO SUGKEKRIMENOU OXHMATOS TOU XRHSTH
-        @katanalwsh_mhna=0.0
-        @katanalwsh_xronou=0.0
+      #otan einai none STATION mporei na upologisei aneksarthta apo to prathrio gia sugkekrimeno xrhsth 
+      if(!oxhma.include?("none"))&&(xronos.include?("all"))
+        #APOTELESMATA GIA OLO TO XRONO SUGKEKRIMENOU OXHMATOS TOU XRHSTH
+        @case=0
         litra=0.0
         km=0.0
         @vehicle=Vehicle.where(user_id: current_user.id).where(name:oxhma).order(:fuel_date)
-        @lt_per_km_monthly=Array.new
+        
         for i in 0..11
           @lt_per_km_monthly[i]=0.0
         end
-        if(xronos.include?("all"))
+        #if(xronos.include?("all"))
           #upologizei ta xiliometra oloklhro to xrono
           last_km=@vehicle.last.kilometers.to_f
           first_km=@vehicle.first.kilometers.to_f
@@ -95,90 +100,118 @@ class PagesController < ApplicationController
           puts "KATANALWSH OLOU TOU XRONOU"
           puts @katanalwsh_xronou
           puts "#{km} + #{litra}"
-        else
+      elsif(!oxhma.include?("none"))&&(!xronos.include?("all"))
           #Ypologizei xiliometra kai litra gia sugkekrimeno mhna
-          @katanalwsh_mhna=calculating(xronos.to_i)
-          print "KATANALWSH #{@katanalwsh_mhna}"
-        end
-      else
-          puts "LA8OS ANAZHTHSH"
+          @case=1
+          @vehicle=Vehicle.where(user_id: current_user.id).where(name:oxhma).where(user_id: current_user).where('extract(month from fuel_date) = ?', xronos).order(:fuel_date)
+          if(@vehicle.size!=0)
+            @katanalwsh_mhna=calculating(xronos.to_i)
+            print "KATANALWSH #{@katanalwsh_mhna}"
+          else 
+            @error_message='DEN UPARXEI EGGRAFH GIA MHNA '+xronos +' GIA TO AUTOKINHTO '+ oxhma +' POU EPILEKSATE '
+            puts "DEN UPARXEI EGGRAFH ME TO SUGKEKRIMENO MHNA GIA TO AUTOKINHTO POU EPILEKSATE"
+          end
+      elsif(oxhma.include?("none")) 
+          @error_message='DEN MPOREITE NA EPILEKSETE NONE STASION KAI NONE VEHICLE'
+          puts "DEN MPOREITE NA EPILEKSETE NONE STASION KAI NONE VEHICLE"
       end
     else
       #alliws upologizei me bash to prathrio
       if(xronos.include?("all"))&&(oxhma.include?("none"))
-        #pollapla oxhmata tou prathriou pou exei balei o xrhsths kausima
+        #katanalwsh gia pollapla oxhmata tou prathriou pou exei balei o xrhsths kausima
+        @case=2
         station_id=Station.find_by_name(station).id
         @vehicle=Vehicle.where(station_id: station_id).order(:fuel_date)
-        oxhmata_list=Array.new
+        @oxhmata_list=Array.new
         @vehicle.each do|vehicle| 
-          if(!oxhmata_list.include?(vehicle.name))
-            oxhmata_list.insert(0,vehicle.name)
+          if(!@oxhmata_list.include?(vehicle.name))
+            @oxhmata_list.insert(0,vehicle.name)
           end
         end
-        litra=Array.new(oxhmata_list)
-        km=Array.new(oxhmata_list)
-        last_km=Array.new(oxhmata_list)
-        litra_per_km=Array.new(oxhmata_list)
-        for i in 0..oxhmata_list.size-1
+        litra=Array.new(@oxhmata_list)
+        km=Array.new(@oxhmata_list)
+        last_km=Array.new(@oxhmata_list)
+        @lt_per_km_monthly=Array.new(@oxhmata_list)
+        for i in 0..@oxhmata_list.size-1
           litra[i]=0
-          last_km[i]=@vehicle.where(name: oxhmata_list[i]).last.kilometers
-          km[i]=last_km[i]-@vehicle.where(name: oxhmata_list[i]).first.kilometers   
+          last_km[i]=@vehicle.where(name: @oxhmata_list[i]).last.kilometers
+          km[i]=last_km[i]-@vehicle.where(name: @oxhmata_list[i]).first.kilometers   
         end
         @vehicle.each do|vehicle|
-          for i in 0..oxhmata_list.size-1
-            if(oxhmata_list[i].include?(vehicle.name))
+          for i in 0..@oxhmata_list.size-1
+            if(@oxhmata_list[i].include?(vehicle.name))
               if(last_km[i]!=vehicle.kilometers)
                 litra[i]=litra[i]+vehicle.liters
               end
             end
           end
         end
-        for i in 0..oxhmata_list.size-1
-          litra_per_km[i]=100*litra[i]/km[i]
+        for i in 0..@oxhmata_list.size-1
+          @lt_per_km_monthly[i]=100*litra[i]/km[i]
         end
-        puts oxhmata_list
+        puts station
+        puts @oxhmata_list
         puts km
         puts litra
-        puts litra_per_km
+        puts @lt_per_km_monthly
       elsif((xronos.include?("all"))&&(!oxhma.include?("none"))&&(sugkrish))
-        #PREPEI NA upologizw kai gia ton sugkekrimeno xrhsth sto sugkekrimeno prathrio
+        #alliws upologizei me bash to prathrio gia sugkekrimeno oxhma kai TYPO KAYSIMOY gia diaforetikous xrhstes
+        @case=3
         station_id=Station.find_by_name(station).id
-        #alliws upologizei me bash to prathrio gia sugkekrimeno oxhma kai tupo kausimou gia diaforetikous xrhstes
         @vehicle=Vehicle.where(station_id: station_id).where(name: oxhma).where(fuel_type:fuel_type).order(:fuel_date)
-        user_list=Array.new
+        @user_list=Array.new
         @vehicle.each do|vehicle| 
-          if(!user_list.include?(vehicle.user_id))
-            user_list.insert(0,vehicle.user_id)
+          if(!@user_list.include?(vehicle.user_id))
+            @user_list.insert(0,vehicle.user_id)
           end
         end
-        litra=Array.new(user_list)
-        km=Array.new(user_list)
-        last_km=Array.new(user_list)
-        litra_per_km=Array.new(user_list)
-        for i in 0..user_list.size-1
+        litra=Array.new(@user_list)
+        km=Array.new(@user_list)
+        last_km=Array.new(@user_list)
+        @lt_per_km_monthly=Array.new(@user_list)
+        for i in 0..@user_list.size-1
           litra[i]=0
-          last_km[i]=@vehicle.where(user_id: user_list[i]).last.kilometers
-          km[i]=last_km[i]-@vehicle.where(user_id: user_list[i]).first.kilometers   
+          last_km[i]=@vehicle.where(user_id: @user_list[i]).last.kilometers
+          km[i]=last_km[i]-@vehicle.where(user_id: @user_list[i]).first.kilometers   
         end
         @vehicle.each do|vehicle|
-          for i in 0..user_list.size-1
-            #if(user_list[i].include?(vehicle.user_id))
-            if(user_list[i]==vehicle.user_id)
+          for i in 0..@user_list.size-1
+            if(@user_list[i]==vehicle.user_id)
               if(last_km[i]!=vehicle.kilometers)
                 litra[i]=litra[i]+vehicle.liters
               end
             end
           end
         end
-        for i in 0..user_list.size-1
-          litra_per_km[i]=100*litra[i]/km[i]
+        for i in 0..@user_list.size-1
+          @lt_per_km_monthly[i]=100*litra[i]/km[i]
         end
-        puts user_list
+        puts xronos.include?("all")&&!oxhma.include?("none")&&sugkrish
+        puts @user_list
         puts km
         puts litra
-        puts litra_per_km
+        puts @lt_per_km_monthly
+        if (@lt_per_km_monthly.size==0)
+          @error_message='DEN YPARXOYN OI XRHSTES KAI H EGGRAFH TOY OXHMATOS '+ oxhma+' STO PRATHRIO ' +station+' TON MHNA '+ xronos+' ME AYTO TON TYPO KAYSIMOU ' +fuel_type
+        end
+      elsif ((!xronos.include?("all"))&&(!oxhma.include?("none")))
+        # upologizw kai gia ton xrhsth sto sugkekrimeno prathrio to sugkekrimeno mhna to sugkekrimeno oxhma me tupo kausimou
+        @case=4
+        station_id=Station.find_by_name(station).id   
+        @vehicle=Vehicle.where(station_id: station_id).where(name: oxhma).where(fuel_type:fuel_type).where(user_id: current_user).where('extract(month from fuel_date) = ?', xronos).order(:fuel_date)
+        puts @vehicle.inspect
+        puts @vehicle.size
+        if(@vehicle.size!=0)
+          @katanalwsh_mhna=calculating(xronos.to_i)  
+          puts @katanalwsh_mhna
+        else
+          @error_message='DEN YPARXEI H EGGRAFH TOY OXHMATOS '+ oxhma+' STO PRATHRIO ' +station+' TON MHNA '+ xronos+' ME AYTO TON TYPO KAYSIMOU ' +fuel_type
+          puts "DEN YPARXEI H EGGRAFH TOY OXHMATOS #{oxhma} STO PRATHRIO #{station} TON MHNA #{xronos}ME AYTO TON TYPO KAYSIMOU #{fuel_type}" 
+        end
       else
+        @error_message='la8os krithria anazhthshs'
         puts "la8os krithria anazhthshs"
+        
       end
     end
     
@@ -192,6 +225,18 @@ class PagesController < ApplicationController
   end
 
   protected
+
+  
+
+  def ipRequest()
+    url=URI.parse('http://api.ipstack.com/195.130.121.45?access_key=d7bdcffd598637070309c1c64b87806c')
+    req = Net::HTTP::Get.new(url.to_s)
+    res = Net::HTTP.start(url.host, url.port) {|http|
+      http.request(req)
+    }
+    puts res.body.class
+    return res.body
+  end
 
   #Ypologizei xiliometra kai litra gia sugkekrimeno mhna
   def calculating(xronos)

@@ -15,6 +15,8 @@
 //= require cocoon
 //= require cable
 //= require turbolinks
+//= require Chart.bundle
+//= require chartkick
 //= require_tree .
 //= require popper
 //= require popover_config

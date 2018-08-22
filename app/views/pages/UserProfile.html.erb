@@ -4,15 +4,37 @@
 <p>Τα οχήματα μου και οι καταχωρήσεις μου</p>
 
 <div>
-<% @vehicle.each do|vehicle| %>
-	NAME<p><%= vehicle.name %></p>
-	KM<p><%= vehicle.kilometers %></p>
-	LITERS<p><%= vehicle.liters %></p>
-	DATE<p><%= vehicle.fuel_date.strftime("%d/%m/%Y") %></p>
-	FUEL TYPE<p><%= vehicle.fuel_type %></p>
-	LOCATION<p><%= vehicle.area %></p>
-	<%= link_to "Edit", edit_vehicle_path(vehicle.id)%>
-	<%= link_to "Delete", vehicle, method: :delete, data: { confirm: 'Are you sure?' }%>
-	<hr>
-<% end %>
+
+    <table class="table table-dark">
+	
+<thead>
+	
+    <tr>
+    	<th scope="col">Vehicle name</th>
+    	<th scope="col">Km</th>
+    	<th scope="col">Liters</th>
+    	<th scope="col">Date</th>
+    	<th scope="col">Fuel type</th>
+    	<th scope="col">Station name</th>
+    	<th scope="col">Area</th>
+    	  </tr>
+  </thead>
+ <tbody>
+  <% @vehicle.each do|vehicle| %>
+    <tr>
+	 <td><%= vehicle.name %></td>
+	 <td><%= vehicle.kilometers %></td>
+	 <td><%= vehicle.liters %></td>
+	 <td><%= vehicle.fuel_date.strftime("%d/%m/%Y") %></td>
+	 <td><%= vehicle.fuel_type %></td>
+	 <td><%= Station.find_by_id(vehicle.station_id).name %></td>
+	 <td><%= vehicle.area %></td>
+	 <td><%= link_to "Edit", edit_vehicle_path(vehicle.id)%></td>
+	 <td><%= link_to "Delete", vehicle, method: :delete, data: { confirm: 'Are you sure?' }%></td>	
+	</tr>
+  <% end %>
+  </tbody>
+</table>
+
+
 </div>

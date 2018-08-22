@@ -1,8 +1,13 @@
 class VehiclesController < ApplicationController
+	include ApplicationHelper
+	#access all: [], user: {:destroy, :new, :create, :update, :edit, :index }, site_admin: :all
+	#access guest_user: [:index]
+	before_action :check_guest_user
+
 	def new
 		@vehicle=Vehicle.new
 		string=params[:location]
-		@location=string.split(',')
+		location=string.split(',')
 		@area=location[1].tr("0-9", "").gsub(/\s+/, '')
 	end
 
@@ -74,6 +79,8 @@ class VehiclesController < ApplicationController
 	end
 
 	private
+
+
 	def vehicle_params
 		params.require(:vehicle).permit(:name, :kilometers, :liters, :fuel_date, :fuel_type,:area,:user_id, :station_id)
 	end

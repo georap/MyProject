@@ -1,0 +1,28 @@
+<h1> Edit Station </h1>
+
+<%= form_for(@station_item) do |f| %>
+	<div class="field">
+	<%=f.label :name%>
+	<%= f.text_field :name,:required => true%>
+	</div>
+	<div class="field">
+	<%=f.label :address%>
+	<%= f.text_field :address,:required => true%>
+	</div>
+	<div class="field">
+	<%=f.label :latitude%>
+	<%= f.text_field :latitude%>
+	</div>
+
+	<div class="field">
+	<%=f.label :longitude%>
+	<%= f.text_field :longitude%>
+	</div>
+
+	<div class="actions">
+	<%=f.submit %>
+	</div>
+
+<%end %>
+
+<hr>

@@ -13,15 +13,14 @@
     </style>
   </head>
   <body>
-    <h3>My Google Maps Demo</h3>
     <div id="map"></div>
     <script>
 
       function initMap() {
 
       	var locations = <%=@addresses%>;
-      	var center1 = <%=@ip.latitude%>;
-      	var center2 = <%=@ip.longitude%>;
+      	var center1 = <%=@ip[0]%>;
+      	var center2 = <%=@ip[1]%>;
         var authenticate= <%=@user_auth%>;
         var userPos = {lat: center1, lng: center2};
         var map = new google.maps.Map(document.getElementById('map'), {
@@ -52,7 +51,7 @@
   	      	});
   	      	messageListener(marker,result);
 	      }
-  	    // This event listener calls addMarker() when the map is clicked.
+        //if current user is logged in, double click is enabled
   	    var newMarker,posMarker;
         if(authenticate==true){
     	    google.maps.event.addListener(map, 'dblclick', function(event) {

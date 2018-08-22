@@ -1,41 +1,46 @@
-<h1> Edit Vehicle </h1>
-
+<div class="mx-auto" style="width: 650px;">
+<h1> Επεξεργασία Εγγραφής Οχήματος </h1>
+</div>
+<br>
+<div class="mx-auto" style="width: 300px;">
 <%= form_for(@vehicle) do |f| %>
 	<div class="field">
-	<%=f.label :name%>
-	<%= f.text_field :name,:required => true%>
+
+	<%= f.text_field :name,:required => true,placeholder: "Ονομα"%>
 	</div>
 
 	<div class="field">
-	<%=f.label :kilometers%>
-	<%= f.text_field :kilometers,:required => true%>
+
+	<%= f.text_field :kilometers,:required => true,placeholder: "Χιλιόμετρα"%>
 	</div>
 
 	<div class="field">
-	<%=f.label :liters%>
-	<%= f.text_field :liters,:required => true%>
+
+	<%= f.text_field :liters,:required => true,placeholder: "Λίτρα"%>
 	</div>
 
 	<div class="field">
-	<%=f.label :fuel_date %>
-	ex dd/mm/yyyy
-	<%= f.text_field :fuel_date,:required => true%>
+
+
+	<%= f.text_field :fuel_date,:required => true,placeholder: "Ημερομηνία dd/mm/yyyy"%>
 	</div>
 
 	<div class="field">
-	<%=f.label :fuel_type%>
+
 	<%= f.select :fuel_type,["Βενζίνη", "Πετρέλαιο", "Αέριο"]%>
 	</div>
 
 	<div class="field">
-	<%=f.label :area %>
+
 	<%= f.text_field :area%>
 	</div>
 	<%= f.hidden_field :user_id %>
 	<%= f.hidden_field :station_id %>
-
+	
+	<br>
 	<div class="actions">
 	<%=f.submit %>
 	</div>
 
 <%end %>
+</div>

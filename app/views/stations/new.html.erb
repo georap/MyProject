@@ -1,25 +1,26 @@
-<h1> New Station </h1>
+<div class="mx-auto" style="width: 650px;">
+	<h1> Νέος Σταθμός Υγρών Καυσίμων </h1>
+</div><br>
+<div class="mx-auto" style="width: 300px;">
+	<%= form_for(@station_item) do |f| %>
+		<div class="field">
 
-<%= form_for(@station_item) do |f| %>
-	<div class="field">
-	<%=f.label :name%>
-	<%= f.text_field :name,:required => true%>
-	</div>
-	
-	<div class="field">
-	<%=f.label :latitude%>
-	<%= f.text_field :latitude, :value => @newLatLong[0],:readonly => true%>
-	</div>
+		<%= f.text_field :name,:required => true, :autocomplete => :off,placeholder: "Ονομα"%>
+		</div>
+		
+		<div class="field">
+		<%=f.label :latitude%>
+		<%= f.text_field :latitude, :value => @newLatLong[0],:readonly => true%>
+		</div>
 
-	<div class="field">
-	<%=f.label :longitude%>
-	<%= f.text_field :longitude,:value => @newLatLong[1],:readonly => true%>
-	</div>
+		<div class="field">
+		<%=f.label :longitude%>
+		<%= f.text_field :longitude,:value => @newLatLong[1],:readonly => true%>
+		</div>
 
-	<div class="actions">
-	<%=f.submit %>
-	</div>
+		<div class="actions">
+		<%=f.submit %>
+		</div>
 
 <%end %>
-
-<hr>
+</div>
