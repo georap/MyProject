@@ -21,6 +21,10 @@
       	var locations = <%=@addresses%>;
       	var center1 = <%=@ip[0]%>;
       	var center2 = <%=@ip[1]%>;
+        if(center1==37.9667 && center2==23.7167){
+          center1=39.61852201204422;
+          center2= 20.840828031368915;
+        }
         var authenticate= <%=@user_auth%>;
         var userPos = {lat: center1, lng: center2};
         var map = new google.maps.Map(document.getElementById('map'), {

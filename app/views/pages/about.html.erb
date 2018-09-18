@@ -1,17 +1,126 @@
 <h1>Pages#about</h1>
 <p>Find me in app/views/pages/about.html.erb</p>
 
-
-
-
-
-<% @vehicle.each do|vehicle| %>
-	<div class="field">
-	<%=vehicle.label :fuel_type%>
-	<%= vehicle.collection_select :name%>
-	</div>
-
-	<div class="actions">
-	<%=vehicle.submit %>
-	</div>
-<%end%>
+<div class="maincontrolbox">
+ 
+ 
+ 
+    <select class="dropdown" name="state" id="state">
+ 
+ 
+        <option value="Not Specified" selected>Choose...</option>
+        <option value="California">California</option>
+        <option value="Texas">Texas</option>
+        <option value="Florida">Florida</option>
+ 
+    </select>
+ 
+ 
+    <select class="dropdown" name="California" id="California">
+ 
+ 
+        <option value="Not Specified" selected>Choose...</option>
+        <option value="Los Angeles">Los Angeles</option>
+        <option value="San Diego">San Diego</option>
+ 
+ 
+    </select>
+ 
+    <select class="dropdown" name="Texas" id="Texas">
+ 
+ 
+        <option value="Not Specified" selected>Choose...</option>
+        <option value="Austin">Austin</option>
+        <option value="Houston">Houston</option>
+        <option value="Dallas">Dallas</option>
+        <option value="Tyler">Tyler</option>
+        <option value="Plano">Plano</option>
+ 
+    </select>
+ 
+    <select class="dropdown" name="Florida" id="Florida">
+ 
+ 
+        <option value="Not Specified" selected>Choose...</option>
+        <option value="Miami">Miami</option>
+        <option value="Orlando">Orlando</option>
+        <option value="Tampa Bay">Tampa Bay</option>
+ 
+    </select>
+ 
+ 
+    <div id="resultbox"></div>
+</div>
+ 
+ 
+ 
+<script>
+ 
+    // to test if one string contains another string ..
+    $(document).ready(function(){
+ 
+ 		var my_station="Hello World";
+        // note the jquery version change ... switch it to .on('change',
+        // remember that in newer versions of jquery the method below should be
+        // $("#state").on('change', function (){  ... but other than that
+        // the two ways ARE EXACTLY THE SAME ...watch my video carefully and
+        // you'll see what i'm referring to ..
+        $("#state").change(function (){
+ 			//fuel_type=$('select[name="' + "fuel_type" + '"]').val();
+			
+            var chosenStation = $("#state").val();
+//            alert(chosenstate);
+ 			$.ajax({
+	      		url: '/pages/about',
+	      		type: 'GET',
+	      		data: {"my_station": chosenStation},
+    		});
+    		
+            if(chosenstate == "Texas"){
+ 
+                $("#Texas").css("display", "block");
+                $("#Florida").css("display", "none");
+                $("#California").css("display", "none");
+ 
+            }
+ 
+            if(chosenstate == "Florida"){
+ 
+                $("#Texas").css("display", "none");
+                $("#Florida").css("display", "block");
+                $("#California").css("display", "none");
+ 
+            }
+            if(chosenstate == "California"){
+ 
+                $("#Texas").css("display", "none");
+                $("#Florida").css("display", "none");
+                $("#California").css("display", "block");
+ 
+            }
+ 
+        // ...end dropdown "change" event handler
+        });
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+        $("#execute").click(function(){
+ 
+            $("#resultbox").text(result);
+ 
+ 
+            // ...end button execute clickevent handler
+        });
+ 
+ 
+        // ...end document ready function
+    });
+ 
+ 
+ 
+ 
+</script>

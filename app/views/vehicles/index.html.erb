@@ -8,32 +8,35 @@
 	<div style="display: none;" id="showStation" >
 		Select Station
 		<select name="stations" id="stationSelector">
-	    <% @prathrio.each do |prathrio| %>
-	        <option ><%= prathrio %></option>
-	    <% end %>
+		    <% @prathrio.each do |prathrio| %>
+		        <option ><%= prathrio %></option>
+		    <% end %>
 		</select>		
 		<input type="checkbox" name="vehicle" id="compare" value="Bike" onclick="javascript:showMonth();"> Compare with other Users
 	</div>
 
+	<div id="divVehicleCheckbox" style="display:none;">
+	<input type="checkbox" name="chkbox" id="vehicleCheckbox" value="motor"  onclick="javascript:showVehicle();"> Many vehicles
+	</div>
 	<!--div class="help-tip">
 		    <p>This is the inline help tip! It can contain all kinds of HTML. Style it as you please.</p>
 		</div-->
 	<div id="show" style="display:none;">
 		<div >
 			Select Vehicle
-			<select name="vehicles">
-		    <% @oxhmata.each do |name| %>
-		        <option ><%= name %></option>
-		    <% end %>
+			<select name="vehicles" id="vehicleSelector">
+			    <% @oxhmata.each do |name| %>
+			        <option ><%= name %></option>
+			    <% end %>
 			</select>
 		</div>
 
 		<div id="months" >
 			Select Month
 			<select name="months" id="monthSelector">
-		    <% @mhnes.each do |mhnes| %>
-		        <option ><%= mhnes %></option>
-		    <% end %>
+			    <% @mhnes.each do |mhnes| %>
+			        <option ><%= mhnes %></option>
+			    <% end %>
 			</select>
 		</div>
 
@@ -42,20 +45,41 @@
 		<div >
 			Select Fuel type
 			<select name="fuel_type">
-		    <% @fuel_type.each do |prathrio| %>
-		        <option ><%= prathrio %></option>
-		    <% end %>
+			    <% @fuel_type.each do |prathrio| %>
+			        <option ><%= prathrio %></option>
+			    <% end %>
 			</select>
 		</div>
 
-		<button id="Search_button" type="button" class="btn btn-primary">Search</button>
+		
 	</div>
+	<button id="Search_button" type="button" class="btn btn-primary" style="display:none;">Search</button>
 </div>
 
 
 <script>
 	document.getElementById("Search_button").addEventListener("click", doAction);
+	console.log(<%=@temp_oxhmata%>);
+	//when changing the value of first select Station jquery to vehicles controller
+	$("#stationSelector").change(function (){
+			
+            var chosenStation = $("#stationSelector").val();
+ 			$.ajax({
+	      		url: '/vehicles',
+	      		type: 'GET',
+	      		data: {"my_station": chosenStation},
+    		});
+ 	});
 
+ 	$("#vehicleSelector").change(function (){
+			var chosenStation = $("#stationSelector").val();
+            var chosenVehicle = $("#vehicleSelector").val();
+ 			$.ajax({
+	      		url: '/vehicles',
+	      		type: 'GET',
+	      		data: {"my_station": chosenStation,"my_vehicle": chosenVehicle},
+    		});
+ 	});
 	function doAction(){
 		mhnes=$('select[name="' + "months" + '"]').val();
 		vehicle=$('select[name="' + "vehicles" + '"]').val();
@@ -64,24 +88,29 @@
 		checked=$('input[type=checkbox]').prop('checked');
 		location.href= "/pages/statistics?q="+mhnes+","+vehicle+","+stations+","+fuel_type+","+checked;
 	}
-
+	/*$('select[name="' + "vehicles" + '"]').on('change', function() {
+  		alert( this.value );
+	}); */
 	//Epiloges
 
 	function stationOrNo() {
-    if (document.getElementById('yesCheck').checked) {
-        document.getElementById('showStation').style.display = 'block';
-        document.getElementById('show').style.display = 'block';
-        
-    }
-    else //if((document.getElementById('noCheck').checked)) {
+		document.getElementById('Search_button').style.display = 'block';
 
-    	document.getElementById('showStation').style.display = 'none';
-    	document.getElementById('show').style.display = 'block';
-    	document.getElementById('months').style.display = 'block';
-    	document.getElementById('compare').checked=false;
-    	document.getElementById('stationSelector').value="none";
+	    if (document.getElementById('yesCheck').checked) {
+	        document.getElementById('showStation').style.display = 'block';
+	        document.getElementById('show').style.display = 'block';
+	        document.getElementById('divVehicleCheckbox').style.display = 'block';
+	    }
+	    else {
+
+	    	document.getElementById('showStation').style.display = 'none';
+	    	document.getElementById('show').style.display = 'block';
+	    	document.getElementById('months').style.display = 'block';
+	    	document.getElementById('compare').checked=false;
+	    	document.getElementById('stationSelector').value="none";
+	    	document.getElementById('divVehicleCheckbox').style.display = 'none';
+	    }
     }
-    //}
 
     function showMonth(){
     	if (document.getElementById('compare').checked && document.getElementById('yesCheck').checked){
@@ -90,6 +119,17 @@
     	}
     	else {
     		document.getElementById('months').style.display = 'block';
+    	}
+    }
+
+    function showVehicle(){
+    	if (document.getElementById('vehicleCheckbox').checked && document.getElementById('yesCheck').checked){
+    		document.getElementById('vehicleSelector').value="none";
+    		document.getElementById('monthSelector').value="all";
+    		document.getElementById('show').style.display = 'none';
+    	}
+    	else {
+    		document.getElementById('show').style.display = 'block';
     	}
     }
 </script>	

@@ -32,6 +32,20 @@ class VehiclesController < ApplicationController
 	    stations=Array.new
 	    @prathrio=Array.new
 	    @fuel_type=Array.new
+	    puts @vehicle.size
+	    if(!params[:my_station].nil?)
+	    	#puts "mphkame ston vehicles controller  #{ params[:my_station]}"
+	      	station_id=Station.find_by_name(params[:my_station]).id
+	      	@vehicle=Vehicle.where(user_id: current_user.id).where(station_id: station_id)
+	      	#puts @vehicle.inspect
+	      	
+	      	
+	    	if(!params[:my_vehicle].nil?)
+	      		puts "EEEEEEEE mphkame ston vehicles controller  #{ params[:my_vehicle]} #{station_id}"
+	      		@vehicle=Vehicle.where(user_id: current_user.id).where(station_id: station_id).where(name:params[:my_vehicle])
+	    	end      
+	    end
+	    puts @vehicle.size
 	    @vehicle.each do|vehicle| 
 	      if(!@oxhmata.include?(vehicle.name))
 	        @oxhmata.insert(0,vehicle.name)
@@ -48,11 +62,15 @@ class VehiclesController < ApplicationController
 	    end
 	    @oxhmata.insert(0,"none")
 	    @mhnes.insert(0,"all")
+	    puts @oxhmata,@mhnes
+	    @temp_oxhmata=@oxhmata.to_json.html_safe
 	    stations.each do|i|
 	    	@prathrio.insert(0,Station.find_by_id(i).name)
 	    end
 	    @prathrio.insert(0,"none")
-	   	
+	    #na ftiaksw format js gia na pairnei tis allages stis times twn selectors
+	   	respond_to :html,:js
+			
 	end
 
 	def edit
@@ -82,6 +100,6 @@ class VehiclesController < ApplicationController
 
 
 	def vehicle_params
-		params.require(:vehicle).permit(:name, :kilometers, :liters, :fuel_date, :fuel_type,:area,:user_id, :station_id)
+		params.require(:vehicle).permit(:name, :kilometers, :liters,:price ,:fuel_date, :fuel_type,:area,:user_id, :station_id)
 	end
 end

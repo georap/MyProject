@@ -1,0 +1,108 @@
+<script >
+//if(<%=@case%>==2){
+        var nameList=<%=@name_list%>;
+        var statistika=<%=@statistika%>;
+        var date=[];
+        var katanalwsh=[];
+
+        var series = [];
+        var counterArray=[];
+        for(i=0;i<statistika.length;i++){  
+
+            var flag=statistika[i].length;
+
+            counterArray[i]=statistika[i][0].length;
+            console.log(counterArray[i]+"hi");
+            for(j=0;j<flag;j++){            
+                
+                for(k=0;k<counterArray[i];k++){                    
+                    console.log(nameList[i]);
+                    //isNaN returns true if its string
+                    if(isNaN(statistika[i][j][k])){
+                        date.push(statistika[i][j][k]);
+                    }
+                    else{
+                        katanalwsh.push(statistika[i][j][k]);
+                    } 
+                }
+                
+                
+            }
+            
+        }
+
+        var title_graph="<%@titlos%>";
+        console.log(title_graph);
+        var data=[];
+        
+        for (i=0;i<nameList.length;i++){ 
+            var temp,j;
+            var pinakas=[];
+            if(i==0){
+                temp=counterArray[i];
+                pinakas=setDataToArray(i,temp);
+                data.push({
+                        name: nameList[i],
+                      
+                        data: pinakas
+                });
+            }
+            else{
+                temp=counterArray[i-1];
+                var last=counterArray[i]+temp;
+                pinakas=setDataToArray(temp,last);
+                console.log("hi");
+                data.push({
+                    name: nameList[i],
+                      
+                    data: pinakas
+                });
+            }
+        }
+
+
+
+    
+    //}
+
+
+    Highcharts.chart('graph', {
+    chart: {
+        type: 'line'
+    },
+    title: {
+        text: title_graph
+    },
+    
+    xAxis: {
+        type:'datetime'
+    },
+    yAxis: {
+        title: {
+            text: 'Λίτρα ανά 100 Χιλιόμετρα'
+        }
+    },
+    
+    series: data/*[{
+            name: nameList[0],
+          
+            data: series
+        }]*/,
+    });
+
+function setDataToArray(first,last){
+    var array=[];
+    for(j=first;j<last;j++){
+                    array.push({
+                    //name
+                    //name:nameList[i],
+                    //date  
+                    x:new Date(date[j]),
+                    //katanalwsh
+                    y:katanalwsh[j]              
+                    });
+                    
+    } 
+    return array;
+}
+</script>

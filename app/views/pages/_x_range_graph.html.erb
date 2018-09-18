@@ -1,0 +1,108 @@
+<script>
+		var date=<%=@date_pinakas%>;
+        var katanalwsh=<%=@katanalwsh_pinakas%>;
+
+        var vehicleName=<%=@vehicle_name%>;
+        console.log(vehicleName);
+        //var title_graph="Κατανάλωση του οχήματος για το μήνα <%=@array[0]%>";
+        var title_graph="<%=@titlos%>";
+        console.log(date);
+        console.log(katanalwsh);
+        var series = [];
+        //1523480400000
+        var y= new Date(date[0]).getTime()+100800;
+				console.log(y);
+        for (i=0;i<katanalwsh.length-1;i++){               
+            series.push({
+            //date first
+            x:new Date(date[i]).getTime()+11000000,
+            //date last
+            x2:new Date(date[i+1]).getTime()+11000000,
+            //katanalwsh
+            y:katanalwsh[i+1],
+            partialFill:  katanalwsh[i+1].toFixed(2)             
+            });
+        }
+        console.log(series[0]);
+        /*var data=[];
+        for (i=0;i<nameList.length;i++){ 
+            var temp,j;
+            var pinakas=[];
+                temp=counterArray[i];
+                pinakas=setDataToArray(i,temp);
+                data.push({
+                        name: nameList[i],
+                      
+                        data: pinakas
+                });
+        }
+	// kwdikas gia to highcharts https://jsfiddle.net/4z2yLp1n/69/
+	for (i=0;i<date_vehicles.length;i+=2){
+
+	}
+	console.log(date_vehicles);
+	//na kanw se morfh yyyy,mm,dd tis xronologies kai na afairesw -1 apo tous mhnes
+	//na brw pws 8a kanw na fainontai oi eggrafes otan den einai sthn seira
+	// στο παρτιαλφιλλ 8α μποροθσα να βαλς την καταναλωση
+	var i=0;
+	//for(i=0;i<date.length;i++)
+	var string=date[0];
+	var test= string.replace("-",",");
+	console.log(test);*/
+	Highcharts.getOptions().colors = ['blue'];
+	Highcharts.chart('graph', {
+		chart: {
+		    type: 'xrange'
+		},
+		title: {
+		    text: title_graph
+		},
+		xAxis: {
+		    type: 'datetime'
+	   },
+		yAxis: {
+			title: {
+			    text: 'Κατανάλωση (lt/100 km)'
+		},
+		reversed: false
+		},
+		series: [{
+			name: vehicleName,
+			// pointPadding: 0,
+		    // groupPadding: 0,
+		    //borderColor: 'gray',
+			pointWidth: 20,
+			data: series/*[{
+		    x: utcDate1,
+		    x2: utcDate2,
+		            y: 0,
+		            partialFill: 1
+		        }]*/,
+			dataLabels: {
+			    enabled: true,
+			    formatter: function() {
+		          var percents = this.point.partialFill;
+		          console.log(percents);
+		          return percents ? percents  + '' : ''
+		      	}
+			}
+			}]
+	});
+
+
+function setDataToArray(first,last){
+    var array=[];
+    for(j=first;j<last;j++){
+                    array.push({
+                    //name
+                    //name:nameList[i],
+                    //date  
+                    x:new Date(date[j]),
+                    //katanalwsh
+                    y:katanalwsh[j]              
+                    });
+                    
+    } 
+    return array;
+}
+</script>

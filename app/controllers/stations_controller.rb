@@ -34,6 +34,7 @@ class StationsController < ApplicationController
 		@station_item=Station.includes(:reviews).find(params[:id])
 		@review=Review.new
 		@flag=current_user.id
+		@admin=is_admin
 		#print "the reviews for current_user #{@station_item.reviews.where(user_id: 4).inspect()}"
 
 	end
@@ -64,4 +65,11 @@ class StationsController < ApplicationController
 		params.require(:station).permit(:name, :address, :latitude, :longitude)
 	end
 	
+	def is_admin
+		if (current_user.roles[0].to_s.include?("site_admin"))
+			return true
+		else
+			return false
+		end
+	end
 end

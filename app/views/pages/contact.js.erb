@@ -1,0 +1,132 @@
+statistics.style.visibility='visible';
+var date=<%=@graph_date%>;
+var katanalwsh=<%=@katanalwsh_pinakas%>;
+var vehicles=<%=@oxhmata%>;
+var vehicle_list=<%=@vehicle_list%>;
+console.log("new");
+console.log(katanalwsh.length);
+console.log(date);
+var series=[];
+/*for (i=0;i<vehicle_list.length;i+=2){
+	for (j=0;j<vehicles.length;j++){
+		if(vehicles[j]===vehicle_list[i+1]){
+			vehicle_list[i+1]=j;
+		}
+		//if(date_vehicles[i]===){
+
+		//}
+	}
+}
+// kwdikas gia to highcharts https://jsfiddle.net/4z2yLp1n/69/
+for (i=0;i<vehicle_list.length;i+=2){
+}
+//console.log(date_vehicles);
+//na kanw se morfh yyyy,mm,dd tis xronologies kai na afairesw -1 apo tous mhnes
+//na brw pws 8a kanw na fainontai oi eggrafes otan den einai sthn seira
+// στο παρτιαλφιλλ 8α μποροθσα να βαλς την καταναλωση
+var i=0;
+//for(i=0;i<date.length;i++)
+var string=date[0];
+var test= string.replace("-",",");
+console.log(test);
+
+Highcharts.chart('statistics', {
+	chart: {
+	    type: 'xrange'
+	},
+	title: {
+	    text: 'Μέση Κατανάλωση Οχημάτων'
+	},
+	xAxis: {
+	    type: 'datetime'
+   },
+	yAxis: {
+		title: {
+		    text: 'Λίτρα ανά χιλιόμετρο'
+	},
+	reversed: false
+	},
+	series: [{
+		name: 'vehicle name',
+		// pointPadding: 0,
+	    // groupPadding: 0,
+	    borderColor: 'gray',
+		pointWidth: 20,
+		data: [{
+		    x: Date.UTC(2014, 10, 21),
+		    x2: Date.UTC(2014, 11, 2),
+		            y: 0,
+		            partialFill: 1
+		        }, {
+		            x: Date.UTC(2014, 11, 2),
+		            x2: Date.UTC(2014, 11, 5),
+		            y: 1,
+		            partialFill: 0.25
+		        }, {
+		            x: Date.UTC(2014, 11, 8),
+		            x2: Date.UTC(2014, 11, 9),
+		            y: 2
+		        }, {
+		            x: Date.UTC(2014, 11, 9),
+		            x2: Date.UTC(2014, 11, 19),
+		            y: 1
+		        }, {
+		            x: Date.UTC(2014, 11, 10),
+		            x2: Date.UTC(2014, 11, 23),
+		            y: 2
+		        }],
+		dataLabels: {
+		    enabled: true
+		}
+		}]
+});
+*/
+//for(j=0;j<katanalwsh.length;j++){
+var pivot=0;
+for (i=0;i<katanalwsh.length;i++){   
+
+            series.push({
+            //date first
+            x:new Date(date[pivot]).getTime()+11000000,
+            //date last
+            x2:new Date(date[pivot+1]).getTime()+11000000,
+            //katanalwsh
+            y:katanalwsh[i],
+            partialFill:  katanalwsh[i]/100             
+            });
+         
+         	pivot+=2;
+         
+         
+        }
+//}
+        console.log(pivot);
+        
+	Highcharts.chart('statistics', {
+		chart: {
+		    type: 'xrange'
+		},
+		title: {
+		    text: 'Μέση Κατανάλωση Οχημάτων'
+		},
+		xAxis: {
+		    type: 'datetime'
+	   },
+		yAxis: {
+			title: {
+			    text: 'Κατανάλωση (lt/100 km)'
+		},
+		reversed: false
+		},
+		series: [{
+			name: '',
+			// pointPadding: 0,
+		    // groupPadding: 0,
+		    //borderColor: 'gray',
+			pointWidth: 20,
+			data: series,
+			dataLabels: {
+			    enabled: true
+			}
+			}]
+	});

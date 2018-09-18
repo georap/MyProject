@@ -16,7 +16,7 @@
           </div>
           <div class="review-links">
             <!-- EXEI PROBLHMA TO ACTIONCABLE ME TO AUTHENTICATION KAI TO RENDERING-->
-            <% if(@flag==review.user_id)|| (current_user.roles[0].to_s.include?("site_admin"))%>
+            <% if(@flag==review.user_id)|| (@admin==true)%>
               <%= link_to 'Delete', [review.station, review],
                   method: :delete, class: "button is-danger", data: { confirm: 'Are you sure?' } %>
               <%= link_to 'Edit',  edit_station_review_path(review.station,review.id)%>

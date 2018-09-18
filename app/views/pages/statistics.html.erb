@@ -1,58 +1,92 @@
 <div>
 	<% if @error_message.length==0 %>
 		<%string=params[:q] %>
-		<%array=string.split(',') %>
+		<%@array=string.split(',') %>
 		<% if @case ==0 %>
 			<p> periptwsh <%=@case%> </p>
 			<!--#upologizei ta xiliometra oloklhro to xrono!--> 
-			<p style="text-align: center;">Κατανάλωση του οχήματος για ένα χρόνο:
-			<%= @katanalwsh_xronou%> Lt/Km </p>
-			<%= @lt_per_km_monthly%>
-			<% data=Array.new%>
-			<% mhnes=['Ιανουαριος','Φεβρουαριος','Μαρτιος','Απριλιος','Μαιος','Ιουνιος','Ιουλιος','Αυγουστος','Σεπτεμβριος','Οκτωβριος','Νοεμβριος','Δεκεμβριος']%>
-			<% for i in 0..@lt_per_km_monthly.size-1 %>
-				<%data[i]=[mhnes[i],@lt_per_km_monthly[i]]%>
-			<%end%>
-			<%=  line_chart data ,library: { pieSliceText: 'value' },xtitle: "Μήνες", ytitle: "Συνολική Κατανάλωση lt/km"%>
+			<%@titlos="Κατανάλωση του οχήματος για ένα χρόνο"%>
+			
+			<div id="graph" >
+				<%= render 'pages/x_range_graph' %>
+			</div>
+			<p style="text-align: center;">Συνολική Κατανάλωση για όλο το χρόνο: <%=@katanalwsh_xronou%></p>
+
+			<%= render 'pages/show_vehicle' %>
+			
+			<%#= @lt_per_km_monthly%>
+			<%# data=Array.new%>
+			<%# mhnes=['Ιανουαριος','Φεβρουαριος','Μαρτιος','Απριλιος','Μαιος','Ιουνιος','Ιουλιος','Αυγουστος','Σεπτεμβριος','Οκτωβριος','Νοεμβριος','Δεκεμβριος']%>
+			<%# for i in 0..@lt_per_km_monthly.size-1 %>
+				<%#data[i]=[mhnes[i],@lt_per_km_monthly[i]]%>
+			<%#end%>
+			<%#=  line_chart data ,library: { pieSliceText: 'value' },xtitle: "Μήνες", ytitle: "Συνολική Κατανάλωση lt/km"%>
 		<%elsif @case==1%>
 			<!--#Ypologizei xiliometra kai litra gia sugkekrimeno mhna !-->
-			<p style="text-align: center;">Κατανάλωση του οχήματος για το μήνα <%=array[0]%>:
-				<%= @katanalwsh_mhna%> 
-			</p>
+			<%@titlos="Κατανάλωση του οχήματος για το μήνα #{@array[0]}"%>
 			<p> periptwsh <%=@case%> </p>
-			
+			<div id="graph" >
+				<%= render 'pages/x_range_graph' %>
+			</div>
+			<p style="text-align: center;">Συνολική Κατανάλωση για όλο το μήνα: <%=@katanalwsh_mhna%>	</p>
 
+			<%= render 'pages/show_vehicle' %>
+			
 		<%elsif @case==2%>
 			<p> periptwsh <%=@case%> </p>
 			<!--#katanalwsh gia pollapla oxhmata tou prathriou pou exei balei o xrhsths kausima!--> 
-			<p style="text-align: center;">Κατανάλωση πολλαπλών οχημάτων στο σταθμό <%=array[2]%></p>
-			<%= @oxhmata_list%>
-			<%= @lt_per_km_monthly%>
-			<% data=Array.new%>
+			
+			<%@titlos="Κατανάλωση πολλαπλών οχημάτων στο σταθμό #{@array[2]}"%>
+
+			<p style="text-align: center;"><%=@titlos%></p>
+			<div id="graph" >
+				
+				<%= render 'pages/case2' %>
+			</div>
+
 			<% for i in 0..@oxhmata_list.size-1 %>
-				<%data[i]=[@oxhmata_list[i],@lt_per_km_monthly[i]]%>
+				<p style="text-align: center;">Συνολική Κατανάλωση οχήματος <%=@oxhmata_list[i]%>  για το παραπάνω χρονικό διάστημα: <%=@lt_per_km_monthly[i]%> </p>
+
 			<%end%>
-			<%=  column_chart data ,library: { pieSliceText: 'value' },xtitle: "Οχήματα", ytitle: "Συνολική Κατανάλωση lt/km"%>
+			<%= render 'pages/show_vehicle' %>
+			<%#= @oxhmata_list%>
+			<%#= @lt_per_km_monthly%>
+			<%# data=Array.new%>
+			<%# for i in 0..@oxhmata_list.size-1 %>
+				<%#data[i]=[@oxhmata_list[i],@lt_per_km_monthly[i]]%>
+			<%#end%>
+			<%#=  line_chart data ,library: { pieSliceText: 'value' },xtitle: "Οχήματα", ytitle: "Συνολική Κατανάλωση lt/km"%>
 
 		<%elsif @case==3%>
 			<p> periptwsh <%=@case%> </p>
 			<!--#alliws upologizei me bash to prathrio gia sugkekrimeno oxhma kai TYPO KAYSIMOY gia diaforetikous xrhstes!-->
-			<p style="text-align: center;">Κατανάλωση χρηστών στο σταθμό <%=array[2]%></p>
-			<%= @lt_per_km_monthly%>
-			<%= @user_list%>
-			<% data=Array.new%>
+			<%@titlos="Κατανάλωση χρηστών στο σταθμό #{@array[2]} για το όχημα #{@array[1]}"%>
+			<p style="text-align: center;"><%=@titlos%></p>
+			<div id="graph" >	
+				<%= render 'pages/case2' %>
+			</div>
+			
 			<% for i in 0..@user_list.size-1 %>
-				<%data[i]=[@user_list[i],@lt_per_km_monthly[i]]%>
+				<p style="text-align: center;">Συνολική Κατανάλωση του χρήστη <%=@user_list[i]%> για το παραπάνω χρονικό διάστημα: <%=@lt_per_km_monthly[i]%></p>
 			<%end%>
-			<%=  column_chart data ,library: { pieSliceText: 'value' },xtitle: "User_id", ytitle: "Συνολική Κατανάλωση lt/km"%>
+			<%= render 'pages/show_vehicle' %>
+			<%#= @lt_per_km_monthly%>
+			<%#= @user_list%>
+			<%# data=Array.new%>
+			<%# for i in 0..@user_list.size-1 %>
+				<%#data[i]=[@user_list[i],@lt_per_km_monthly[i]]%>
+			<%#end%>
+			<%#=  column_chart data ,library: { pieSliceText: 'value' },xtitle: "User_id", ytitle: "Συνολική Κατανάλωση lt/km"%>
 
 		<%elsif @case==4%>
 			<p> periptwsh <%=@case%> </p>
 			<!--# upologizw kai gia ton sugkekrimeno xrhsth sto sugkekrimeno prathrio to sugkekrimeno mhna!-->
-			
-			<p style="text-align: center;">Κατανάλωση οχήματος για το μήνα <%=array[0]%> στο σταθμό <%=array[2]%>:
-			<%= @katanalwsh_mhna%> </p>
-			
+			<%@titlos="Κατανάλωση του οχήματος #{@array[1]} για το μήνα #{@array[0]} στο πρατήριο #{@array[2]}"%>
+			<div id="graph" >
+				<%= render 'pages/x_range_graph' %>
+			</div>
+			<p style="text-align: center;">Συνολική κατανάλωση οχήματος για το μήνα <%=@array[0]%> στο σταθμό <%=@array[2]%>: <%=@katanalwsh_mhna%> </p>
+			<%= render 'pages/show_vehicle' %>
 		<%end%>
 
 	<% else %>
