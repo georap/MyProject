@@ -1,3 +1,8 @@
+<div id="graph" style="height: 300px; margin-top: 2em" >
+
+</div>
+<div id="second_graph" style="height: 300px; margin-top: 2em">
+</div>    
 <script >
 //if(<%=@case%>==2){
         var nameList=<%=@name_list%>;
@@ -7,6 +12,11 @@
 
         var series = [];
         var counterArray=[];
+        var colours= [];
+                
+        for(j=0;j<nameList.length;j++){
+            colours[j]=setRandomColour();
+        }
         for(i=0;i<statistika.length;i++){  
 
             var flag=statistika[i].length;
@@ -24,11 +34,8 @@
                     else{
                         katanalwsh.push(statistika[i][j][k]);
                     } 
-                }
-                
-                
-            }
-            
+                }    
+            }   
         }
 
         var title_graph="<%@titlos%>";
@@ -38,37 +45,55 @@
         for (i=0;i<nameList.length;i++){ 
             var temp,j;
             var pinakas=[];
+            var colourPicker=colours[i]
             if(i==0){
                 temp=counterArray[i];
-                pinakas=setDataToArray(i,temp);
+                pinakas=setDataToArray(i,temp,colourPicker);
                 data.push({
                         name: nameList[i],
                       
-                        data: pinakas
+                        data: pinakas,
+                        dataLabels: {
+                            enabled: true,
+                            formatter: function() {
+                              var percents = this.point.partialFill;
+                              console.log(percents);
+                              return percents ? percents  + '' : ''
+                            }
+                        }
                 });
             }
             else{
                 temp=counterArray[i-1];
                 var last=counterArray[i]+temp;
-                pinakas=setDataToArray(temp,last);
+                pinakas=setDataToArray(temp,last,colourPicker);
                 console.log("hi");
                 data.push({
                     name: nameList[i],
                       
-                    data: pinakas
+                    data: pinakas,
+                    dataLabels: {
+                        enabled: true,
+                        formatter: function() {
+                          var percents = this.point.partialFill;
+                          console.log(percents);
+                          return percents ? percents  + '' : ''
+                        }
+                    }
                 });
             }
         }
 
 
-
+console.log(data);
     
     //}
 
 
+
     Highcharts.chart('graph', {
     chart: {
-        type: 'line'
+        type: 'xrange'
     },
     title: {
         text: title_graph
@@ -79,30 +104,114 @@
     },
     yAxis: {
         title: {
-            text: 'Λίτρα ανά 100 Χιλιόμετρα'
+            text: 'Κατανάλωση (lt/100 km)'
         }
     },
-    
-    series: data/*[{
+    legend: {
+        align: 'right',
+        x: -30,
+        verticalAlign: 'top',
+        y: 25,
+        floating: true,
+        backgroundColor: (Highcharts.theme && Highcharts.theme.background2) || 'white',
+        borderColor: '#CCC',
+        borderWidth: 1,
+        shadow: false
+    },
+    series: data/*data[{
             name: nameList[0],
           
             data: series
         }]*/,
     });
 
-function setDataToArray(first,last){
+
+
+    var array_date=<%=@array_date%>;
+    var second_graph_array=<%=@second_graph_array%>;
+
+var highcharts_series=[];
+for (i=0;i<second_graph_array.length;i++){   
+        if(second_graph_array[i]!=-1){
+                highcharts_series.push({
+                //date first
+                x:new Date(array_date[i]).getTime()+11000000,
+                //date last
+                x2:new Date(array_date[i+1]).getTime()+11000000,
+                //katanalwsh
+                y:second_graph_array[i],
+                partialFill:  second_graph_array[i].toFixed(2)            
+                });
+                
+                //pivot+=2;
+        }     
+             
+}
+console.log(second_graph_array);
+console.log(array_date);
+    Highcharts.getOptions().colors = ['blue'];    
+            Highcharts.chart('second_graph', {
+                chart: {
+                    type: 'xrange'
+                },
+                title: {
+                    text: 'Μέση Κατανάλωση Οχημάτος'
+                },
+                xAxis: {
+                    type: 'datetime'
+               },
+                yAxis: {
+                    title: {
+                        text: 'Κατανάλωση (lt/100 km)',
+                        style: {
+                            color: 'black'
+                        }
+                    },
+                    reversed: false
+                },
+                series: [{
+                    name: '',
+                    // pointPadding: 0,
+                    // groupPadding: 0,
+                    //borderColor: 'gray',
+                    pointWidth: 20,
+                    data: highcharts_series,
+                    dataLabels: {
+                        enabled: true,
+                        formatter: function() {
+                          var percents = this.point.partialFill;
+                          console.log(percents);
+                          return percents ? percents  + '' : ''
+                        }
+                    }
+                    }]
+            });
+
+function setDataToArray(first,last,colourPicker){
     var array=[];
-    for(j=first;j<last;j++){
+    for(j=first;j<last-1;j++){
                     array.push({
                     //name
                     //name:nameList[i],
                     //date  
-                    x:new Date(date[j]),
+                    x:new Date(date[j]).getTime()+11000000,
+                    x2:new Date(date[j+1]).getTime()+11000000,
                     //katanalwsh
-                    y:katanalwsh[j]              
+                    y:katanalwsh[j+1],
+                    partialFill:  katanalwsh[j+1].toFixed(2),
+                    color: colourPicker              
                     });
                     
     } 
     return array;
+}
+function setRandomColour() {
+          var letters = '0123456789ABCDEF';
+          var color = '#';
+          for (i = 0; i < 6; i++) {
+            color += letters[Math.floor(Math.random() * 16)];
+          }
+          console.log(color);
+          return color;
 }
 </script>

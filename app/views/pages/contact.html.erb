@@ -2,13 +2,14 @@
 <p>Find me in app/views/pages/contact.html.erb</p>
 <div >
 		Επιλέξτε Καύσιμο
-		<select name="fuel_type">
+		<select id='fuel_type' name="fuel_type">
+			<option value="Πετρέλαιο"> </option>
 			<option value="Πετρέλαιο">Πετρέλαιο</option>
   			<option value="Βενζίνη">Βενζίνη</option>
   			<option value="Αέριο">Αέριο</option>
 		</select>
 </div>
-<button id="Search_button" type="button" class="btn btn-primary">Αναζήτηση</button>
+<!--<button id="Search_button" type="button" class="btn btn-primary">Αναζήτηση</button>-->
 
 <div id='statistics' style="visibility:  hidden;">
 
@@ -17,9 +18,9 @@
 
 <script>
 	//statistics.style.visibility='hidden'
-	document.getElementById("Search_button").addEventListener("click", Search);
-
-	function Search(){
+	//document.getElementById("Search_button").addEventListener("click", Search);
+	$("#fuel_type").change(function (){
+	//function Search(){
 		fuel_type=$('select[name="' + "fuel_type" + '"]').val();
 		$.ajax({
       		url: '/pages/contact',
@@ -33,6 +34,6 @@
     	//var date=<%=@vehicle%>;
     	//var ftype=<%=@fuel_type%>;
     	//console.log(ftype);
-	}
+	});
 </script>
 

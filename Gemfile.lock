@@ -137,6 +137,7 @@ GEM
       rake (>= 0.8.7)
       thor (>= 0.18.1, < 2.0)
     rake (12.3.1)
+    range_tree (0.0.2)
     rb-fsevent (0.10.3)
     rb-inotify (0.9.10)
       ffi (>= 0.5.0, < 2)
@@ -216,6 +217,7 @@ DEPENDENCIES
   popper_js
   puma (~> 3.7)
   rails (~> 5.1.6)
+  range_tree (~> 0.0.2)
   redis (~> 3.3, >= 3.3.3)
   rubyXL (~> 3.3, >= 3.3.21)
   sass-rails (~> 5.0)

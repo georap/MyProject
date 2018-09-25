@@ -62,12 +62,13 @@
 			<!--#alliws upologizei me bash to prathrio gia sugkekrimeno oxhma kai TYPO KAYSIMOY gia diaforetikous xrhstes!-->
 			<%@titlos="Κατανάλωση χρηστών στο σταθμό #{@array[2]} για το όχημα #{@array[1]}"%>
 			<p style="text-align: center;"><%=@titlos%></p>
-			<div id="graph" >	
+			<!--<div id="graph" >-->	
 				<%= render 'pages/case2' %>
-			</div>
+			<!--</div>-->
+
 			
 			<% for i in 0..@user_list.size-1 %>
-				<p style="text-align: center;">Συνολική Κατανάλωση του χρήστη <%=@user_list[i]%> για το παραπάνω χρονικό διάστημα: <%=@lt_per_km_monthly[i]%></p>
+				<p style="text-align: center;">Συνολική Κατανάλωση του χρήστη <%=@user_list[i]%> για το παραπάνω χρονικό διάστημα: <%=@lt_per_km_monthly[i].round(2)%></p>
 			<%end%>
 			<%= render 'pages/show_vehicle' %>
 			<%#= @lt_per_km_monthly%>
