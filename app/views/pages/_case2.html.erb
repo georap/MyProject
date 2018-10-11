@@ -93,7 +93,8 @@ console.log(data);
 
     Highcharts.chart('graph', {
     chart: {
-        type: 'xrange'
+        type: 'xrange',
+        zoomType: 'x'
     },
     title: {
         text: title_graph
@@ -135,9 +136,9 @@ for (i=0;i<second_graph_array.length;i++){
         if(second_graph_array[i]!=-1){
                 highcharts_series.push({
                 //date first
-                x:new Date(array_date[i]).getTime()+11000000,
+                x:new Date(array_date[i]).getTime()+7200000,
                 //date last
-                x2:new Date(array_date[i+1]).getTime()+11000000,
+                x2:new Date(array_date[i+1]).getTime()+7200000,
                 //katanalwsh
                 y:second_graph_array[i],
                 partialFill:  second_graph_array[i].toFixed(2)            
@@ -152,10 +153,11 @@ console.log(array_date);
     Highcharts.getOptions().colors = ['blue'];    
             Highcharts.chart('second_graph', {
                 chart: {
-                    type: 'xrange'
+                    type: 'xrange',
+                    zoomType: 'xy'
                 },
                 title: {
-                    text: 'Μέση Κατανάλωση Οχημάτος'
+                    text: 'Μέση Κατανάλωση '
                 },
                 xAxis: {
                     type: 'datetime'

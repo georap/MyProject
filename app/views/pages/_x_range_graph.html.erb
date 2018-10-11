@@ -1,62 +1,46 @@
+<div id="graph" style="height: 300px; margin-top: 2em" >
+	</div>
+<div id="euro_liter_graph" style="height: 300px; margin-top: 2em" >
+	</div>
 <script>
 		var date=<%=@date_pinakas%>;
         var katanalwsh=<%=@katanalwsh_pinakas%>;
-
-        var vehicleName=<%=@vehicle_name%>;
-        console.log(vehicleName);
+        //var station_list=<%@station_list%>;
+        //var vehicleName=<%=@vehicle_list%>;
+        //console.log(vehicleName);
         //var title_graph="Κατανάλωση του οχήματος για το μήνα <%=@array[0]%>";
         var title_graph="<%=@titlos%>";
         console.log(date);
         console.log(katanalwsh);
         var series = [];
         //1523480400000
-        var y= new Date(date[0]).getTime()+100800;
-				console.log(y);
-        for (i=0;i<katanalwsh.length-1;i++){               
+        //var y= new Date(date[0]).getTime()+100800;
+				//console.log(y);
+        for (i=0;i<katanalwsh.length;i++){               
             series.push({
             //date first
-            x:new Date(date[i]).getTime()+11000000,
+            x:new Date(date[i]).getTime()+7200000,
             //date last
-            x2:new Date(date[i+1]).getTime()+11000000,
+            x2:new Date(date[i+1]).getTime()+7200000,
             //katanalwsh
-            y:katanalwsh[i+1],
-            partialFill:  katanalwsh[i+1].toFixed(2)             
+            y:katanalwsh[i],
+            partialFill:  katanalwsh[i].toFixed(2)             
             });
         }
         console.log(series[0]);
-        /*var data=[];
-        for (i=0;i<nameList.length;i++){ 
-            var temp,j;
-            var pinakas=[];
-                temp=counterArray[i];
-                pinakas=setDataToArray(i,temp);
-                data.push({
-                        name: nameList[i],
-                      
-                        data: pinakas
-                });
-        }
-	// kwdikas gia to highcharts https://jsfiddle.net/4z2yLp1n/69/
-	for (i=0;i<date_vehicles.length;i+=2){
-
-	}
-	console.log(date_vehicles);
-	//na kanw se morfh yyyy,mm,dd tis xronologies kai na afairesw -1 apo tous mhnes
-	//na brw pws 8a kanw na fainontai oi eggrafes otan den einai sthn seira
-	// στο παρτιαλφιλλ 8α μποροθσα να βαλς την καταναλωση
-	var i=0;
-	//for(i=0;i<date.length;i++)
-	var string=date[0];
-	var test= string.replace("-",",");
-	console.log(test);*/
+      
 	Highcharts.getOptions().colors = ['blue'];
 	Highcharts.chart('graph', {
 		chart: {
-		    type: 'xrange'
+		    type: 'xrange',
+			zoomType: 'xy'
 		},
 		title: {
 		    text: title_graph
 		},
+		rangeSelector:{
+                enabled:true
+            },
 		xAxis: {
 		    type: 'datetime'
 	   },
@@ -67,7 +51,7 @@
 		reversed: false
 		},
 		series: [{
-			name: vehicleName,
+			//name: vehicleName[0],
 			// pointPadding: 0,
 		    // groupPadding: 0,
 		    //borderColor: 'gray',
@@ -89,6 +73,136 @@
 			}]
 	});
 
+var liters=<%=@litra_pinakas%>;
+var station_list=<%=@prathria_list%>;
+var station_uniq_list=<%=@prathria_uniq_list%>;
+console.log("id prathria ",station_uniq_list);
+//console.log(liters);
+var price=<%=@timh_pinakas%>;
+//var vehicle_list=<%=@vehicle_list%>;
+var litersArray = [];
+var priceArray = [];
+var colours = [];
+var priorDate ;
+var random_colour;
+var lt_colours=[];
+var euro_colours=[];
+var litroColours=[];
+var euroColours=[];
+
+for(k=0;k<station_uniq_list.length;k++){
+	lt_colours[k]=setRandomColour();
+	euro_colours[k]=setRandomColour();
+}
+console.log(lt_colours,"kai",euro_colours);
+for(j=0;j<station_list.length;j++){
+	for(k=0;k<station_uniq_list.length;k++){
+		if(station_uniq_list[k]==station_list[j]){
+			litroColours[j]=lt_colours[k]
+			euroColours[j]=euro_colours[k]
+			console.log(station_uniq_list[k],station_list[j],litroColours[j],euroColours[j]);
+		}
+	}
+}
+
+
+for (i=0;i<date.length;i++){
+					priorDate= new Date(date[i]).getTime()+7200000;
+					priorDate= new Date(priorDate);   
+
+				    litersArray.push({
+				    	name:'Date: '+ priorDate,
+					    //date  
+					    x:new Date(date[i]),
+					    //litra
+					    y:liters[i],
+					    color: litroColours[i]             
+				    });
+				    priceArray.push({
+				    	name:'Date: '+ priorDate,
+					    //date  
+					    x:new Date(date[i]),
+					    //timh
+					    y:price[i],
+					    color: euroColours[i]              
+				    });
+				    
+}
+
+
+
+
+Highcharts.chart('euro_liter_graph', {
+				    chart: {
+				        type: 'column',
+				        zoomType: 'xy'
+				    },
+				    title: {
+				        text: 'Τιμή Αγοράς Λίτρων καυσίμου'
+				    },
+				    xAxis: {
+
+				        type: 'datetime'
+				    },
+				    yAxis: [{
+				        min: 0,
+				        title: {
+				            text: 'Liters(lt)'
+				        }
+				    }, {
+				        title: {
+				            text: 'Euro(€)'
+				        },
+				        opposite: true
+				    }],
+				    legend: {
+				        align: 'right',
+				        x: -25,
+				        verticalAlign: 'top',
+				        y: 25,
+				        floating: true,
+				        backgroundColor: (Highcharts.theme && Highcharts.theme.background2) || 'white',
+				        borderColor: '#CCC',
+				        borderWidth: 1,
+				        shadow: false
+				    },
+				    tooltip: {
+				        shared: true
+				    },
+				    plotOptions: {
+				        column: {
+				            grouping: false,
+				            shadow: false,
+				            borderWidth: 0
+				        }
+				    },
+				    /*tooltip: {
+				        formatter: function() {
+				          return 'Extra data: <b>' + this.point.myData + '</b>';
+				        }
+				    },*/
+				    series: [{
+				        name: 'Λίτρα',
+				        color: 'rgba(165,170,217,1)',
+				        data: litersArray,
+				        tooltip: {
+				            valueSuffix: ' lt'
+				        },
+				        pointPadding: 0.2,
+				        pointPlacement: -0.2
+				    },  {
+				        name: 'Τιμή',
+				        color: 'rgba(186,60,61,.9)',
+				        data: priceArray,
+				        tooltip: {
+				            valueSuffix: ' €'
+				        },
+				        pointPadding: 0.2,
+				        pointPlacement: 0.2,
+				        yAxis: 1
+				    }]
+				});
+			//}
 
 function setDataToArray(first,last){
     var array=[];
@@ -104,5 +218,14 @@ function setDataToArray(first,last){
                     
     } 
     return array;
+}
+function setRandomColour() {
+          var letters = '0123456789ABCDEF';
+          var color = '#';
+          for (i = 0; i < 6; i++) {
+            color += letters[Math.floor(Math.random() * 16)];
+          }
+          console.log(color);
+          return color;
 }
 </script>

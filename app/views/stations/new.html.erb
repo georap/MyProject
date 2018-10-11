@@ -1,6 +1,14 @@
 <div class="mx-auto" style="width: 650px;">
 	<h1> Νέος Σταθμός Υγρών Καυσίμων </h1>
 </div><br>
+
+<%results = Geocoder.search([@newLatLong[0], @newLatLong[1]])%>
+<% results=results.first.address_components_of_type(:administrative_area_level_3)%>
+results=[{"long_name"=>"Ιωάννινα", "short_name"=>"Ιωάννινα", "types"=>["administrative_area_level_3", "political"]}].to_s
+puts results
+			data= results.split(",")
+			puts data[0].partition("=>").last.tr('"','')
+<!-- AYTA PREPEI NA TA BALW KAI STA PARAMS TOY STATION CONTROLLER KAI NA DHMIOURGHSW NEA STYLH STON STATION-->			
 <div class="mx-auto" style="width: 300px;">
 	<%= form_for(@station_item) do |f| %>
 		<div class="field">
@@ -17,6 +25,10 @@
 		<%=f.label :longitude%>
 		<%= f.text_field :longitude,:value => @newLatLong[1],:readonly => true%>
 		</div>
+
+		EDW MPORW NA BALW KAI TA DEDOMENA GIA THN ADDRESS ME TO RESULTS.address.to_s
+
+		EDW NEA STULH GIA TA NEA DEDOMENA
 
 		<div class="actions">
 		<%=f.submit %>

@@ -5,6 +5,22 @@ class StationsController < ApplicationController
 
 	def index
 		@station_items=Station.all
+		counter=0
+		@station_items.each do|station_item|
+			if(station_item.area == nil &&station_item.latitude!=nil &&station_item.longitude!=nil)
+
+				puts "#{counter} #{station_item.latitude} #{station_item.longitude}"
+				results = Geocoder.search(station_item.latitude,station_item.longitude)
+				results=results.first.address_components_of_type(:administrative_area_level_3)
+				data= results.split(",")
+				new_data=data[0].partition("=>").last.tr('"','')
+				Station.update!(area: new_data)
+				#reverse_geocoded_by :latitude, :longitude,
+			  	#:address_components_of_type(:administrative_area_level_3) =>  :area 
+				#after_validation :reverse_geocode, if: :latitude_changed? || :longitude_changed?
+				counter+=1
+			end
+		end
 	end
 
 	def edit

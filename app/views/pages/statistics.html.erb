@@ -5,12 +5,15 @@
 		<% if @case ==0 %>
 			<p> periptwsh <%=@case%> </p>
 			<!--#upologizei ta xiliometra oloklhro to xrono!--> 
-			<%@titlos="Κατανάλωση του οχήματος για ένα χρόνο"%>
+			<%@titlos="Mέση Κατανάλωση του οχήματος #{@vehicle_list[0]} "%>
 			
-			<div id="graph" >
+			<!--<div id="graph" >-->
 				<%= render 'pages/x_range_graph' %>
-			</div>
-			<p style="text-align: center;">Συνολική Κατανάλωση για όλο το χρόνο: <%=@katanalwsh_xronou%></p>
+			<!--</div>-->
+			<p style="text-align: center;">Συνολική Κατανάλωση για το παραπάνω χρονικό διάστημα: <%=@katanalwsh_xronou%></p>
+			<!--<div id="euro_liter_graph" >-->
+			<!--</div>-->
+			
 
 			<%= render 'pages/show_vehicle' %>
 			
@@ -39,10 +42,10 @@
 			<%@titlos="Κατανάλωση πολλαπλών οχημάτων στο σταθμό #{@array[2]}"%>
 
 			<p style="text-align: center;"><%=@titlos%></p>
-			<div id="graph" >
+			
 				
 				<%= render 'pages/case2' %>
-			</div>
+			
 
 			<% for i in 0..@oxhmata_list.size-1 %>
 				<p style="text-align: center;">Συνολική Κατανάλωση οχήματος <%=@oxhmata_list[i]%>  για το παραπάνω χρονικό διάστημα: <%=@lt_per_km_monthly[i]%> </p>

@@ -91,9 +91,9 @@ console.log(message);
 		if(katanalwsh[i]!=-1){
 	            series.push({
 	            //date first
-	            x:new Date(date[i]).getTime()+11000000,
+	            x:new Date(date[i]).getTime()+7000000,
 	            //date last
-	            x2:new Date(date[i+1]).getTime()+11000000,
+	            x2:new Date(date[i+1]).getTime()+7000000,
 	            //katanalwsh
 	            y:katanalwsh[i],
 	            partialFill:  katanalwsh[i].toFixed(2)            
@@ -108,11 +108,15 @@ console.log(message);
 	    Highcharts.getOptions().colors = ['blue'];    
 		Highcharts.chart('statistics', {
 			chart: {
-			    type: 'xrange'
+			    type: 'xrange',
+			    zoomType: 'xy'
 			},
 			title: {
 			    text: 'Μέση Κατανάλωση Οχημάτων'
 			},
+			rangeSelector:{
+                enabled:true
+            },
 			xAxis: {
 			    type: 'datetime'
 		   },

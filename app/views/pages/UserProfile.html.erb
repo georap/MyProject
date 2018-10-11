@@ -53,7 +53,8 @@
 
 				Highcharts.chart('graph', {
 				    chart: {
-				        type: 'column'
+				        type: 'column',
+				        zoomType: 'xy'
 				    },
 				    title: {
 				        text: 'Τιμή Αγοράς Λίτρων καυσίμου'
@@ -98,7 +99,7 @@
 				        tooltip: {
 				            valueSuffix: ' lt'
 				        },
-				        pointPadding: 0.1,
+				        pointPadding: 0.01,
 				        pointPlacement: -0.2
 				    },  {
 				        name: 'Τιμή',
@@ -107,7 +108,7 @@
 				        tooltip: {
 				            valueSuffix: ' €'
 				        },
-				        pointPadding: 0.1,
+				        pointPadding: 0.01,
 				        pointPlacement: 0.2,
 				        yAxis: 1
 				    }]

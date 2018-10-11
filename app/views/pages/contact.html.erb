@@ -1,5 +1,5 @@
-<h1>Pages#contact</h1>
-<p>Find me in app/views/pages/contact.html.erb</p>
+<h1>Απεικόνιση στατιστικών στοιχείων του <%=Station.find_by_id(@my_station).name %></h1>
+
 <div >
 		Επιλέξτε Καύσιμο
 		<select id='fuel_type' name="fuel_type">
@@ -9,9 +9,19 @@
   			<option value="Αέριο">Αέριο</option>
 		</select>
 </div>
+
+<div >
+		Επιλέξτε Δεύτερο Πρατήριο
+		<select id='fuel_type' name="fuel_type">
+			<option value="Πετρέλαιο"> </option>
+			<option value="Πετρέλαιο">Πετρέλαιο</option>
+  			<option value="Βενζίνη">Βενζίνη</option>
+  			<option value="Αέριο">Αέριο</option>
+		</select>
+</div>
 <!--<button id="Search_button" type="button" class="btn btn-primary">Αναζήτηση</button>-->
 
-<div id='statistics' style="visibility:  hidden;">
+<div id='statistics' style="visibility:  hidden; min-width: 400px; height: 400px; margin: 0 auto">
 
 	
 </div>
