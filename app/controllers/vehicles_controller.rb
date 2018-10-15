@@ -8,7 +8,9 @@ class VehiclesController < ApplicationController
 		@vehicle=Vehicle.new
 		string=params[:location]
 		location=string.split(',')
-		@area=location[1].tr("0-9", "").gsub(/\s+/, '')
+		station_id=params[:my_station]
+		@area=Station.find_by_id(station_id).area
+		#@area=location[1].tr("0-9", "").gsub(/\s+/, '')
 	end
 
 	def create

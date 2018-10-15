@@ -1,23 +1,44 @@
-<h1>Απεικόνιση στατιστικών στοιχείων του <%=Station.find_by_id(@my_station).name %></h1>
 
-<div >
-		Επιλέξτε Καύσιμο
-		<select id='fuel_type' name="fuel_type">
-			<option value="Πετρέλαιο"> </option>
-			<option value="Πετρέλαιο">Πετρέλαιο</option>
-  			<option value="Βενζίνη">Βενζίνη</option>
-  			<option value="Αέριο">Αέριο</option>
-		</select>
-</div>
+<h1>Απεικόνιση στατιστικών στοιχείων του σταθμού <%=@name_station %></h1>
 
-<div >
-		Επιλέξτε Δεύτερο Πρατήριο
-		<select id='fuel_type' name="fuel_type">
-			<option value="Πετρέλαιο"> </option>
-			<option value="Πετρέλαιο">Πετρέλαιο</option>
-  			<option value="Βενζίνη">Βενζίνη</option>
-  			<option value="Αέριο">Αέριο</option>
-		</select>
+<p style="width: 200px;">Αναζήτηση για τον σταθμό<input type="radio" onclick="javascript:stationOrGeo();" name="yesno" id="stationCheck"></p> 
+ <p style="width: 400px;">Αναζήτηση για τη γεωγραφική περιοχή<input type="radio" onclick="javascript:stationOrGeo();" name="yesno" id="geographCheck"></p> 
+<div class="mx-auto" style="width: 450px;">
+
+	<div id='first_fuel_selector' style="display:none;">
+			Επιλέξτε Καύσιμο
+			<select id='fuel_type' name="fuel_type" >
+				<option value=" "> </option>
+				<option value="Πετρέλαιο">Πετρέλαιο</option>
+	  			<option value="Βενζίνη">Βενζίνη</option>
+	  			<option value="Αέριο">Αέριο</option>
+			</select>
+	</div>
+
+	<div id='second_station_selector' style="display:none;">
+			Επιλέξτε Δεύτερο Πρατήριο
+			<select id='second_station'  name="second_station">
+				
+			</select>
+	</div>
+
+
+	<div id='first_fuel_area_selector' style="display:none;">
+			Επιλέξτε Καύσιμο Περιοχής
+			<select id='fuel_area' name="fuel_area" >
+				<option value=" "> </option>
+				<option value="Πετρέλαιο">Πετρέλαιο</option>
+	  			<option value="Βενζίνη">Βενζίνη</option>
+	  			<option value="Αέριο">Αέριο</option>
+			</select>
+	</div>
+
+	<div id='second_area_selector' style="display:none;">
+			Επιλέξτε Δεύτερη Περιοχή
+			<select id='second_area' name="second_area">
+						
+			</select>
+	</div>
 </div>
 <!--<button id="Search_button" type="button" class="btn btn-primary">Αναζήτηση</button>-->
 
@@ -25,10 +46,42 @@
 
 	
 </div>
+<div id='error' style="visibility:  hidden; ">
+	<p class="text-danger">ΔΕΝ ΥΠΑΡΧΟΥΝ ΕΓΓΡΑΦΕΣ ΓΙΑ ΤΗ ΔΕΥΤΕΡΗ ΕΠΙΛΟΓΗ</p>
+	
+</div>
+<div id='second_graph_div' style="visibility:  hidden; min-width: 400px; height: 400px; margin: 0 auto">
+	
+	
+</div>
+
+
 
 <script>
 	//statistics.style.visibility='hidden'
 	//document.getElementById("Search_button").addEventListener("click", Search);
+	function stationOrGeo(){
+		if (document.getElementById('stationCheck').checked) {
+			document.getElementById('first_fuel_selector').style.display='block';
+			document.getElementById('first_fuel_area_selector').style.display='none';
+			document.getElementById('second_area_selector').style.display='none';
+			document.getElementById('fuel_area').value = " ";
+			document.getElementById('second_area').value = " ";
+			document.getElementById('second_graph_div').style.visibility='hidden';
+			document.getElementById('statistics').style.visibility='hidden';
+
+		}
+		else if(document.getElementById('geographCheck').checked){
+			document.getElementById('first_fuel_selector').style.display='none';
+			document.getElementById('second_station_selector').style.display='none';
+			document.getElementById('first_fuel_area_selector').style.display='block';
+			document.getElementById('fuel_type').value = " ";
+			document.getElementById('second_station').value = " ";
+			document.getElementById('second_graph_div').style.visibility='hidden';
+			document.getElementById('statistics').style.visibility='hidden';
+		}
+
+	}
 	$("#fuel_type").change(function (){
 	//function Search(){
 		fuel_type=$('select[name="' + "fuel_type" + '"]').val();
@@ -37,13 +90,63 @@
       		type: 'GET',
       		data: {"fuel_type": fuel_type, "my_station": <%=params[:my_station]%>},
       		success: function(graph){
-      			
+      			console.log("success PRWTO"); 
+      			//value change for the second station
+      			document.getElementById('second_station').value = " ";
+      			document.getElementById('second_station_selector').style.display = 'block';
+      			//ajax call if user choose second station from selector
+				$("#second_station").change(function (){
+					var second_station=$('select[name="' + "second_station" + '"]').val();
+					second_station= stations[second_station];
+					$.ajax({
+						url: '/pages/contact',
+						type: 'GET',
+						data: {"fuel_type": fuel_type,"second_station": second_station,"my_station": <%=params[:my_station]%>},
+						success: function(graph){
+							 console.log("success DEUTERO");
+							 //value change for the first station
+  							document.getElementById('fuel_type').value = " ";
+						}
+					});
+				});
       		}
     	});
-    	//statistics.style.visibility='visible';
-    	//var date=<%=@vehicle%>;
-    	//var ftype=<%=@fuel_type%>;
-    	//console.log(ftype);
+
+	});
+//"fuel_area": fuel_area, "my_station": <%=params[:my_station]%>
+	$("#fuel_area").change(function (){
+		fuel_area=$('select[name="' + "fuel_area" + '"]').val();
+		
+		$.ajax({
+						url: '/pages/contact',
+						type: 'GET',
+						data: {"fuel_area": fuel_area, "my_station": <%=params[:my_station]%>},
+						//dataType: 'script',
+						success: function(graph){
+							//value change for the second area
+      						document.getElementById('second_area').value = " ";
+							document.getElementById('second_area_selector').style.display = 'block';
+							console.log("success TRITO");
+							$("#second_area").change(function (){
+								var second_area=$('select[name="' + "second_area" + '"]').val();
+								second_area= areas[second_area];
+								$.ajax({
+									url: '/pages/contact',
+									type: 'GET',
+									data: {"fuel_area": fuel_area,"second_area": second_area,"my_station": <%=params[:my_station]%>},
+									success: function(graph){
+										//value change for the first area
+      									document.getElementById('fuel_area').value = " ";
+										 console.log("success TETARTO");  			
+									}
+								});
+							});
+						},
+						error: function(){
+							console.log("ERROR 3");
+
+						}
+					});
 	});
 </script>
 

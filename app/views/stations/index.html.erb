@@ -7,6 +7,7 @@
 	<p><%= station_item.latitude %></p>
 	<p><%= station_item.longitude %></p>
 	<p><%= station_item.area %></p>
+	<p><%= station_item.company %></p>
 	<% if(current_user.roles[0].to_s.include?("site_admin"))%>
 		<td><%= link_to "Edit", edit_station_path(station_item.id)%></td>
 		<td><%= link_to "Delete", station_item, method: :delete, data: { confirm: 'Are you sure?' }%></td>

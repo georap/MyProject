@@ -86,10 +86,10 @@
 			<p> periptwsh <%=@case%> </p>
 			<!--# upologizw kai gia ton sugkekrimeno xrhsth sto sugkekrimeno prathrio to sugkekrimeno mhna!-->
 			<%@titlos="Κατανάλωση του οχήματος #{@array[1]} για το μήνα #{@array[0]} στο πρατήριο #{@array[2]}"%>
-			<div id="graph" >
+			
 				<%= render 'pages/x_range_graph' %>
-			</div>
-			<p style="text-align: center;">Συνολική κατανάλωση οχήματος για το μήνα <%=@array[0]%> στο σταθμό <%=@array[2]%>: <%=@katanalwsh_mhna%> </p>
+			
+			<p style="text-align: center;">Συνολική κατανάλωση οχήματος για το μήνα <%=@array[0]%> στο σταθμό <%=@array[2]%>: <%=@katanalwsh_xronou%> </p>
 			<%= render 'pages/show_vehicle' %>
 		<%end%>
 

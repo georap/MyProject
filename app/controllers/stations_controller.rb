@@ -5,22 +5,7 @@ class StationsController < ApplicationController
 
 	def index
 		@station_items=Station.all
-		counter=0
-		@station_items.each do|station_item|
-			if(station_item.area == nil &&station_item.latitude!=nil &&station_item.longitude!=nil)
 
-				puts "#{counter} #{station_item.latitude} #{station_item.longitude}"
-				results = Geocoder.search(station_item.latitude,station_item.longitude)
-				results=results.first.address_components_of_type(:administrative_area_level_3)
-				data= results.split(",")
-				new_data=data[0].partition("=>").last.tr('"','')
-				Station.update!(area: new_data)
-				#reverse_geocoded_by :latitude, :longitude,
-			  	#:address_components_of_type(:administrative_area_level_3) =>  :area 
-				#after_validation :reverse_geocode, if: :latitude_changed? || :longitude_changed?
-				counter+=1
-			end
-		end
 	end
 
 	def edit
@@ -61,7 +46,11 @@ class StationsController < ApplicationController
 		@newLatLong=string.split(',')
 		@newLatLong[0].to_f
 		@newLatLong[1].to_f
-
+		results = Geocoder.search([@newLatLong[0], @newLatLong[1]])
+		puts results.first.address_components_of_type(:city)
+		results=results.first.address_components_of_type(:administrative_area_level_3).to_s
+		data= results.split(",")
+		@area= data[0].partition("=>").last.tr('"','')
 	end
 
 	def create
@@ -78,7 +67,7 @@ class StationsController < ApplicationController
 
 	private
 	def station_params
-		params.require(:station).permit(:name, :address, :latitude, :longitude)
+		params.require(:station).permit(:name, :address, :latitude, :longitude, :area,:company)
 	end
 	
 	def is_admin

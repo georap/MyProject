@@ -1,0 +1,46 @@
+
+<h1>Απεικόνιση στατιστικών στοιχείων του </h1>
+
+<div >
+		Επιλέξτε Καύσιμο Περιοχής
+		<select id='fuel_area' name="fuel_area">
+			<option value=" "> </option>
+			<option value="Πετρέλαιο">Πετρέλαιο</option>
+  			<option value="Βενζίνη">Βενζίνη</option>
+  			<option value="Αέριο">Αέριο</option>
+		</select>
+</div>
+
+<div id='second_area_selector' style="display:none;">
+		Επιλέξτε Δεύτερη Περιοχή
+		<select id='second_area' name="second_area">
+			<option value=" "> </option>
+			
+		</select>
+</div>
+
+<div id='statistics' style="visibility:  hidden; min-width: 400px; height: 400px; margin: 0 auto">
+
+	
+</div>
+
+<div id='second_graph_div' style="visibility:  hidden; min-width: 400px; height: 400px; margin: 0 auto">
+
+	
+</div>
+
+<script>
+	$("#fuel_area").change(function (){
+		fuel_area=$('select[name="' + "fuel_area" + '"]').val();
+		
+		$.ajax({
+      		url: '/pages/area',
+      		type: 'GET',
+      		data: {"fuel_area": fuel_area, "my_station": <%=params[:my_station]%>},
+      		success: function(graph){
+      			console.log("success");
+      			//document.getElementById('second_area_selector').style.display = 'block';
+			}
+		});
+	});
+</script>
