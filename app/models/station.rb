@@ -6,7 +6,6 @@ class Station < ApplicationRecord
 	before_save :uppercase_fields
 
 	if(:address != nil)
-		
 		geocoded_by :address
 		after_validation :geocode, if: :address_changed?
 	end

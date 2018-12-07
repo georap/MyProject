@@ -1,3 +1,4 @@
+
 <div>
 	<% if @error_message.length==0 %>
 		<%string=params[:q] %>
@@ -39,16 +40,16 @@
 			<p> periptwsh <%=@case%> </p>
 			<!--#katanalwsh gia pollapla oxhmata tou prathriou pou exei balei o xrhsths kausima!--> 
 			
-			<%@titlos="Κατανάλωση πολλαπλών οχημάτων στο σταθμό #{@array[2]}"%>
+			<%@titlos="Κατανάλωση πολλαπλών οχημάτων στο σταθμό #{@station_id.name}"%>
 
 			<p style="text-align: center;"><%=@titlos%></p>
 			
 				
-				<%= render 'pages/case2' %>
+				<%#= render 'pages/case2' %>
 			
-
+				<%= render 'pages/line_chart' %>
 			<% for i in 0..@oxhmata_list.size-1 %>
-				<p style="text-align: center;">Συνολική Κατανάλωση οχήματος <%=@oxhmata_list[i]%>  για το παραπάνω χρονικό διάστημα: <%=@lt_per_km_monthly[i]%> </p>
+				<p style="text-align: center;">Συνολική Κατανάλωση οχήματος <%=@oxhmata_list[i]%>  για το παραπάνω χρονικό διάστημα: <%=@lt_per_km_monthly[i].round(2)%> </p>
 
 			<%end%>
 			<%= render 'pages/show_vehicle' %>
@@ -63,15 +64,21 @@
 		<%elsif @case==3%>
 			<p> periptwsh <%=@case%> </p>
 			<!--#alliws upologizei me bash to prathrio gia sugkekrimeno oxhma kai TYPO KAYSIMOY gia diaforetikous xrhstes!-->
-			<%@titlos="Κατανάλωση χρηστών στο σταθμό #{@array[2]} για το όχημα #{@array[1]}"%>
+			
+			<%@titlos="Σύγκριση κατανάλωσης οχημάτων #{@array[1]} και #{@array[5]} στο σταθμό #{@station_id.name}"%>
 			<p style="text-align: center;"><%=@titlos%></p>
 			<!--<div id="graph" >-->	
-				<%= render 'pages/case2' %>
+				<%#= render 'pages/case2' %>
+				<%= render 'pages/line_chart' %>
 			<!--</div>-->
 
 			
-			<% for i in 0..@user_list.size-1 %>
-				<p style="text-align: center;">Συνολική Κατανάλωση του χρήστη <%=@user_list[i]%> για το παραπάνω χρονικό διάστημα: <%=@lt_per_km_monthly[i].round(2)%></p>
+			<% for i in 0..@lt_per_km_monthly.size-1 %>
+				<%if @flag_statistics==false%>
+					<p style="text-align: center;">Συνολική Κατανάλωση του οχήματος <%=@oxhmata_list[i]%> για το παραπάνω χρονικό διάστημα: <%=@lt_per_km_monthly[i].round(2)%></p>
+				<%else%>
+					<p style="text-align: center;">Συνολική Κατανάλωση του χρήστη <%=@user_list[i]%>,οχήματος <%=@oxhmata_list[i] %> για το παραπάνω χρονικό διάστημα: <%=@lt_per_km_monthly[i].round(2)%></p>
+				<%end%>
 			<%end%>
 			<%= render 'pages/show_vehicle' %>
 			<%#= @lt_per_km_monthly%>
@@ -85,15 +92,15 @@
 		<%elsif @case==4%>
 			<p> periptwsh <%=@case%> </p>
 			<!--# upologizw kai gia ton sugkekrimeno xrhsth sto sugkekrimeno prathrio to sugkekrimeno mhna!-->
-			<%@titlos="Κατανάλωση του οχήματος #{@array[1]} για το μήνα #{@array[0]} στο πρατήριο #{@array[2]}"%>
+			<%@titlos="Κατανάλωση του οχήματος #{@array[1]} για το μήνα #{@array[0]} στο πρατήριο #{@station_id.name}"%>
 			
 				<%= render 'pages/x_range_graph' %>
 			
-			<p style="text-align: center;">Συνολική κατανάλωση οχήματος για το μήνα <%=@array[0]%> στο σταθμό <%=@array[2]%>: <%=@katanalwsh_xronou%> </p>
+			<p style="text-align: center;">Συνολική κατανάλωση οχήματος για το μήνα <%=@array[0]%> στο σταθμό <%=@station_id.name%>: <%=@katanalwsh_xronou%> </p>
 			<%= render 'pages/show_vehicle' %>
 		<%end%>
 
 	<% else %>
-		<p style="color: red;"><%=@error_message%> </p>
+		<%= render 'pages/error_page' %>
 	<%end%>
 </div>

@@ -1,10 +1,15 @@
 //var message=<%#=@message%>;
-//console.log(message);
+//console.log("EEEEEEEEEEEEEE"+message);
 
 //put stations or geograph_locations in second_station selector
+
+
+
 var flagFront=<%=@flag_JS%>;
+console.log(flagFront);
 if(flagFront==1){
 	var stations=<%=@prathrio%>;
+	var stations_ids=<%=@stations_ids%>;
 	for (i=0;i<stations.length;i++){
 		console.log(stations[i]);
 		var secondStationSelect = document.getElementById("second_station");
@@ -19,24 +24,38 @@ else if(flagFront==2){
 		var secondAreaSelector = document.getElementById("second_area");
 		secondAreaSelector.options[secondAreaSelector.options.length] = new Option(areas[i], i);	
 	}
-	//remove double elements from selectors
+
+}
+else if(flagFront==3){
+	var companies=<%=@company_selector%>;
+	console.log(companies);
+	for (i=0;i<companies.length;i++){
+
+		var secondCompanySelector = document.getElementById("second_company");
+		secondCompanySelector.options[secondCompanySelector.options.length] = new Option(companies[i], i);	
+	}
+
 }
 removeDoubleElements("second_station");
 removeDoubleElements("second_area_selector");
-
+removeDoubleElements("second_company");
 var firstName,secondName;
 
 
-	statistics.style.visibility='visible';
+	
 
 	var date=<%=@graph_date%>;
 	var katanalwsh=<%=@katanalwsh_pinakas%>;
 	console.log(katanalwsh);
 	console.log(date);
 	var series=[];
-
+	//removeA(katanalwsh, -1);
+	console.log(katanalwsh);
 	var pivot=0;
 	firstName=<%=@first_name%>;
+
+if(date.length>1){
+	error.style.visibility='hidden';
 	for (i=0;i<katanalwsh.length;i++){
   
 		if(katanalwsh[i]!=-1){
@@ -58,7 +77,10 @@ var firstName,secondName;
 
 	var firstTitle=<%=@title_graph%>;
 	console.log(firstTitle);
-	    //Highcharts.getOptions().colors = ['blue'];    
+	    //Highcharts.getOptions().colors = ['blue']; 
+
+	 
+	    statistics.style.visibility='visible';  
 		Highcharts.chart('statistics', {
 			chart: {
 			    type: 'xrange',
@@ -110,11 +132,13 @@ var firstName,secondName;
 var date2=<%=@second_graph%>;	
 
 if(date2.length>1){
-	
+	//statistics.style.visibility='hidden';
 	secondName=<%=@second_name%>;
 	second_graph_div.style.visibility='visible';
 	error.style.visibility='hidden';
 	var katanalwsh2 = <%=@katanalwsh_pinakas2%>;
+	console.log(katanalwsh2);
+	//removeA(katanalwsh2, -1);
 	console.log(katanalwsh2);
 	var data=[];
 	var newSeries=[];
@@ -125,7 +149,8 @@ if(date2.length>1){
 		postDate= new Date(postDate);   
 		if(katanalwsh[i]!=-1){
 	            newSeries.push({
-	            myData: firstName+ ', Date: '+ priorDate+' - '+postDate,
+
+	            myData: firstName+ ', Date: '+ priorDate+' - '+postDate+' = '+katanalwsh[i].toFixed(2),
 	            //date first
 	            x:new Date(date[i]).getTime()+7000000,
 	            //date last
@@ -133,21 +158,43 @@ if(date2.length>1){
 	            //katanalwsh
 	            y:katanalwsh[i],
 	            partialFill:  katanalwsh[i].toFixed(2),   
-	            color: 'blue'         
+	            color: 'blue',
+        
 	            });
 		         	
 		         	//pivot+=2;
 	    }
 
 	}
+	var tempForSeries=[];	
+
+	tempForSeries.push({
+		name: firstName,
+				// pointPadding: 0,
+			    // groupPadding: 0,
+			    //borderColor: 'gray',
+				pointWidth: 10,
+				data: newSeries,
+				dataLabels: {
+				    enabled: false,
+				    formatter: function() {
+			          var percents = this.point.partialFill;
+			          console.log(percents);
+			          return percents ? percents  + '' : ''
+			      	}
+				}
+	});
+//setDataToSeries(tempForSeries,newSeries,firstName);
+	var secondDataGraph=[];
 	for (i=0;i<katanalwsh2.length;i++){
-		priorDate= new Date(date[i]).getTime()+7000000;
+		priorDate= new Date(date2[i]).getTime()+7000000;
 		priorDate= new Date(priorDate);
-		postDate= new Date(date[i+1]).getTime()+7000000;
+		postDate= new Date(date2[i+1]).getTime()+7000000;
 		postDate= new Date(postDate);   
 		if(katanalwsh2[i]!=-1){
-	            newSeries.push({
-	            myData: secondName+', Date: '+ priorDate+' - '+postDate,
+	            secondDataGraph.push({
+
+	            myData: secondName+', Date: '+ priorDate+' - '+postDate+' = '+katanalwsh2[i].toFixed(2),
 	            //date first
 	            x:new Date(date2[i]).getTime()+7000000,
 	            //date last
@@ -161,59 +208,16 @@ if(date2.length>1){
 	         	//pivot+=2;
 	    }             
 	}
-	/*
-	if(katanalwsh2.length>katanalwsh.length){
 
-	}
-	else if(katanalwsh.length>katanalwsh2.length){
-		console.log("OI PINAKES EXOUN MEGE8OS PRWTOS "+ katanalwsh.length+ " DEYTEROS "+katanalwsh2.length);
-		for (i=0;i<katanalwsh.length;i++){
-			var pinakas=[];
-			if(katanalwsh[i]!=-1){
-				pinakas=setDataToArray(date,i,katanalwsh[i],'blue');
-                data.push({
-                        name: 'haha',
-                      	pointWidth: 10,
-                        data: pinakas,
-                        dataLabels: {
-                            enabled: true,
-                            formatter: function() {
-                              var percents = this.point.partialFill;
-                              console.log(percents);
-                              return percents ? percents  + '' : ''
-                            }
-                        }
-                });
-			}
-			if(i<katanalwsh2.length){
-				if(katanalwsh2[i]!=-1){
-					pinakas=setDataToArray(date2,i,katanalwsh2[i],'red');
-                	data.push({
-                        name: 'hoho',
-                      	pointWidth: 10,
-                        data: pinakas,
-                        dataLabels: {
-                            enabled: true,
-                            formatter: function() {
-                              var percents = this.point.partialFill;
-                              console.log(percents);
-                              return percents ? percents  + '' : ''
-                            }
-                        }
-                	});
-				}
-			}
-		}
-	}
-	else{
+	setDataToSeries(tempForSeries,secondDataGraph,secondName);
 
-	}
-		console.log(data);*/
 	var secondTitle=<%=@title_graph2%>;
 	console.log(secondTitle);
-	Highcharts.chart('second_graph_div', {
+
+
+	Highcharts.chart('statistics', {
 			chart: {
-			    type: 'xrange',
+			    type: 'spline',//x-range
 			    zoomType: 'xy'
 			},
 			title: {
@@ -234,7 +238,7 @@ if(date2.length>1){
 				},
 				reversed: false
 			},
-			legend: {
+			/*legend: {
 		        align: 'right',
 		        x: -30,
 		        verticalAlign: 'top',
@@ -247,12 +251,13 @@ if(date2.length>1){
 		        labelFormatter: function () {
 		            return secondName;
 		        }
-		    },
+		    },*/
     		tooltip: {
 			        formatter: function() {
 			          return '<b>' + this.point.myData + '</b>';
 			}},
-			series: /*data*/[{
+			series:tempForSeries /*data*/
+				/*[{
 				name: '',
 				// pointPadding: 0,
 			    // groupPadding: 0,
@@ -267,14 +272,22 @@ if(date2.length>1){
 			          return percents ? percents  + '' : ''
 			      	}
 				}
-				}]
+				}]*/
 		});
+	}
+	else{
+			//second_graph_div.style.visibility='hidden';
+			document.getElementById("error_message").innerHTML = <%=@message%>;
+			error.style.visibility='visible';
+			console.log("TROUUUUUUUUUUUUUUUUUUUUUUUUUUUBLE")
+	}
 }
 else{
-		second_graph_div.style.visibility='hidden';
+		//second_graph_div.style.visibility='hidden';
+		console.log("kalhspera");
+		document.getElementById("error_message").innerHTML = <%=@message%>;
 		error.style.visibility='visible';
 }
-
 function removeDoubleElements(selectID){	
 	var string='#'+selectID+' option';
 	var optionValues =[];
@@ -287,19 +300,33 @@ function removeDoubleElements(selectID){
 });
 }
 
-function setDataToArray(arrayDate,position,katanalwsh,colourPicker,){
-	console.log("EEEEEEEEEEE"+arrayDate+" "+katanalwsh+" "+colourPicker);
-	var array=[];
+function setDataToSeries(array,series,seriesName){
+
 	array.push({
-                    //name
-                    //name:nameList[i],
-                    //date  
-                    x:new Date(arrayDate[position]).getTime()+11000000,
-                    x2:new Date(arrayDate[position+1]).getTime()+11000000,
-                    //katanalwsh
-                    y:katanalwsh,
-                    partialFill:  katanalwsh.toFixed(2),
-                    color: colourPicker              
-                    });
-	return array;
+		name: seriesName,
+				// pointPadding: 0,
+			    // groupPadding: 0,
+			    //borderColor: 'gray',
+				pointWidth: 10,
+				data: secondDataGraph,
+				dataLabels: {
+				    enabled: false,
+				    formatter: function() {
+			          var percents = this.point.partialFill;
+			          console.log(percents);
+			          return percents ? percents  + '' : ''
+			      	}
+				}
+	});
+
+}
+function removeA(arr) {
+    var what, a = arguments, L = a.length, ax;
+    while (L > 1 && arr.length) {
+        what = a[--L];
+        while ((ax= arr.indexOf(what)) !== -1) {
+            arr.splice(ax, 1);
+        }
+    }
+    return arr;
 }

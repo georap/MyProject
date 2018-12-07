@@ -15,7 +15,6 @@
             Review posted by <span class="review-name"><%= review.user.first_name %></span> <%= distance_of_time_in_words(review.created_at, Time.now) %> ago
           </div>
           <div class="review-links">
-            <!-- EXEI PROBLHMA TO ACTIONCABLE ME TO AUTHENTICATION KAI TO RENDERING-->
             <% if(@flag==review.user_id)|| (@admin==true)%>
               <%= link_to 'Delete', [review.station, review],
                   method: :delete, class: "button is-danger", data: { confirm: 'Are you sure?' } %>

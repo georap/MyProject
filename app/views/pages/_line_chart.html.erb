@@ -1,13 +1,10 @@
 <%=link_to "Νέα απεικόνιση στατιστικών στοιχείων", vehicles_path%>
 <br>
-<div id="graph" style="height: 600px; margin-top: 2em" >
+<div id="graph" style="height: 500px; margin-top: 2em" >
 
 </div>
-<div id="second_graph" >
-</div>    
-<script >
-//if(<%=@case%>==2){
-        var nameList=<%=@name_list%>;
+<script>
+var nameList=<%=@name_list%>;
         var statistika=<%=@statistika%>;
         var date=[];
         var katanalwsh=[];
@@ -24,11 +21,11 @@
             var flag=statistika[i].length;
 
             counterArray[i]=statistika[i][0].length;
-            console.log(counterArray[i]+"hi");
+            //console.log(counterArray[i]+"hi");
             for(j=0;j<flag;j++){            
                 
                 for(k=0;k<counterArray[i];k++){                    
-                    console.log(nameList[i]);
+                    //console.log(nameList[i]);
                     //isNaN returns true if its string
                     if(isNaN(statistika[i][j][k])){
                         date.push(statistika[i][j][k]);
@@ -42,8 +39,8 @@
 
         var title_graph="<%@titlos%>";
         //console.log(katanalwsh);
-        //console.log(date);
-removeA(katanalwsh, -1);
+        console.log(date);
+//removeA(katanalwsh, -1);
 console.log(katanalwsh);
         var data=[];
         var oxhma="<%="#{@array[1]}"%>";
@@ -60,13 +57,14 @@ console.log(katanalwsh);
                         pointWidth: 10,
                         data: pinakas,
                         dataLabels: {
-                            enabled: true,
+                            enabled: false,
                             formatter: function() {
                               var percents = this.point.partialFill;
-                              console.log(percents);
+                              //console.log(percents);
                               return percents ? percents  + '' : ''
                             }
-                        }
+                        },
+                        colour: colourPicker
                 });
                 lastPos=temp;
             }
@@ -78,16 +76,17 @@ console.log(katanalwsh);
                 //console.log("LAST "+lastPos+" "+counterArray[i]);
                 data.push({
                     name: nameList[i],
-                    pointWidth: 10,
+                    //pointWidth: 10,
                     data: pinakas,
                     dataLabels: {
-                        enabled: true,
+                        enabled: false,
                         formatter: function() {
                           var percents = this.point.partialFill;
-                          console.log(percents);
+                          //console.log(percents);
                           return percents ? percents  + '' : ''
                         }
-                    }
+                    },
+                    colour: colourPicker
                 });
                 //console.log(lastPos+counterArray[i]);
                 lastPos+=counterArray[i];
@@ -102,7 +101,7 @@ console.log(katanalwsh);
 
     <% if @case ==3 %>
         legendTitle="Οχήματα";
-        titleForMesh="Μέση κατανάλωση χρηστών";
+        titleForMesh="Μέση κατανάλωση οχημάτων";
 
     <%else%>
         legendTitle="Οχήματα";
@@ -114,35 +113,39 @@ console.log(katanalwsh);
     var second_graph_array=<%=@second_graph_array%>;
     console.log(second_graph_array);
     console.log(array_date);
-            removeA(second_graph_array, -1);
-        console.log(second_graph_array);
-    var secondPinakas=setDataToSecondGraph(second_graph_array.length-second_graph_array.length,second_graph_array.length,'red');
+    //removeA(second_graph_array, -1);
+    console.log(second_graph_array);
+    var secondPinakas=[];
+    if(array_date.length>=second_graph_array.length){
+        secondPinakas=setDataToSecondGraph(0,second_graph_array.length,'red');
+    
+    }
+    else{
+        secondPinakas=setDataToSecondGraph(0,array_date.length,'red');
+    }
     data.push({
                     name: titleForMesh,
-                    pointWidth: 5,
+                    //pointWidth: 5,
                     data: secondPinakas,
                     dataLabels: {
-                        enabled: true,
+                        enabled: false,
                         formatter: function() {
                           var percents = this.point.partialFill;
                           console.log(percents);
                           return percents ? percents  + '' : ''
                         }
-                    }
-                });
+                    },
+                    color: 'red'
+    });
 
-
-
-
-    Highcharts.chart('graph', {
+Highcharts.chart('graph', {
     chart: {
-        type: 'xrange',
+        type: 'spline',
         zoomType: 'x'
     },
     title: {
         text: title_graph
     },
-    
     xAxis: {
         type:'datetime'
     },
@@ -152,102 +155,48 @@ console.log(katanalwsh);
         }
     },
     legend: {
+        layout: 'vertical',
         align: 'right',
-        x: -30,
-        verticalAlign: 'top',
-        y: 0,
-        floating: true,
-        backgroundColor: (Highcharts.theme && Highcharts.theme.background2) || 'white',
-        borderColor: '#CCC',
-        borderWidth: 1,
-        shadow: false,
+        verticalAlign: 'middle',
         title: {
             text:legendTitle
         }
     },
-    series: data/*data[{
-            name: nameList[0],
-          
-            data: series
-        }]*/,
-    });
+    tooltip: {
+                    formatter: function() {
+                      return '<b>' + this.point.myData + '</b>';
+            }},
+    /*plotOptions: {
+        series: {
+            label: {
+                connectorAllowed: false
+            },
+            pointStart: 2010
+        }
+    },*/
 
+    series: data
 
+});
 
-    
-var highcharts_series=[];
-for (i=0;i<second_graph_array.length;i++){   
-        if(second_graph_array[i]!=-1){
-                highcharts_series.push({
-                //date first
-                x:new Date(array_date[i]).getTime()+7200000,
-                //date last
-                x2:new Date(array_date[i+1]).getTime()+7200000,
-                //katanalwsh
-                y:second_graph_array[i],
-                partialFill:  second_graph_array[i].toFixed(2)            
-                });
-                
-                //pivot+=2;
-        }     
-             
-}
-//console.log(second_graph_array);
-//console.log(array_date);
-/*
-    Highcharts.getOptions().colors = ['blue'];    
-            Highcharts.chart('second_graph', {
-                chart: {
-                    type: 'xrange',
-                    zoomType: 'xy'
-                },
-                title: {
-                    text: 'Μέση Κατανάλωση '
-                },
-                xAxis: {
-                    type: 'datetime'
-               },
-                yAxis: {
-                    title: {
-                        text: 'Κατανάλωση (lt/100 km)',
-                        style: {
-                            color: 'black'
-                        }
-                    },
-                    reversed: false
-                },
-                series: [{
-                    name: '',
-                    // pointPadding: 0,
-                    // groupPadding: 0,
-                    //borderColor: 'gray',
-                    pointWidth: 20,
-                    data: highcharts_series,
-                    dataLabels: {
-                        enabled: true,
-                        formatter: function() {
-                          var percents = this.point.partialFill;
-                          console.log(percents);
-                          return percents ? percents  + '' : ''
-                        }
-                    }
-                    }]
-            });
-*/
 function setDataToArray(first,last,colourPicker){
     var array=[];
     for(j=first;j<last-1;j++){
-
+        priorDate= new Date(date[j]).getTime()+7000000;
+        priorDate= new Date(priorDate);
+        postDate= new Date(date[j+1]).getTime()+7000000;
+        postDate= new Date(postDate);
                     array.push({
                     //name
                     //name:nameList[i],
                     //date  
+                    myData: 'Date: '+ priorDate+' - '+postDate+' = ' +katanalwsh[j+1].toFixed(2),
                     x:new Date(date[j]).getTime()+11000000,
-                    x2:new Date(date[j+1]).getTime()+11000000,
+                    //x2:new Date(date[j+1]).getTime()+11000000,
                     //katanalwsh
                     y:katanalwsh[j+1],
                     partialFill:  katanalwsh[j+1].toFixed(2),
-                    color: colourPicker              
+                    //color: colourPicker              
                     });
                     
     } 
@@ -257,16 +206,21 @@ function setDataToSecondGraph(first,last,colourPicker){
     var array=[];
     for(j=first;j<last;j++){
         if(second_graph_array[j]!=-1){
+            priorDate= new Date(date[j]).getTime()+7000000;
+            priorDate= new Date(priorDate);
+            postDate= new Date(date[j+1]).getTime()+7000000;
+            postDate= new Date(postDate);
                     array.push({
                     //name
                     //name:nameList[i],
-                    //date  
+                    //date
+                    myData: 'Date: '+ priorDate+' - '+postDate+' = ' +second_graph_array[j].toFixed(2),  
                     x:new Date(array_date[j]).getTime()+11000000,
-                    x2:new Date(array_date[j+1]).getTime()+11000000,
+                    //x2:new Date(array_date[j+1]).getTime()+11000000,
                     //katanalwsh
                     y:second_graph_array[j],
                     partialFill:  second_graph_array[j].toFixed(2),
-                    color: colourPicker              
+                    //color: colourPicker              
                     });
         }             
     } 

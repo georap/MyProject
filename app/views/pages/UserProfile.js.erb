@@ -1,0 +1,284 @@
+
+
+if(<%=@flagJS%>==0){
+	console.log("hello");
+	var date=<%=@date_pinakas%>;
+			
+				document.getElementById('graph').style.display = 'block'
+				
+				var liters=<%=@litra_pinakas%>;
+				var price=<%=@timh_pinakas%>;
+				
+				        
+				//var title_graph="<%=@titlos%>";
+				var litersArray = [];
+				var priceArray = [];
+				var priorDate ;
+				for (i=0;i<date.length;i++){
+            
+				    litersArray.push({
+				    	//name:'Vehicle: '+vehicle_list[i]+', '+'Date: '+ priorDate,
+					    //date  
+					    x:new Date(date[i]),
+					    //litra
+					    y:liters[i]              
+				    });
+				    priceArray.push({
+				    	//name:'Vehicle: '+vehicle_list[i]+', '+'Date: '+ priorDate,
+					    //date  
+					    x:new Date(date[i]),
+					    //timh
+					    y:price[i]              
+				    });
+				    
+				}
+				Highcharts.chart('graph', {
+				    chart: {
+				        type: 'column',
+				        zoomType: 'xy'
+				    },
+				    title: {
+				        text: 'Τιμή Αγοράς Λίτρων καυσίμου'
+				    },
+				    xAxis: {
+				        type: 'datetime'
+				    },
+				    yAxis: [{
+				        min: 0,
+				        title: {
+				            text: 'Liters(lt)'
+				        }
+				    }, {
+				        title: {
+				            text: 'Euro(€)'
+				        },
+				        opposite: true
+				    }],
+				    legend: {
+				        shadow: false
+				    },
+				    tooltip: {
+				        shared: true
+				    },
+				    plotOptions: {
+				        column: {
+				            grouping: false,
+				            shadow: false,
+				            borderWidth: 0
+				        }
+				    },
+				    /*tooltip: {
+				        formatter: function() {
+				          return 'Extra data: <b>' + this.point.myData + '</b>';
+				        }
+				    },*/
+				    series: [{
+				        name: 'Λίτρα',
+				        color: 'rgba(165,170,217,1)',
+				        data: litersArray,
+				        tooltip: {
+				            valueSuffix: ' lt'
+				        },
+				        pointPadding: 0.01,
+				        pointPlacement: -0.2
+				    },  {
+				        name: 'Τιμή',
+				        color: 'rgba(186,60,61,.9)',
+				        data: priceArray,
+				        tooltip: {
+				            valueSuffix: ' €'
+				        },
+				        pointPadding: 0.01,
+				        pointPlacement: 0.2,
+				        yAxis: 1
+				    }]
+				});
+}
+
+if(<%=@flagJS%>==1){
+document.getElementById('graph').style.display = 'block'
+var station_names=<%=@stations_names%>;
+var station_ids=<%=@stations_ids%>;
+var station_list=<%=@station_list%>;
+var date=<%=@date_pinakas%>;
+var colours=[];
+var testDate=<%=@tester%>;
+//console.log(date);
+console.log("EEEEEEEEEEEEEE"+station_list);
+var position=0;
+var dataSeries=[];
+
+for(j=0;j<station_list.length;j++){
+	colours[j]=setRandomColour();
+}
+var pinakas=[];
+
+var name=" ";
+
+for( i =0; i < date.length-1; i++){
+	var priorDate= new Date(date[i]).getTime()+7200000;
+	priorDate= new Date(priorDate);
+	var postDate= new Date(date[i+1]).getTime()+7200000;
+	postDate= new Date(postDate)
+	for ( j =0 ; j < station_list.length; j++) {
+		if(station_list[j]==station_ids[i]){
+			pinakas.push({
+                    //date  
+                    x:new Date(date[i]).getTime()+7200000,
+                    x2:new Date(date[i+1]).getTime()+7200000,
+                    myData: 'Station: '+station_names[j]+', '+'Date: '+ priorDate+' - '+postDate,
+                    y:0,
+                    pointWidth: 10,
+                    color: colours[j]              
+            });
+		}
+		
+	}
+}
+for ( j =0 ; j < station_list.length; j++) {
+	name=name+" "+station_names[j];
+}
+dataSeries.push({
+	name: name,
+	data: pinakas,
+	dataLabels: {
+		enabled: false,
+
+	}
+});
+
+
+
+
+console.log(dataSeries);
+var titleGraph='Γεμίσματα οχήματος  σε όλους τους σταθμούς';
+highchartsGraph(dataSeries,'graph',titleGraph);
+}
+
+function setDataToArray(first,last,colourPicker,sta8mos){
+
+	console.log("first "+first+" last"+last);
+
+    for(j=first;j<last;j++){
+    	var array=[];
+    	if(date[j]!=0){
+    		console.log("hi");
+
+                    array.push({
+                    //date  
+                    x:new Date(testDate[j]).getTime()+7200000,
+                    x2:new Date(testDate[j+1]).getTime()+7200000,
+                    //myData: 'Station: '+sta8mos+', '+'Date: '+ priorDate+' - '+postDate,
+                    y:0,
+                    pointWidth: 10,
+                    color: colourPicker              
+                    });
+        }            
+    } 
+    return array;
+}
+
+function setData(){
+	for( i =0; i < testDate.length; i++){
+		var size=testDate[i].length;
+		for ( j =0 ; j < size; j++) {
+			if(testDate[i][j]!=0){
+				
+			}
+		}
+	}
+}
+
+		function setRandomColour() {
+		  var letters = '0123456789ABCDEF';
+		  var color = '#';
+		  for (i = 0; i < 6; i++) {
+		    color += letters[Math.floor(Math.random() * 16)];
+		  }
+		  console.log(color);
+		  return color;
+		}
+		function search(start,vehicle,array){
+			var newPos=0;
+			
+			for (k = start; k < array.length; k++) {
+				
+		    	if(vehicle===array[k]){
+		    		newPos=k;
+		    		return newPos;
+		    	}
+		  	}
+		  	return newPos;
+		}
+
+		function highchartsGraph(array,graphDiv,title){
+
+			var tableData=array;
+			var color=setRandomColour();
+			
+			Highcharts.chart(graphDiv, {
+				chart: {
+				    type: 'xrange',
+					zoomType: 'xy'
+				},
+				title: {
+				    text: title
+				},
+				rangeSelector:{
+		                enabled:true
+		            },
+				xAxis: {
+				    type: 'datetime'
+			   },
+				yAxis: {
+					title: {
+					    text: 'Γεμίσματα'
+					},
+					labels: {
+			            enabled: false
+			        },
+				    //categories: categories_list,
+				    reversed: true,
+				},
+				tooltip: {
+			        formatter: function() {
+			          return '<b>' + this.point.myData + '</b>';
+			        }},
+			    legend: {
+				        align: 'right',
+				        x: -25,
+				        verticalAlign: 'top',
+				        y: 25,
+				        floating: true,
+				        backgroundColor: (Highcharts.theme && Highcharts.theme.background2) || 'white',
+				        borderColor: '#CCC',
+				        borderWidth: 1,
+				        shadow: false
+				},
+				series: tableData/*[{
+					name: categories_list,
+					// pointPadding: 0,
+				    // groupPadding: 0,
+				    //borderColor: 'gray',
+					pointWidth: 10,
+					data: tableData/*[{
+				    x: utcDate1,
+				    x2: utcDate2,
+				            y: 0,
+				            partialFill: 1
+				        }],
+					dataLabels: {
+					    enabled: true,
+					    formatter: function() {
+				          var percents = this.point.partialFill;
+				          console.log(percents);
+				          return percents ? percents  + '' : ''
+				      	}
+					}
+					}]*/
+			});
+		}
+		function removeDuplicateUsingSet(arr){
+		    let unique_array = Array.from(new Set(arr))
+		    return unique_array
+		}

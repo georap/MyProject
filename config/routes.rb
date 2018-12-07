@@ -10,7 +10,7 @@ Rails.application.routes.draw do
 
   get 'pages/contact'
   get 'pages/statistics'
-  get 'pages/area'
+
   resources :stations do
   	resources :reviews
   end

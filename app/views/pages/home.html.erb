@@ -1,6 +1,8 @@
 <h1>Hi, <%= current_user.first_name %></h1>
 
-
+<%if (current_user.roles[0].to_s.include?("site_admin"))%>
+  <%= link_to '<button class="btn btn-primary mr-5" >Σταθμοί Υγρών Καυσίμων</button>'.html_safe, stations_path%>
+<%end%>
 
 <!DOCTYPE html>
 <html>

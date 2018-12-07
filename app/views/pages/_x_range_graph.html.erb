@@ -1,14 +1,22 @@
+<%=link_to "Νέα απεικόνιση στατιστικών στοιχείων", vehicles_path%>
+
 <div id="graph" style="height: 300px; margin-top: 2em" >
 	</div>
-<div id="euro_liter_graph" style="height: 300px; margin-top: 2em" >
+
+<div id="kiliometers_div" style="height: 300px; margin-top: 2em" >
 	</div>
+<div id="liters_div" style="height: 300px; margin-top: 2em" >
+	</div>
+<div id="price_div" style="height: 300px; margin-top: 2em" >
+	</div>
+<!--	
+	<div id="euro_liter_graph" style="height: 300px; margin-top: 2em" >
+	</div>
+-->
 <script>
 		var date=<%=@date_pinakas%>;
         var katanalwsh=<%=@katanalwsh_pinakas%>;
-        //var station_list=<%@station_list%>;
-        //var vehicleName=<%=@vehicle_list%>;
-        //console.log(vehicleName);
-        //var title_graph="Κατανάλωση του οχήματος για το μήνα <%=@array[0]%>";
+
         var title_graph="<%=@titlos%>";
         console.log(date);
         console.log(katanalwsh);
@@ -89,7 +97,7 @@ var lt_colours=[];
 var euro_colours=[];
 var litroColours=[];
 var euroColours=[];
-
+/*
 for(k=0;k<station_uniq_list.length;k++){
 	lt_colours[k]=setRandomColour();
 	euro_colours[k]=setRandomColour();
@@ -176,11 +184,7 @@ Highcharts.chart('euro_liter_graph', {
 				            borderWidth: 0
 				        }
 				    },
-				    /*tooltip: {
-				        formatter: function() {
-				          return 'Extra data: <b>' + this.point.myData + '</b>';
-				        }
-				    },*/
+				    
 				    series: [{
 				        name: 'Λίτρα',
 				        color: 'rgba(165,170,217,1)',
@@ -201,8 +205,13 @@ Highcharts.chart('euro_liter_graph', {
 				        pointPlacement: 0.2,
 				        yAxis: 1
 				    }]
-				});
-			//}
+				});*/
+var hichartsArray=<%=@km_graph%>;
+highchartsGraph(hichartsArray,"kiliometers_div","Χιλιόμετρα οχήματος","Χιλιόμετρα (Κm)");
+hichartsArray=<%=@litra_pinakas%>;
+highchartsGraph(hichartsArray,"liters_div","Λίτρα οχήματος","Λίτρα (lt)");
+
+highchartsGraph(price,"price_div","Tιμή καυσίμου",'Ευρώ (€)');
 
 function setDataToArray(first,last){
     var array=[];
@@ -228,4 +237,68 @@ function setRandomColour() {
           console.log(color);
           return color;
 }
+
+function highchartsGraph(array,graphDiv,title,text){
+	var tableData=[];
+	var color=setRandomColour();
+	//katanalwsh length epeidh den upologizoume th teleutaia eggrafh litrwn kai xiliometrwn
+	for (i=0;i<katanalwsh.length;i++){               
+            tableData.push({
+            //date first
+            x:new Date(date[i]).getTime()+7200000,
+            //date last
+            x2:new Date(date[i+1]).getTime()+7200000,
+            //katanalwsh
+            y:array[i],
+            partialFill:  array[i].toFixed(2)  ,
+            color: color     
+            });
+    }
+    
+	//Highcharts.getOptions().colors = color;
+	Highcharts.chart(graphDiv, {
+		chart: {
+		    type: 'xrange',
+			zoomType: 'xy'
+		},
+		title: {
+		    text: title
+		},
+		rangeSelector:{
+                enabled:true
+            },
+		xAxis: {
+		    type: 'datetime'
+	   },
+		yAxis: {
+			title: {
+			    text: text
+		},
+		reversed: false
+		},
+		series: [{
+			//name: vehicleName[0],
+			// pointPadding: 0,
+		    // groupPadding: 0,
+		    //borderColor: 'gray',
+			pointWidth: 20,
+			data: tableData/*[{
+		    x: utcDate1,
+		    x2: utcDate2,
+		            y: 0,
+		            partialFill: 1
+		        }]*/,
+			dataLabels: {
+			    enabled: true,
+			    formatter: function() {
+		          var percents = this.point.partialFill;
+		          console.log(percents);
+		          return percents ? percents  + '' : ''
+		      	}
+			}
+			}]
+	});
+}
+
+
 </script>

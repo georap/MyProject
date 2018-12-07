@@ -1,135 +1,215 @@
 <!--DYNAMIC SEARCH AT VEHICLES-->
 
-<p style="width: 200px;">Αναζήτηση με σταθμό <input type="radio" onclick="javascript:stationOrNo();" name="yesno" id="yesCheck"></p> 
- <p style="width: 400px;">Αναζήτηση χωρίς σταθμό <input type="radio" onclick="javascript:stationOrNo();" name="yesno" id="noCheck"></p> 
+<p style="width: 400px;">Στατιστικά στοιχεία για σταθμό <input type="radio" onclick="javascript:stationOrNo();" name="yesno" id="yesCheck"></p> 
+ <p style="width: 400px;">Στατιστικά στοιχεία ανεξαρτήτου σταθμού <input type="radio" onclick="javascript:stationOrNo();" name="yesno" id="noCheck"></p> 
  
-
-<div class="mx-auto" style="width: 450px;">
+<br>
+<div class="mx-auto" style="width: 650px;">
 	<div style="display: none;" id="showStation" >
-		Select Station
+		Επιλογή σταθμού
 		<select name="stations" id="stationSelector">
-		    <% @prathrio.each do |prathrio| %>
-		        <option ><%= prathrio %></option>
-		    <% end %>
+		    <%# @prathrio.each do |prathrio| %>
+		        <!--<option ><%#= prathrio %></option>-->
+		    <%# end %>
 		</select>		
-		<input type="checkbox" name="vehicle" id="compare" value="Bike" onclick="javascript:showMonth();"> Compare with other Users
+		<input type="checkbox" name="vehicle" id="compare" value="Bike" onclick="javascript:showComparison();"> Σύγκριση οχήματος
 	</div>
 
 	<div id="divVehicleCheckbox" style="display:none;">
-	<input type="checkbox" name="chkbox" id="vehicleCheckbox" value="motor"  onclick="javascript:showVehicle();"> Many vehicles
+		<input type="checkbox" name="chkbox" id="vehicleCheckbox" value="motor"  onclick="javascript:showVehicle();"> Πολλαπλά οχήματα χρήστη
 	</div>
 	<!--div class="help-tip">
 		    <p>This is the inline help tip! It can contain all kinds of HTML. Style it as you please.</p>
 		</div-->
 	<div id="show" style="display:none;">
-		<div >
-			Select Vehicle
+		<div id="divVehicle" style="display:none;">
+			Επιλογή οχήματος
 			<select name="vehicles" id="vehicleSelector">
-			    <% @oxhmata.each do |name| %>
-			        <option ><%= name %></option>
-			    <% end %>
+			    <%# @oxhmata.each do |name| %>
+			        <!--<option ><%#= name %></option>-->
+			    <%# end %>
+			    <!--<option value="none"> none </option>-->
 			</select>
 		</div>
 
-		<div id="months" >
+				
+
+
+
+		<div id="divFuel" style="display:none;">
+			Επιλογή τύπου καυσίμου
+			<select name="fuel_type" id='fuel_type'>
+			    <%# @fuel_type.each do |prathrio| %>
+			        <!--<option ><%#= prathrio %></option>-->
+			    <%# end %>
+			    <option value="Καύσιμο"> </option>
+			</select>
+		</div>	
+	</div>
+
+	<div id="showSecondVehicle" style="display:none;">
+			Επιλογή δεύτερου οχήματος
+			<select name="compareVehicle" id="compareVehicle" >
+				<%# @fuel_type.each do |prathrio| %>
+			        <!--<option ><%#= prathrio %></option>-->
+			    <%# end %>
+			</select>
+	</div>
+
+	<div id="months" style="display:none;" >
 			Select Month
 			<select name="months" id="monthSelector">
-			    <% @mhnes.each do |mhnes| %>
-			        <option ><%= mhnes %></option>
-			    <% end %>
+			    <option value="all">all</option>
 			</select>
-		</div>
-
-
-
-		<div >
-			Select Fuel type
-			<select name="fuel_type">
-			    <% @fuel_type.each do |prathrio| %>
-			        <option ><%= prathrio %></option>
-			    <% end %>
-			</select>
-		</div>
-
-		
 	</div>
 	<button id="Search_button" type="button" class="btn btn-primary" style="display:none;">Search</button>
 </div>
 
 
 <script>
-	document.getElementById("Search_button").addEventListener("click", doAction);
-	console.log(<%=@temp_oxhmata%>);
-	//when changing the value of first select Station jquery to vehicles controller
-	$("#stationSelector").change(function (){
-			
-            var chosenStation = $("#stationSelector").val();
- 			$.ajax({
-	      		url: '/vehicles',
-	      		type: 'GET',
-	      		data: {"my_station": chosenStation},
-    		});
- 	});
-
- 	$("#vehicleSelector").change(function (){
-			var chosenStation = $("#stationSelector").val();
-            var chosenVehicle = $("#vehicleSelector").val();
- 			$.ajax({
-	      		url: '/vehicles',
-	      		type: 'GET',
-	      		data: {"my_station": chosenStation,"my_vehicle": chosenVehicle},
-    		});
- 	});
+	
+	
+	/*
 	function doAction(){
 		mhnes=$('select[name="' + "months" + '"]').val();
 		vehicle=$('select[name="' + "vehicles" + '"]').val();
 		stations=$('select[name="' + "stations" + '"]').val();
 		fuel_type=$('select[name="' + "fuel_type" + '"]').val();
 		checked=$('input[type=checkbox]').prop('checked');
-		location.href= "/pages/statistics?q="+mhnes+","+vehicle+","+stations+","+fuel_type+","+checked;
-	}
+		console.log(mhnes,vehicle,stations,fuel_type,checked);
+		if(fuel_type=="Καύσιμο"){
+			alert("problem")
+		}
+		//koumpi gia statistics
+		//location.href= "/pages/statistics?q="+mhnes+","+vehicle+","+stations+","+fuel_type+","+checked;
+		/*$.ajax({
+	      		url: '/vehicles/index',
+	      		type: 'GET',
+	      		data: {"station": stations, "months": mhnes,"vehicle":vehicle ,"fuel_type": fuel_type,"checked":checked },
+	      		error: function(){
+							console.log("ERROR 3");
+				}
+    	});*/
+	//}
 	/*$('select[name="' + "vehicles" + '"]').on('change', function() {
   		alert( this.value );
-	}); */
+	});*/
 	//Epiloges
+
+	$("#stationSelector").change(function (){
+		var stationSelector=$('select[name="' + "stations" + '"]').val();
+		$.ajax({
+      		url: '/vehicles/',
+      		type: 'GET',
+      		data: {"my_station": stationSelector,"got_checked": "station"},
+      		success: function(graph){
+      			console.log("success DEYTERO");
+      		}
+      	});
+	});
+
+	$("#vehicleSelector").change(function (){
+		var vehicleSelector=$('select[name="' + "vehicles" + '"]').val();
+		var stationSelector=$('select[name="' + "stations" + '"]').val();
+
+		var got_checked;
+		if (document.getElementById('yesCheck').checked) {
+			got_checked="station";
+		}
+		else{
+			got_checked="noStation";
+		}
+		console.log(vehicleSelector);
+		$.ajax({
+      		url: '/vehicles/',
+      		type: 'GET',
+      		data: {"my_vehicle": vehicleSelector,"my_station": stationSelector,"got_checked": got_checked},
+      		success: function(graph){
+      			console.log("success TRITO");
+      		},
+      		error: function(){
+							console.log("ERROR 3");
+
+						}
+      	});
+	});
 
 	function stationOrNo() {
 		document.getElementById('Search_button').style.display = 'block';
-
 	    if (document.getElementById('yesCheck').checked) {
+
+			$.ajax({
+	      		url: '/vehicles/',
+	      		type: 'GET',
+	      		data: {"got_checked": "station"},
+	      		success: function(graph){
+	      			console.log("success STATION");
+	      		}
+	      	});
 	        document.getElementById('showStation').style.display = 'block';
 	        document.getElementById('show').style.display = 'block';
+	        document.getElementById('divVehicle').style.display = 'block';
+	        document.getElementById('divFuel').style.display = 'block';
 	        document.getElementById('divVehicleCheckbox').style.display = 'block';
 	    }
 	    else {
-
+	    	$.ajax({
+	      		url: '/vehicles/',
+	      		type: 'GET',
+	      		data: {"got_checked": "noStation"},
+	      		success: function(graph){
+	      			console.log("success TIME");
+	      		}
+	      	});
 	    	document.getElementById('showStation').style.display = 'none';
 	    	document.getElementById('show').style.display = 'block';
-	    	document.getElementById('months').style.display = 'block';
+	    	document.getElementById('divVehicle').style.display = 'block';
+	        document.getElementById('divFuel').style.display = 'block';
+	    	//document.getElementById('months').style.display = 'block';
 	    	document.getElementById('compare').checked=false;
+	    	document.getElementById('vehicleCheckbox').checked=false;
 	    	document.getElementById('stationSelector').value="none";
 	    	document.getElementById('divVehicleCheckbox').style.display = 'none';
+	    	document.getElementById('showSecondVehicle').style.display = 'none';
+	    	document.getElementById('compareVehicle').value=0;
 	    }
     }
 
-    function showMonth(){
+    function showComparison(){
     	if (document.getElementById('compare').checked && document.getElementById('yesCheck').checked){
-    		document.getElementById('monthSelector').value="all";
-    		document.getElementById('months').style.display = 'none';
+    		/*$.ajax({
+	      		url: '/vehicles/',
+	      		type: 'GET',
+	      		data: {"got_checked": "comparison"},
+	      		success: function(graph){
+	      			console.log("success COMPARISON");
+	      		}
+	      	});*/
+    		document.getElementById('showSecondVehicle').style.display = 'block';
+    		document.getElementById('divVehicleCheckbox').style.display = 'none';
+    		document.getElementById('vehicleCheckbox').checked=false;
+    		document.getElementById('divVehicle').style.display = 'block';
+	        document.getElementById('divFuel').style.display = 'block';
     	}
     	else {
-    		document.getElementById('months').style.display = 'block';
+    		document.getElementById('showSecondVehicle').style.display = 'none';
+    		document.getElementById('divVehicleCheckbox').style.display = 'block';
+    		document.getElementById('compareVehicle').value=0;
     	}
     }
 
     function showVehicle(){
     	if (document.getElementById('vehicleCheckbox').checked && document.getElementById('yesCheck').checked){
     		document.getElementById('vehicleSelector').value="none";
-    		document.getElementById('monthSelector').value="all";
-    		document.getElementById('show').style.display = 'none';
+    		//document.getElementById('monthSelector').value="all";
+    		//document.getElementById('show').style.display = 'none';
+    		document.getElementById('divVehicle').style.display = 'none';
+	        document.getElementById('divFuel').style.display = 'none';
     	}
     	else {
-    		document.getElementById('show').style.display = 'block';
+    		//document.getElementById('show').style.display = 'block';
+    		document.getElementById('divVehicle').style.display = 'block';
+	        document.getElementById('divFuel').style.display = 'block';
     	}
-    }
+	}
 </script>	
