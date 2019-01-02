@@ -57,7 +57,10 @@ var firstName,secondName;
 if(date.length>1){
 	error.style.visibility='hidden';
 	for (i=0;i<katanalwsh.length;i++){
-  
+  		var priorDate= new Date(date[i]).getTime()+7000000;
+		priorDate= new Date(priorDate);
+		var postDate= new Date(date[i+1]).getTime()+7000000;
+		postDate= new Date(postDate);
 		if(katanalwsh[i]!=-1){
 			
 	            series.push({
@@ -67,6 +70,7 @@ if(date.length>1){
 	            x2:new Date(date[i+1]).getTime()+7000000,
 	            //katanalwsh
 	            y:katanalwsh[i],
+	            myData: firstName+ ', Date: '+ priorDate+' - '+postDate+' = '+katanalwsh[i].toFixed(2),
 	            partialFill:  katanalwsh[i].toFixed(2),  
 	            color:'blue'          
 	            });
@@ -83,7 +87,7 @@ if(date.length>1){
 	    statistics.style.visibility='visible';  
 		Highcharts.chart('statistics', {
 			chart: {
-			    type: 'xrange',
+			    type: 'spline',
 			    zoomType: 'xy'
 			},
 			title: {
@@ -93,7 +97,13 @@ if(date.length>1){
                 enabled:true
             },
 			xAxis: {
-			    type: 'datetime'
+			    type: 'datetime',
+			    title: {
+					text: 'Χρόνος',
+					style: {
+		                color: 'black'
+		        	}
+				}
 		   },
 			yAxis: {
 				title: {
@@ -105,9 +115,33 @@ if(date.length>1){
 				reversed: false
 			},
 			legend:{
+				align: 'right',
+		        x: -30,
+		        verticalAlign: 'top',
+		        y: 25,
+		        floating: true,
+		        backgroundColor: (Highcharts.theme && Highcharts.theme.background2) || 'white',
+		        borderColor: '#CCC',
+		        borderWidth: 1,
+		        shadow: false,
 				labelFormatter: function () {
 			            return firstName;
 			    }
+		    },
+		    tooltip: {
+			        formatter: function() {
+			          return '<b>' + this.point.myData + '</b>';
+			}},
+		    plotOptions: {
+		        series: {
+		            label: {
+		                connectorAllowed: false
+		            },
+		            //pointStart: 2010,
+		            marker: {
+		                enabled: true
+		            }
+		        }
 		    },
 			series: [{
 				name: '',
@@ -117,7 +151,7 @@ if(date.length>1){
 				pointWidth: 20,
 				data: series,
 				dataLabels: {
-				    enabled: true,
+				    enabled: false,
 				    formatter: function() {
 			          var percents = this.point.partialFill;
 			          console.log(percents);
@@ -227,7 +261,13 @@ if(date2.length>1){
                 enabled:true
             },
 			xAxis: {
-			    type: 'datetime'
+			    type: 'datetime',
+			    title: {
+					text: 'Χρόνος',
+					style: {
+		                color: 'black'
+		        	}
+				}
 		   },
 			yAxis: {
 				title: {
@@ -238,7 +278,7 @@ if(date2.length>1){
 				},
 				reversed: false
 			},
-			/*legend: {
+			legend: {
 		        align: 'right',
 		        x: -30,
 		        verticalAlign: 'top',
@@ -248,14 +288,22 @@ if(date2.length>1){
 		        borderColor: '#CCC',
 		        borderWidth: 1,
 		        shadow: false,
-		        labelFormatter: function () {
-		            return secondName;
-		        }
-		    },*/
+		    },
     		tooltip: {
 			        formatter: function() {
 			          return '<b>' + this.point.myData + '</b>';
 			}},
+			plotOptions: {
+		        series: {
+		            label: {
+		                connectorAllowed: false
+		            },
+		            //pointStart: 2010,
+		            marker: {
+		                enabled: true
+		            }
+		        }
+		    },
 			series:tempForSeries /*data*/
 				/*[{
 				name: '',

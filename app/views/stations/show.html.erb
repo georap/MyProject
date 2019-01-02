@@ -1,5 +1,5 @@
 <div class="col-sm-8 " >
-	<h1><%= @station_item.name %></h1>
+	<h1>Πρατήριο: <%= @station_item.name %></h1>
 
 	<p><em>Διεύθυνση:  <%= @station_item.address %></em></p>
 	<% if (!@station_item.company.nil?) %>
@@ -7,7 +7,7 @@
 	<% end%>
 	<% unless current_user.is_a? GuestUser %>
 			
-			<%= link_to '<button class="btn btn-primary mr-5" >Bάλατε Καύσιμα σε αυτόν τον σταθμό;</button>'.html_safe, new_vehicle_path(:my_station => @station_item,:location => @station_item.address)%>
+			<%= link_to '<button class="btn btn-primary mr-5" >Bάλατε Καύσιμα σε αυτόν τον σταθμό;</button>'.html_safe, new_vehicle_path(:my_station => @station_item)%>
 			
 	<% end%>
 	<%= link_to '<button class="btn btn-primary mr-5" >Στατιστικά Στοιχεία Σταθμού</button>'.html_safe, pages_contact_path(:my_station => @station_item,:location => @station_item.address)%>

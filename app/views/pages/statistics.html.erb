@@ -11,12 +11,12 @@
 			<!--<div id="graph" >-->
 				<%= render 'pages/x_range_graph' %>
 			<!--</div>-->
-			<p style="text-align: center;">Συνολική Κατανάλωση για το παραπάνω χρονικό διάστημα: <%=@katanalwsh_xronou%></p>
-			<!--<div id="euro_liter_graph" >-->
+			<!--<p style="text-align: center;">Συνολική Κατανάλωση για το παραπάνω χρονικό διάστημα: <%=@katanalwsh_xronou%></p>
+			<div id="euro_liter_graph" >-->
 			<!--</div>-->
 			
 
-			<%= render 'pages/show_vehicle' %>
+			<%#= render 'pages/show_vehicle' %>
 			
 			<%#= @lt_per_km_monthly%>
 			<%# data=Array.new%>
@@ -34,13 +34,13 @@
 			</div>
 			<p style="text-align: center;">Συνολική Κατανάλωση για όλο το μήνα: <%=@katanalwsh_mhna%>	</p>
 
-			<%= render 'pages/show_vehicle' %>
+			<%#= render 'pages/show_vehicle' %>
 			
 		<%elsif @case==2%>
 			<p> periptwsh <%=@case%> </p>
 			<!--#katanalwsh gia pollapla oxhmata tou prathriou pou exei balei o xrhsths kausima!--> 
 			
-			<%@titlos="Κατανάλωση πολλαπλών οχημάτων στο σταθμό #{@station_id.name}"%>
+			<%@titlos="Κατανάλωση πολλαπλών οχημάτων στο πρατήριο #{@station_id.name}"%>
 
 			<p style="text-align: center;"><%=@titlos%></p>
 			
@@ -48,11 +48,11 @@
 				<%#= render 'pages/case2' %>
 			
 				<%= render 'pages/line_chart' %>
-			<% for i in 0..@oxhmata_list.size-1 %>
-				<p style="text-align: center;">Συνολική Κατανάλωση οχήματος <%=@oxhmata_list[i]%>  για το παραπάνω χρονικό διάστημα: <%=@lt_per_km_monthly[i].round(2)%> </p>
+			<!--<%# for i in 0..@oxhmata_list.size-1 %>
+				<p style="text-align: center;">Συνολική Κατανάλωση οχήματος <%#=@oxhmata_list[i]%>  για το παραπάνω χρονικό διάστημα: <%#=@lt_per_km_monthly[i].round(2)%> </p>
 
-			<%end%>
-			<%= render 'pages/show_vehicle' %>
+			<%#end%>-->
+			<%#= render 'pages/show_vehicle' %>
 			<%#= @oxhmata_list%>
 			<%#= @lt_per_km_monthly%>
 			<%# data=Array.new%>
@@ -65,22 +65,21 @@
 			<p> periptwsh <%=@case%> </p>
 			<!--#alliws upologizei me bash to prathrio gia sugkekrimeno oxhma kai TYPO KAYSIMOY gia diaforetikous xrhstes!-->
 			
-			<%@titlos="Σύγκριση κατανάλωσης οχημάτων #{@array[1]} και #{@array[5]} στο σταθμό #{@station_id.name}"%>
+			<%@titlos="Σύγκριση κατανάλωσης οχημάτων #{@array[1]} και #{@array[5]} στο πρατήριο #{@station_id.name}"%>
 			<p style="text-align: center;"><%=@titlos%></p>
 			<!--<div id="graph" >-->	
-				<%#= render 'pages/case2' %>
-				<%= render 'pages/line_chart' %>
+				<%= render 'pages/case2' %>
 			<!--</div>-->
 
-			
-			<% for i in 0..@lt_per_km_monthly.size-1 %>
-				<%if @flag_statistics==false%>
-					<p style="text-align: center;">Συνολική Κατανάλωση του οχήματος <%=@oxhmata_list[i]%> για το παραπάνω χρονικό διάστημα: <%=@lt_per_km_monthly[i].round(2)%></p>
-				<%else%>
-					<p style="text-align: center;">Συνολική Κατανάλωση του χρήστη <%=@user_list[i]%>,οχήματος <%=@oxhmata_list[i] %> για το παραπάνω χρονικό διάστημα: <%=@lt_per_km_monthly[i].round(2)%></p>
-				<%end%>
-			<%end%>
-			<%= render 'pages/show_vehicle' %>
+			<!--
+			<%# for i in 0..@lt_per_km_monthly.size-1 %>
+				<%#if @flag_statistics==false%>
+					<p style="text-align: center;">Συνολική Κατανάλωση του οχήματος <%#=@oxhmata_list[i]%> για το παραπάνω χρονικό διάστημα: <%#=@lt_per_km_monthly[i].round(2)%></p>
+				<%#else%>
+					<p style="text-align: center;">Συνολική Κατανάλωση του χρήστη <%#=@user_list[i]%>,οχήματος <%#=@oxhmata_list[i] %> για το παραπάνω χρονικό διάστημα: <%#=@lt_per_km_monthly[i].round(2)%></p>
+				<%#end%>
+			<%#end%>-->
+			<%#= render 'pages/show_vehicle' %>
 			<%#= @lt_per_km_monthly%>
 			<%#= @user_list%>
 			<%# data=Array.new%>
@@ -96,8 +95,8 @@
 			
 				<%= render 'pages/x_range_graph' %>
 			
-			<p style="text-align: center;">Συνολική κατανάλωση οχήματος για το μήνα <%=@array[0]%> στο σταθμό <%=@station_id.name%>: <%=@katanalwsh_xronou%> </p>
-			<%= render 'pages/show_vehicle' %>
+			<!--<p style="text-align: center;">Συνολική κατανάλωση οχήματος για το μήνα <%=@array[0]%> στο σταθμό <%=@station_id.name%>: <%=@katanalwsh_xronou%> </p>
+			<%#= render 'pages/show_vehicle' %>-->
 		<%end%>
 
 	<% else %>

@@ -12,7 +12,7 @@
 		        <!--<option ><%#= prathrio %></option>-->
 		    <%# end %>
 		</select>		
-		<input type="checkbox" name="vehicle" id="compare" value="Bike" onclick="javascript:showComparison();"> Σύγκριση οχήματος
+		<input type="checkbox" name="vehicle" id="compare" value="Bike" onclick="javascript:showComparison();"> Σύγκριση Μάρκας Οχημάτων
 	</div>
 
 	<div id="divVehicleCheckbox" style="display:none;">
@@ -47,8 +47,26 @@
 		</div>	
 	</div>
 
-	<div id="showSecondVehicle" style="display:none;">
-			Επιλογή δεύτερου οχήματος
+	<div id="showBrand" style="display:none;">
+			Επιλογή Μάρκας
+			<select name="brandVehicle" id="brandVehicle" >
+				<%# @fuel_type.each do |prathrio| %>
+			        <!--<option ><%#= prathrio %></option>-->
+			    <%# end %>
+			</select>
+	</div>
+
+	<div id="showBrandFuel" style="display:none;">
+			Επιλογή τύπου καυσίμου
+			<select name="brand_fuel" id='brand_fuel'>
+			    <option value="Πετρέλαιο">Πετρέλαιο </option>
+			    <option value="Βενζίνη">Βενζίνη </option>
+			    <option value="Αέριο">Αέριο </option>
+			</select>
+	</div>
+
+	<div id="showSecondBrand" style="display:none;">
+			Επιλογή δεύτερης μάρκας
 			<select name="compareVehicle" id="compareVehicle" >
 				<%# @fuel_type.each do |prathrio| %>
 			        <!--<option ><%#= prathrio %></option>-->
@@ -62,7 +80,7 @@
 			    <option value="all">all</option>
 			</select>
 	</div>
-	<button id="Search_button" type="button" class="btn btn-primary" style="display:none;">Search</button>
+	<button id="Search_button" type="button" class="btn btn-primary" style="display:none;">Αναζήτηση</button>
 </div>
 
 
@@ -170,8 +188,11 @@
 	    	document.getElementById('vehicleCheckbox').checked=false;
 	    	document.getElementById('stationSelector').value="none";
 	    	document.getElementById('divVehicleCheckbox').style.display = 'none';
-	    	document.getElementById('showSecondVehicle').style.display = 'none';
+	    	document.getElementById('showSecondBrand').style.display = 'none';
 	    	document.getElementById('compareVehicle').value=0;
+	    	document.getElementById('showBrand').style.display = 'none';
+	    	document.getElementById('showBrandFuel').style.display = 'none';
+	    	
 	    }
     }
 
@@ -185,16 +206,22 @@
 	      			console.log("success COMPARISON");
 	      		}
 	      	});*/
-    		document.getElementById('showSecondVehicle').style.display = 'block';
+	      	document.getElementById('showBrand').style.display = 'block';
+	      	document.getElementById('showBrandFuel').style.display = 'block';
+    		document.getElementById('showSecondBrand').style.display = 'block';
     		document.getElementById('divVehicleCheckbox').style.display = 'none';
     		document.getElementById('vehicleCheckbox').checked=false;
-    		document.getElementById('divVehicle').style.display = 'block';
-	        document.getElementById('divFuel').style.display = 'block';
+    		document.getElementById('divVehicle').style.display = 'none';
+	        document.getElementById('divFuel').style.display = 'none';
     	}
     	else {
-    		document.getElementById('showSecondVehicle').style.display = 'none';
+    		document.getElementById('showBrand').style.display = 'none';
+    		document.getElementById('showBrandFuel').style.display = 'none';
+    		document.getElementById('showSecondBrand').style.display = 'none';
     		document.getElementById('divVehicleCheckbox').style.display = 'block';
     		document.getElementById('compareVehicle').value=0;
+    		document.getElementById('divVehicle').style.display = 'block';
+	        document.getElementById('divFuel').style.display = 'block';
     	}
     }
 

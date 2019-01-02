@@ -179,7 +179,7 @@ class PagesController < ApplicationController
         @litra_pinakas=Array.new
         @timh_pinakas=Array.new
         @prathria_list=Array.new
-        if(@vehicle.size>1)
+        if(@vehicle.size>2)
             @katanalwsh_pinakas=Array.new
             @date_pinakas=Array.new
             #temp_collection=@vehicle
@@ -340,7 +340,7 @@ class PagesController < ApplicationController
         @array_date=@array_date.to_json.html_safe
         @date_pinakas=@date_pinakas.to_json.html_safe
         #puts @date_pinakas
-      elsif((xronos.include?("all"))&&(!oxhma.include?("none"))&&(sugkrish))
+      elsif((xronos.include?("all"))&&(!oxhma.include?("none"))&&(sugkrish)&&(!array[5].include?("none")))
         #SYGKRISH 2 OXHMATWN oxhma kai second_vehicle GIA SUGKEKRIMENO STA8MO
         @case=3
         second_vehicle=array[5]
@@ -348,129 +348,82 @@ class PagesController < ApplicationController
         #check if user owns second_vehicle
         flag_different_user=false
         @vehicle=Array.new
-        current_user_names=Vehicle.where(user_id: current_user).where(station_id:@station_id.id).pluck(:name)
-        if((current_user_names.include?(second_vehicle))&&(second_vehicle!=oxhma))
-          flag_different_user=false
-          @vehicle=Vehicle.where(station_id: @station_id.id).where(name: oxhma).where(fuel_type:fuel_type).where(user_id: current_user).order(:fuel_date).or(Vehicle.where(station_id: @station_id.id).where(name:second_vehicle).where(user_id: current_user).order(:fuel_date))
-        else
-          #current user with oxhma or different user with second_vehicle
-          flag_different_user=true
-          @vehicle=Vehicle.where(station_id: @station_id.id).where(name: oxhma).where(fuel_type:fuel_type).where(user_id: current_user).order(:fuel_date).or(Vehicle.where(station_id: @station_id.id).where(name:second_vehicle).where.not(user_id: current_user).order(:fuel_date))
-        end
-        #temp_collection=Vehicle.where(station_id: station_id).where(name:second_vehicle).where.not(user_id: current_user).order(:fuel_date)
-        #puts temp_collection.size
-
-        #puts Vehicle.where(station_id: station_id).where(name: second_vehicle).or(Vehicle.where(name:oxhma)).order(:fuel_date).inspect
-        @user_list=Array.new
-        @array_date=Array.new
+        @vehicle=Vehicle.where(station_id: @station_id.id).where(brand: oxhma).where(fuel_type:fuel_type).order(:fuel_date)#.or(Vehicle.where(station_id: @station_id.id).where(brand:second_vehicle).order(:fuel_date))
+        puts @vehicle.inspect
+        #2 ksexwristes erwthseis sth bash...gia omadopoihsh twn dedomenwn 
         km_array=Array.new
         lt_array=Array.new
-        @vehicle_list=Array.new
-        @oxhmata_list=Array.new
+        @array_date=Array.new
         @user_id=Array.new
-        @vehicle.each do|vehicle| 
-          if(!@user_list.include?(vehicle.user_id))
-            @user_list.insert(0,vehicle.user_id)
-          end
-          if(!@oxhmata_list.include?(vehicle.name))
-            @oxhmata_list.insert(0,vehicle.name)
-          end
-          @array_date.insert(-1,vehicle.fuel_date)
-          km_array.insert(-1,vehicle.kilometers)
-          lt_array.insert(-1,vehicle.liters)
-          @vehicle_list.insert(-1,vehicle.name)
-          @user_id.insert(-1,vehicle.user_id)
-        end
-        users=@vehicle.pluck(:user_id).uniq
-        puts users
-        #if second_vehicle==oxhma and we have different users then we make the difference with my vehicle
-        if (second_vehicle==oxhma&&users.size>1)
-          string="my "+second_vehicle
-          @oxhmata_list.insert(1,string)
-        end
-        
+        @vehicle_list=Array.new
+        consumption_array=Array.new
+        km_array2=Array.new
+        lt_array2=Array.new
+        @timh_pinakas=Array.new
+        @prathria_list=Array.new
         @katanalwsh_pinakas=Array.new
         @date_pinakas=Array.new
-        @statistika=Array.new()
-        litra=Array.new
-        km=Array.new
-        last_km=Array.new
-        @lt_per_km_monthly=Array.new
-        if(flag_different_user==true)
-          for i in 0..@user_list.size-1
-            litra[i]=0
-            last_km[i]=@vehicle.where(user_id: @user_list[i]).last.kilometers
-            km[i]=last_km[i]-@vehicle.where(user_id: @user_list[i]).first.kilometers
-            temp_collection=@vehicle.where(user_id: @user_list[i])
-            @katanalwsh_pinakas,@date_pinakas=monthly_calc(xronos,temp_collection)
-            @statistika.push([@katanalwsh_pinakas,@date_pinakas])
-          end
-        else
-          for i in 0..@oxhmata_list.size-1
-            litra[i]=0
-            last_km[i]=@vehicle.where(name:@oxhmata_list[i]).last.kilometers
-            km[i]=last_km[i]-@vehicle.where(name:@oxhmata_list[i]).first.kilometers
-            temp_collection=@vehicle.where(name:@oxhmata_list[i])
-            @katanalwsh_pinakas,@date_pinakas=monthly_calc(xronos,temp_collection)
-            @statistika.push([@katanalwsh_pinakas,@date_pinakas])
-          end
-        end
-        puts @statistika
-        consumption_array=find_consumption_2(km_array,lt_array,0)
-        #puts consumption_array
-        #@second_graph_array=fill_katanalwsh_array(consumption_array,0)
-        @second_graph_array=new_katanalwsh_array(consumption_array,0)
-        @second_graph_array=@second_graph_array.to_json.html_safe
-        @array_date=@array_date.uniq
-        @array_date=@array_date.to_json.html_safe
-        @titlos=@titlos.to_json.html_safe
-        @statistika=@statistika.to_json.html_safe
-
-        @flag_statistics=false
-        @name_list=@oxhmata_list
-        
-        if(users.size>1||(users.size==1 && second_vehicle!=oxhma))
-          if(users.size==1)
-            @user_list.insert(0,@user_list[0])
-          end
+        @oxhmata=Array.new
+        @graph_date=Array.new
+        @katanalwsh_pinakas2=Array.new
+        @second_graph=Array.new
+        if(@vehicle.size>2)
+          
           @vehicle.each do|vehicle|
-            for i in 0..@name_list.size-1
-              if(@user_list[i]==vehicle.user_id&&users.size>1)
-                if(last_km[i]!=vehicle.kilometers)
-                  litra[i]=litra[i]+vehicle.liters
-                end
-              elsif (users.size==1)
-                if(@oxhmata_list[i].include?(vehicle.name))
-                  if(last_km[i]!=vehicle.kilometers)
-                    litra[i]=litra[i]+vehicle.liters
-                  end
-                end
+              if(!@oxhmata.include?(vehicle.name))
+                @oxhmata.insert(-1,vehicle.name)
               end
+              @vehicle_list.insert(-1,vehicle.name)
+              @array_date.insert(-1,vehicle.fuel_date)
+              @user_id.insert(-1,vehicle.user_id)
+              km_array2.insert(-1,vehicle.kilometers)
+              lt_array2.insert(-1,vehicle.liters)
+          end
+          consumption_array=find_consumption_2(km_array2,lt_array2,0)
+          puts consumption_array
+          @katanalwsh_pinakas=new_katanalwsh_array(consumption_array,0)
+          puts @katanalwsh_pinakas
+          @graph_date=@array_date.uniq
+          @vehicle_list.clear
+          @array_date.clear
+          @user_id.clear
+          @oxhmata.clear
+          km_array2.clear
+          lt_array2.clear
+          consumption_array.clear
+        end
+
+        second_array=Vehicle.where(station_id: @station_id.id).where(brand:second_vehicle).order(:fuel_date)
+        if(@vehicle.size>2)
+          second_array.each do|vehicle|
+            if(!@oxhmata.include?(vehicle.name))
+              @oxhmata.insert(-1,vehicle.name)
             end
+            @vehicle_list.insert(-1,vehicle.name)
+            @array_date.insert(-1,vehicle.fuel_date)
+            @user_id.insert(-1,vehicle.user_id)
+            km_array2.insert(-1,vehicle.kilometers)
+            lt_array2.insert(-1,vehicle.liters)
           end
-          puts km,litra
-          for i in 0..@name_list.size-1
-            @lt_per_km_monthly[i]=100*litra[i]/km[i]
-          end
+          consumption_array=find_consumption_2(km_array2,lt_array2,0)
+          puts consumption_array
+          @katanalwsh_pinakas2=new_katanalwsh_array(consumption_array,0)
+          #afairesh diploeggrafwn tou pinaka
+          @second_graph=@array_date.uniq
+          puts @katanalwsh_pinakas
         end
-    
-        @name_list=@name_list.to_json.html_safe
+        @first_brand=oxhma
+        @second_brand=second_vehicle
+        @first_brand=@first_brand.to_json.html_safe
+        @second_brand=@second_brand.to_json.html_safe
+        @graph_date=@graph_date.to_json.html_safe
+        @katanalwsh_pinakas=@katanalwsh_pinakas.to_json.html_safe
+        @katanalwsh_pinakas2=@katanalwsh_pinakas2.to_json.html_safe
+        @second_graph=@second_graph.to_json.html_safe
 
-        
-        #this question gives you the names of vehicles
-        #tester=Vehicle.where(station_id: @station_id.id).where(name: oxhma).where(fuel_type:fuel_type).where(user_id: current_user).order(:fuel_date).or(Vehicle.where(station_id: @station_id.id).where(name:second_vehicle).where.not(user_id: current_user).order(:fuel_date)).pluck(:name).uniq
 
-        #puts tester
-        #puts xronos.include?("all")&&!oxhma.include?("none")&&sugkrish
-        #puts @user_list
-        #puts km
-        #puts litra
-        #puts @lt_per_km_monthly
-        if (@lt_per_km_monthly.size==0)
-          @error_message='Δεν βρέθηκε κάποιος άλλος χρήστης εκτός από εσάς, για το δεύτερο όχημα ('+second_vehicle +') που επιλέξατε για σύγκριση. '
-        end
       elsif ((xronos.include?("all"))&&(!oxhma.include?("none")))
-        # upologizw kai gia ton xrhsth sto sugkekrimeno prathrio to sugkekrimeno mhna to sugkekrimeno oxhma me tupo kausimou
+        # upologizw kai gia ton xrhsth sto sugkekrimeno prathrio to sugkekrimeno oxhma me tupo kausimou
         @case=4
         @station_id=Station.find_by_id(station)
         #an 8elw o xrhsths na epilegei ton mhna pou 8elei na dei gia sugkekrimeno prathrio   
@@ -539,7 +492,7 @@ class PagesController < ApplicationController
           puts "DEN YPARXEI H EGGRAFH TOY OXHMATOS #{oxhma} STO PRATHRIO #{station} TON MHNA #{xronos}ME AYTO TON TYPO KAYSIMOU #{fuel_type}" 
         end
       else
-        @error_message='la8os krithria anazhthshs'
+        @error_message='Λάθος Κριτήρια Αναζήτησης'
         puts "la8os krithria anazhthshs"
         
       end
@@ -644,13 +597,13 @@ class PagesController < ApplicationController
             #@oxhmata=@oxhmata.to_json.html_safe
             @second_name=Station.find_by_id(second_station).name
             @second_name=@second_name.to_json.html_safe
-            @title_graph2="Σύγκριση μέσης κατανάλωσης οχημάτων στους δύο σταθμούς για καύσιμο #{params[:fuel_type]}"
+            @title_graph2="Σύγκριση μέσης κατανάλωσης οχημάτων στα δύο πρατήρια για καύσιμο #{params[:fuel_type]}"
             @title_graph2=@title_graph2.to_json.html_safe
             respond_to do |format|
               format.js
             end
           else
-            @message="Δεν υπάρχουν εγγραφές στο σύστημα για το δευτερο σταθμο"
+            @message="Δεν υπάρχουν εγγραφές στο σύστημα για το δευτερο πρατήριο"
             puts @message
 
             @message=@message.to_json.html_safe
@@ -706,7 +659,7 @@ class PagesController < ApplicationController
         @oxhmata=@oxhmata.to_json.html_safe
         @first_name=@name_station
         @first_name=@first_name.to_json.html_safe
-        @title_graph="Mέση κατανάλωση οχημάτων σταθμού #{@name_station} για καύσιμο #{params[:fuel_type]}"
+        @title_graph="Mέση κατανάλωση οχημάτων πρατηρίου #{@name_station} για καύσιμο #{params[:fuel_type]}"
         @title_graph=@title_graph.to_json.html_safe
         respond_to do |format|
           format.js
@@ -714,7 +667,7 @@ class PagesController < ApplicationController
 
       else
 
-        @message="Δεν υπάρχουν εγγραφές στο σύστημα για τον σταθμο αυτο"
+        @message="Δεν υπάρχουν εγγραφές στο σύστημα για το πρατήριο αυτο"
         puts @message
         @graph_date=@graph_date.to_json.html_safe
         @katanalwsh_pinakas=@katanalwsh_pinakas.to_json.html_safe
@@ -1050,9 +1003,11 @@ class PagesController < ApplicationController
             puts "#{temp_pos} TO TEMP POS KAI #{date_temp_first} #{date_temp_last}"
             if(date_temp_last>=@array_date[i+1]&&date_temp_first<=@array_date[i])
      
-                previous_consumption=previous_consumption+range_query[k]/consumption_array[temp_pos-1]
+                #previous_consumption=previous_consumption+range_query[k]/consumption_array[temp_pos-1]
+                #puts "deuterh periptwsh #{@array_date[i]} #{@array_date[i+1]} kai #{previous_consumption*days}"
+                previous_consumption=previous_consumption+range_query[k]
                 sum_range_query+=1
-                puts "deuterh periptwsh #{@array_date[i]} #{@array_date[i+1]} kai #{previous_consumption*days}"
+                puts "deuterh periptwsh #{@array_date[i]} #{@array_date[i+1]} kai #{previous_consumption}"              
                 second_flag=true
 
               
@@ -1060,8 +1015,10 @@ class PagesController < ApplicationController
                    
           end
           if(second_flag==true)
-              puts "otan einai true #{@array_date[i]} #{@array_date[i+1]} kai #{previous_consumption*days/sum_range_query}"
-              temp_collection.insert(-1,previous_consumption*days/sum_range_query)
+              #puts "otan einai true #{@array_date[i]} #{@array_date[i+1]} kai #{previous_consumption*days/sum_range_query}"
+              #temp_collection.insert(-1,previous_consumption*days/sum_range_query)
+              puts "otan einai true #{@array_date[i]} #{@array_date[i+1]} kai #{previous_consumption/sum_range_query}"
+              temp_collection.insert(-1,previous_consumption/sum_range_query)
           end
         end
       end
@@ -1100,16 +1057,21 @@ class PagesController < ApplicationController
             date_temp_first=consumption_array[temp_pos-6]
             puts "#{temp_pos} TO TEMP POS KAI #{date_temp_first} #{date_temp_last}"
             if(date_temp_last>=@array_date[i+1]&&date_temp_first<=@array_date[i])
-                previous_consumption=previous_consumption+range_query[k]/consumption_array[temp_pos-1]
+                #previous_consumption=previous_consumption+range_query[k]/consumption_array[temp_pos-1]
+                #puts "deuterh periptwsh #{@array_date[i]} #{@array_date[i+1]} kai #{previous_consumption*days} meres pou exei kanei #{consumption_array[temp_pos-1]}"
+                previous_consumption=previous_consumption+range_query[k]
+                puts "deuterh periptwsh #{@array_date[i]} #{@array_date[i+1]} kai #{previous_consumption} meres pou exei kanei #{consumption_array[temp_pos-1]}"
                 sum_range_query+=1
-                puts "deuterh periptwsh #{@array_date[i]} #{@array_date[i+1]} kai #{previous_consumption*days} meres pou exei kanei #{consumption_array[temp_pos-1]}"
+                
                 second_flag=true   
             end
                    
           end
           if(second_flag==true)
-              puts "otan einai true #{@array_date[i]} #{@array_date[i+1]} kai #{previous_consumption*days/sum_range_query}"
-              temp_collection.insert(-1,previous_consumption*days/sum_range_query)
+              #puts "otan einai true #{@array_date[i]} #{@array_date[i+1]} kai #{previous_consumption*days/sum_range_query}"
+              #temp_collection.insert(-1,previous_consumption*days/sum_range_query)
+              puts "otan einai true #{@array_date[i]} #{@array_date[i+1]} kai #{previous_consumption/sum_range_query}"
+              temp_collection.insert(-1,previous_consumption/sum_range_query)
           end
         end
       end

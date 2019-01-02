@@ -1,7 +1,7 @@
 
-<h1>Απεικόνιση στατιστικών στοιχείων του σταθμού <%=@name_station %></h1>
+<h1>Απεικόνιση στατιστικών στοιχείων του πρατηρίου <%=@name_station %></h1>
 
-<p style="width: 400px;">Στατιστικά για τον σταθμό<input type="radio" onclick="javascript:stationOrGeo();" name="yesno" id="stationCheck"></p> 
+<p style="width: 400px;">Στατιστικά για το πρατήριο<input type="radio" onclick="javascript:stationOrGeo();" name="yesno" id="stationCheck"></p> 
  <p style="width: 400px;">Στατιστικά για τη γεωγραφική περιοχή<input type="radio" onclick="javascript:stationOrGeo();" name="yesno" id="geographCheck"></p> 
 <p style="width: 400px;">Στατιστικά για την μάρκα καυσίμου <%=Station.find_by_id(params[:my_station]).company%><input type="radio" onclick="javascript:stationOrGeo();" name="yesno" id="companyCheck"></p> 
 <br>

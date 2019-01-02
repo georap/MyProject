@@ -1,11 +1,11 @@
 var stations=<%=@prathrio%>;
 var vehicles=<%=@oxhmata%>;
 var fuel=<%=@fuel_type%>;
-var secondVehicle=<%=@second_vehicle%>;
+var brandVehicle=<%=@brand_vehicle%>;
 var stationSelector = document.getElementById("stationSelector");
 var vehicleSelector = document.getElementById("vehicleSelector");
 var fuelSelector=document.getElementById("fuel_type");
-var secondVehicleSelector=document.getElementById("compareVehicle");
+var brandVehicleSelector=document.getElementById("brandVehicle");
 var stations_ids=<%=@stations%>;
 console.log(stations_ids);
 if (<%=@flag_no_Station%>==true) {
@@ -19,9 +19,11 @@ for (i=0;i<stations.length;i++){
 }
 removeDoubleElements("stationSelector");
 
-//remove Elements from vehicle selector when changing station
+//remove Elements from vehicle selector d brand selector when changing station
 if(<%=@flag_vehicles%>==true){
 	$("#vehicleSelector").children('option:not(:first)').remove();
+	$("#brandVehicle").children('option:not(:first)').remove();
+	$("#compareVehicle").children('option:not(:first)').remove();
 }
 //add elements in vehicleSelector
 for (i=0;i<vehicles.length;i++){
@@ -42,13 +44,30 @@ for (i=0;i<fuel.length;i++){
 		fuelSelector.options[fuelSelector.options.length] = new Option(fuel[i], i);
 }	
 removeDoubleElements("fuel_type");
-//add elements in second vehicle selector
-for (i=0;i<secondVehicle.length;i++){
-		console.log(secondVehicle[i]);
+
+//add elements in brand vehicle selector
+for (i=0;i<brandVehicle.length;i++){
+		console.log(brandVehicle[i]);
 		
-		secondVehicleSelector.options[secondVehicleSelector.options.length] = new Option(secondVehicle[i], i);
+		brandVehicleSelector.options[brandVehicleSelector.options.length] = new Option(brandVehicle[i], i);
 }	
-removeDoubleElements("compareVehicle");
+removeDoubleElements("brandVehicle");
+
+$("#brandVehicle").change(function (){
+	$("#compareVehicle").children('option:not(:first)').remove();
+	var brandSecondVehicleSelector=document.getElementById("compareVehicle");
+	var brandSelector=$('select[name="' + "brandVehicle" + '"]').val();
+	console.log("hi "+brandSelector);
+	for (i=0;i<brandVehicle.length;i++){
+		if(i!=brandSelector){
+			brandSecondVehicleSelector.options[brandSecondVehicleSelector.options.length] = new Option(brandVehicle[i], i);
+		}
+	}
+	removeDoubleElements("compareVehicle");
+});
+
+
+
 
 document.getElementById("Search_button").addEventListener("click", doAction);
 function doAction(){
@@ -57,7 +76,9 @@ function doAction(){
 	var station=$('select[name="' + "stations" + '"]').val();
 	var fuel_type=$('select[name="' + "fuel_type" + '"]').val();
 	var checked=$('input[type=checkbox]').prop('checked');
-	var compareVehicle=$('select[name="' + "compareVehicle" + '"]').val();
+	var brand=$('select[name="' + "brandVehicle" + '"]').val();
+	var secondBrand=$('select[name="' + "compareVehicle" + '"]').val();
+	var fuel_brand=$('select[name="' + "brand_fuel" + '"]').val();
 	/*if(station==null){
 		station="none";
 	}
@@ -75,6 +96,10 @@ function doAction(){
 		fuel_type="none";
 		console.log("many vehicles");
 	}
+	else if((fuel_type=="Καύσιμο"&&document.getElementById('compare').checked && document.getElementById('yesCheck').checked)){
+		fuel_type="none";
+		console.log("compare brands");
+	}
 	else if(fuel_type=="Καύσιμο"){
 		alert("Πρέπει να επιλέξετε καύσιμο για το όχημα");
 	}
@@ -89,15 +114,27 @@ function doAction(){
 		console.log(mhnes,vehicles[vehicle],station,fuel[fuel_type],checked);
 	}
 	else if(vehicles[vehicle]==undefined||fuel[fuel_type]==undefined){
-		location.href= "/pages/statistics?q="+mhnes+","+vehicle+","+stations_ids[station]+","+fuel_type+","+checked;
+		
 		console.log("periptwsh2")
-		console.log(mhnes,vehicle,stations_ids[station],fuel_type,checked);
+		
+		if(document.getElementById('compare').checked){
+			//change vehicle with brand and fuel_type with fuel_brand
+			console.log("compare brands")
+			console.log(mhnes,brandVehicle[brand],stations_ids[station],fuel_brand,checked,brandVehicle[secondBrand]);
+			location.href= "/pages/statistics?q="+mhnes+","+brandVehicle[brand]+","+stations_ids[station]+","+fuel_brand+","+checked+","+brandVehicle[secondBrand];
+
+		}
+		else if(document.getElementById('vehicleCheckbox').checked){
+			console.log("many vehicles")
+			console.log(mhnes,vehicle,stations_ids[station],fuel_type,checked);
+			location.href= "/pages/statistics?q="+mhnes+","+vehicle+","+stations_ids[station]+","+fuel_type+","+checked;
+		}
 	}
 	else{
 		console.log("periptwsh3")
-		location.href= "/pages/statistics?q="+mhnes+","+vehicles[vehicle]+","+stations_ids[station]+","+fuel[fuel_type]+","+checked+","+secondVehicle[compareVehicle];
+		location.href= "/pages/statistics?q="+mhnes+","+vehicles[vehicle]+","+stations_ids[station]+","+fuel[fuel_type]+","+checked;
 		console.log(mhnes,vehicle,station,fuel_type,checked);
-		console.log(mhnes,vehicles[vehicle],stations_ids[station],fuel[fuel_type],checked,secondVehicle[compareVehicle]);
+		console.log(mhnes,vehicles[vehicle],stations_ids[station],fuel[fuel_type],checked);
 	}
 	//+","+secondVehicle[compareVehicle]
 }

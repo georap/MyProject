@@ -5,8 +5,13 @@
 <div class="mx-auto" style="width: 300px;">
 <%= form_for(@vehicle) do |f| %>
 	<div class="field">
+		<%=f.label :Μάρκα%>
+		<%= f.select :brand,@car_list%>
+	</div>
 
-	<%= f.text_field :name,:required => true,placeholder: "Ονομα"%>
+	<div class="field">
+
+	<%= f.text_field :model,:required => true,placeholder: "Μοντέλο"%>
 	</div>
 
 	<div class="field">
@@ -44,7 +49,7 @@
 	
 	<br>
 	<div class="actions">
-	<%=f.submit %>
+	<%=f.submit 'Καταχώρηση Εγγραφής'%>
 	</div>
 
 <%end %>

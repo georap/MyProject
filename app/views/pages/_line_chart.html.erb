@@ -116,13 +116,9 @@ console.log(katanalwsh);
     //removeA(second_graph_array, -1);
     console.log(second_graph_array);
     var secondPinakas=[];
-    if(array_date.length>=second_graph_array.length){
-        secondPinakas=setDataToSecondGraph(0,second_graph_array.length,'red');
-    
-    }
-    else{
-        secondPinakas=setDataToSecondGraph(0,array_date.length,'red');
-    }
+
+    secondPinakas=setDataToSecondGraph(0,second_graph_array.length,'red');
+
     data.push({
                     name: titleForMesh,
                     //pointWidth: 5,
@@ -166,14 +162,17 @@ Highcharts.chart('graph', {
                     formatter: function() {
                       return '<b>' + this.point.myData + '</b>';
             }},
-    /*plotOptions: {
+    plotOptions: {
         series: {
             label: {
                 connectorAllowed: false
             },
-            pointStart: 2010
+            //pointStart: 2010,
+            marker: {
+                enabled: true
+            }
         }
-    },*/
+    },
 
     series: data
 
@@ -191,7 +190,7 @@ function setDataToArray(first,last,colourPicker){
                     //name:nameList[i],
                     //date  
                     myData: 'Date: '+ priorDate+' - '+postDate+' = ' +katanalwsh[j+1].toFixed(2),
-                    x:new Date(date[j]).getTime()+11000000,
+                    x:new Date(date[j]).getTime()+7000000,
                     //x2:new Date(date[j+1]).getTime()+11000000,
                     //katanalwsh
                     y:katanalwsh[j+1],
@@ -206,16 +205,16 @@ function setDataToSecondGraph(first,last,colourPicker){
     var array=[];
     for(j=first;j<last;j++){
         if(second_graph_array[j]!=-1){
-            priorDate= new Date(date[j]).getTime()+7000000;
+            priorDate= new Date(array_date[j]).getTime()+7000000;
             priorDate= new Date(priorDate);
-            postDate= new Date(date[j+1]).getTime()+7000000;
+            postDate= new Date(array_date[j+1]).getTime()+7000000;
             postDate= new Date(postDate);
                     array.push({
                     //name
                     //name:nameList[i],
                     //date
                     myData: 'Date: '+ priorDate+' - '+postDate+' = ' +second_graph_array[j].toFixed(2),  
-                    x:new Date(array_date[j]).getTime()+11000000,
+                    x:new Date(array_date[j]).getTime()+7000000,
                     //x2:new Date(array_date[j+1]).getTime()+11000000,
                     //katanalwsh
                     y:second_graph_array[j],

@@ -6,290 +6,182 @@
 <div id="second_graph" >
 </div>    
 <script >
-//if(<%=@case%>==2){
-        var nameList=<%=@name_list%>;
-        var statistika=<%=@statistika%>;
-        var date=[];
-        var katanalwsh=[];
 
-        var series = [];
-        var counterArray=[];
-        var colours= [];
-                
-        for(j=0;j<nameList.length;j++){
-            colours[j]=setRandomColour();
-        }
-        for(i=0;i<statistika.length;i++){  
+    var date=<%=@graph_date%>;
+    var katanalwsh=<%=@katanalwsh_pinakas%>;
+    var katanalwsh2 = <%=@katanalwsh_pinakas2%>;
+    var date2=<%=@second_graph%>;
 
-            var flag=statistika[i].length;
+    var data=[];
+    var newSeries=[];
+    var firstBrand=<%=@first_brand%>;
+    var secondBrand=<%=@second_brand%>;
+    console.log(secondBrand)
+    for (i=0;i<katanalwsh.length;i++){
+        var priorDate= new Date(date[i]).getTime()+7000000;
+        priorDate= new Date(priorDate);
+        var postDate= new Date(date[i+1]).getTime()+7000000;
+        postDate= new Date(postDate);   
+        if(katanalwsh[i]!=-1){
+                newSeries.push({
 
-            counterArray[i]=statistika[i][0].length;
-            console.log(counterArray[i]+"hi");
-            for(j=0;j<flag;j++){            
-                
-                for(k=0;k<counterArray[i];k++){                    
-                    console.log(nameList[i]);
-                    //isNaN returns true if its string
-                    if(isNaN(statistika[i][j][k])){
-                        date.push(statistika[i][j][k]);
-                    }
-                    else{
-                        katanalwsh.push(statistika[i][j][k]);
-                    } 
-                }    
-            }   
-        }
-
-        var title_graph="<%@titlos%>";
-        //console.log(katanalwsh);
-        //console.log(date);
-removeA(katanalwsh, -1);
-console.log(katanalwsh);
-        var data=[];
-        var oxhma="<%="#{@array[1]}"%>";
-        var oxhma2="<%="#{@array[5]}"%>",lastPos=0;
-        for (i=0;i<nameList.length;i++){ 
-            var temp,j;
-            var pinakas=[];
-            var colourPicker=colours[i]
-            if(i==0){
-                temp=counterArray[i];
-                pinakas=setDataToArray(i,temp,colourPicker);
-                data.push({
-                        name: nameList[i],
-                        pointWidth: 10,
-                        data: pinakas,
-                        dataLabels: {
-                            enabled: true,
-                            formatter: function() {
-                              var percents = this.point.partialFill;
-                              console.log(percents);
-                              return percents ? percents  + '' : ''
-                            }
-                        }
+                myData: firstBrand+ ', Date: '+ priorDate+' - '+postDate+' = '+katanalwsh[i].toFixed(2),
+                //date first
+                x:new Date(date[i]).getTime()+7000000,
+                //date last
+                x2:new Date(date[i+1]).getTime()+7000000,
+                //katanalwsh
+                y:katanalwsh[i],
+                partialFill:  katanalwsh[i].toFixed(2),   
+                color: 'blue',
+        
                 });
-                lastPos=temp;
-            }
-            else{
+                    
+                    //pivot+=2;
+        }
 
-                //temp=counterArray[i-1];
-                //var last=counterArray[i]+temp;
-                pinakas=setDataToArray(lastPos,lastPos+counterArray[i],colourPicker);
-                //console.log("LAST "+lastPos+" "+counterArray[i]);
-                data.push({
-                    name: nameList[i],
-                    pointWidth: 10,
-                    data: pinakas,
-                    dataLabels: {
-                        enabled: true,
-                        formatter: function() {
-                          var percents = this.point.partialFill;
-                          console.log(percents);
-                          return percents ? percents  + '' : ''
-                        }
+    }
+
+    var tempForSeries=[];   
+
+    tempForSeries.push({
+        name: firstBrand,
+                // pointPadding: 0,
+                // groupPadding: 0,
+                //borderColor: 'gray',
+                pointWidth: 10,
+                data: newSeries,
+                dataLabels: {
+                    enabled: false,
+                    formatter: function() {
+                      var percents = this.point.partialFill;
+                      console.log(percents);
+                      return percents ? percents  + '' : ''
                     }
-                });
-                //console.log(lastPos+counterArray[i]);
-                lastPos+=counterArray[i];
-
-            }
-        }
-
-
-//console.log(data);
-
-    var legendTitle,titleForMesh;
-
-    <% if @case ==3 %>
-        legendTitle="Οχήματα";
-        titleForMesh="Μέση κατανάλωση χρηστών";
-
-    <%else%>
-        legendTitle="Οχήματα";
-        titleForMesh="Μέση κατανάλωση οχημάτων";
-    <%end%>   
-//eisodos kokkinhs grammhs sto grafhma
-
-    var array_date=<%=@array_date%>;
-    var second_graph_array=<%=@second_graph_array%>;
-    console.log(second_graph_array);
-    console.log(array_date);
-            removeA(second_graph_array, -1);
-        console.log(second_graph_array);
-    var secondPinakas=setDataToSecondGraph(second_graph_array.length-second_graph_array.length,second_graph_array.length,'red');
-    data.push({
-                    name: titleForMesh,
-                    pointWidth: 5,
-                    data: secondPinakas,
-                    dataLabels: {
-                        enabled: true,
-                        formatter: function() {
-                          var percents = this.point.partialFill;
-                          console.log(percents);
-                          return percents ? percents  + '' : ''
-                        }
-                    }
-                });
-
-
-
-
-    Highcharts.chart('graph', {
-    chart: {
-        type: 'xrange',
-        zoomType: 'x'
-    },
-    title: {
-        text: title_graph
-    },
-    
-    xAxis: {
-        type:'datetime'
-    },
-    yAxis: {
-        title: {
-            text: 'Κατανάλωση (lt/100 km)'
-        }
-    },
-    legend: {
-        align: 'right',
-        x: -30,
-        verticalAlign: 'top',
-        y: 0,
-        floating: true,
-        backgroundColor: (Highcharts.theme && Highcharts.theme.background2) || 'white',
-        borderColor: '#CCC',
-        borderWidth: 1,
-        shadow: false,
-        title: {
-            text:legendTitle
-        }
-    },
-    series: data/*data[{
-            name: nameList[0],
-          
-            data: series
-        }]*/,
+                }
     });
 
+var secondDataGraph=[];
+for (i=0;i<katanalwsh2.length;i++){
+        priorDate= new Date(date2[i]).getTime()+7000000;
+        priorDate= new Date(priorDate);
+        postDate= new Date(date2[i+1]).getTime()+7000000;
+        postDate= new Date(postDate);   
+        if(katanalwsh2[i]!=-1){
+                secondDataGraph.push({
 
-
-    
-var highcharts_series=[];
-for (i=0;i<second_graph_array.length;i++){   
-        if(second_graph_array[i]!=-1){
-                highcharts_series.push({
+                myData: secondBrand+', Date: '+ priorDate+' - '+postDate+' = '+katanalwsh2[i].toFixed(2),
                 //date first
-                x:new Date(array_date[i]).getTime()+7200000,
+                x:new Date(date2[i]).getTime()+7000000,
                 //date last
-                x2:new Date(array_date[i+1]).getTime()+7200000,
+                x2:new Date(date2[i+1]).getTime()+7000000,
                 //katanalwsh
-                y:second_graph_array[i],
-                partialFill:  second_graph_array[i].toFixed(2)            
+                y:katanalwsh2[i],
+                partialFill:  katanalwsh2[i].toFixed(2),  
+                color:'red'          
                 });
                 
                 //pivot+=2;
-        }     
-             
-}
-//console.log(second_graph_array);
-//console.log(array_date);
-/*
-    Highcharts.getOptions().colors = ['blue'];    
-            Highcharts.chart('second_graph', {
-                chart: {
-                    type: 'xrange',
-                    zoomType: 'xy'
-                },
-                title: {
-                    text: 'Μέση Κατανάλωση '
-                },
-                xAxis: {
-                    type: 'datetime'
-               },
-                yAxis: {
-                    title: {
-                        text: 'Κατανάλωση (lt/100 km)',
-                        style: {
-                            color: 'black'
-                        }
-                    },
-                    reversed: false
-                },
-                series: [{
-                    name: '',
-                    // pointPadding: 0,
-                    // groupPadding: 0,
-                    //borderColor: 'gray',
-                    pointWidth: 20,
-                    data: highcharts_series,
-                    dataLabels: {
-                        enabled: true,
-                        formatter: function() {
-                          var percents = this.point.partialFill;
-                          console.log(percents);
-                          return percents ? percents  + '' : ''
-                        }
-                    }
-                    }]
-            });
-*/
-function setDataToArray(first,last,colourPicker){
-    var array=[];
-    for(j=first;j<last-1;j++){
-
-                    array.push({
-                    //name
-                    //name:nameList[i],
-                    //date  
-                    x:new Date(date[j]).getTime()+11000000,
-                    x2:new Date(date[j+1]).getTime()+11000000,
-                    //katanalwsh
-                    y:katanalwsh[j+1],
-                    partialFill:  katanalwsh[j+1].toFixed(2),
-                    color: colourPicker              
-                    });
-                    
-    } 
-    return array;
-}
-function setDataToSecondGraph(first,last,colourPicker){
-    var array=[];
-    for(j=first;j<last;j++){
-        if(second_graph_array[j]!=-1){
-                    array.push({
-                    //name
-                    //name:nameList[i],
-                    //date  
-                    x:new Date(array_date[j]).getTime()+11000000,
-                    x2:new Date(array_date[j+1]).getTime()+11000000,
-                    //katanalwsh
-                    y:second_graph_array[j],
-                    partialFill:  second_graph_array[j].toFixed(2),
-                    color: colourPicker              
-                    });
         }             
-    } 
-    return array;
-}
-function setRandomColour() {
-          var letters = '0123456789ABCDEF';
-          var color = '#';
-          for (i = 0; i < 6; i++) {
-            color += letters[Math.floor(Math.random() * 16)];
-          }
-          console.log(color);
-          return color;
-
-}
-function removeA(arr) {
-    var what, a = arguments, L = a.length, ax;
-    while (L > 1 && arr.length) {
-        what = a[--L];
-        while ((ax= arr.indexOf(what)) !== -1) {
-            arr.splice(ax, 1);
-        }
     }
-    return arr;
+setDataToSeries(tempForSeries,secondDataGraph,secondBrand);
+
+
+
+
+
+        Highcharts.chart('graph', {
+            chart: {
+                type: 'spline',//x-range
+                zoomType: 'xy'
+            },
+            title: {
+                text:''
+            },
+            rangeSelector:{
+                enabled:true
+            },
+            xAxis: {
+                type: 'datetime',
+                title: {
+                    text: 'Χρόνος',
+                    style: {
+                        color: 'black'
+                    }
+                }
+           },
+            yAxis: {
+                title: {
+                    text: 'Κατανάλωση (lt/100 km)',
+                    style: {
+                        color: 'black'
+                    }
+                },
+                reversed: false
+            },
+            legend: {
+                align: 'right',
+                x: -30,
+                verticalAlign: 'top',
+                y: 25,
+                floating: true,
+                backgroundColor: (Highcharts.theme && Highcharts.theme.background2) || 'white',
+                borderColor: '#CCC',
+                borderWidth: 1,
+                shadow: false,
+            },
+            tooltip: {
+                    formatter: function() {
+                      return '<b>' + this.point.myData + '</b>';
+            }},
+            plotOptions: {
+                series: {
+                    label: {
+                        connectorAllowed: false
+                    },
+                    //pointStart: 2010,
+                    marker: {
+                        enabled: true
+                    }
+                }
+            },
+            series:tempForSeries /*data*/
+                /*[{
+                name: '',
+                // pointPadding: 0,
+                // groupPadding: 0,
+                //borderColor: 'gray',
+                pointWidth: 10,
+                data: newSeries,
+                dataLabels: {
+                    enabled: true,
+                    formatter: function() {
+                      var percents = this.point.partialFill;
+                      console.log(percents);
+                      return percents ? percents  + '' : ''
+                    }
+                }
+                }]*/
+        });
+
+function setDataToSeries(array,series,seriesName){
+
+    array.push({
+        name: seriesName,
+                // pointPadding: 0,
+                // groupPadding: 0,
+                //borderColor: 'gray',
+                pointWidth: 10,
+                data: secondDataGraph,
+                dataLabels: {
+                    enabled: false,
+                    formatter: function() {
+                      var percents = this.point.partialFill;
+                      console.log(percents);
+                      return percents ? percents  + '' : ''
+                    }
+                }
+    });
+
 }
 </script>

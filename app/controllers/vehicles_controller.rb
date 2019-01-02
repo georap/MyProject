@@ -5,12 +5,10 @@ class VehiclesController < ApplicationController
 	before_action :check_guest_user
 
 	def new
+		@car_list=brand_list
 		@vehicle=Vehicle.new
-		string=params[:location]
-		location=string.split(',')
 		station_id=params[:my_station]
 		@area=Station.find_by_id(station_id).area
-		#@area=location[1].tr("0-9", "").gsub(/\s+/, '')
 	end
 
 	def create
@@ -34,7 +32,7 @@ class VehiclesController < ApplicationController
 	    @stations=Array.new
 	    @prathrio=Array.new
 	    @fuel_type=Array.new
-	    @second_vehicle=Array.new
+	    @brand_vehicle=Array.new
 	    @flag_vehicles=false
 	    @flag_fuel=false
 	    @flag_no_Station=false
@@ -48,18 +46,21 @@ class VehiclesController < ApplicationController
 	    	if(!params[:my_station].nil?)
 			    puts "mphkame ston vehicles controller  #{ params[:my_station]}"
 			    element=params[:my_station].to_i
-			    			    puts "to id einai #{@stations[element]}"
+			    puts "to id einai #{@stations[element]}"
 			    station_name=@prathrio[element]
 			    station_id=@stations[element]
 			    if(station_name!="none")
-			    	dummy_var=fill_vehicles(station_id)
-		    		
+			    	#fill first vehicle
+			    	dummy_var=fill_vehicles(station_id)	
+			    	
 			    end
-			    
+			    #compare brands
+				fill_brands(station_id)
 		    	@oxhmata.insert(0,"none")
 		    	@flag_vehicles=true  
 			end
 			puts "oxhmata #{@oxhmata}"
+			
 			@prathrio=@prathrio.to_json.html_safe
 			@oxhmata=@oxhmata.to_json.html_safe
 			@stations=@stations.to_json.html_safe
@@ -118,7 +119,6 @@ class VehiclesController < ApplicationController
 				end
 			end
 			@flag_fuel=true
-			fill_second_vehicle(station_id)
 			@fuel_type=@fuel_type.to_json.html_safe
 			@prathrio=@prathrio.to_json.html_safe
 			@oxhmata=@oxhmata.to_json.html_safe
@@ -192,6 +192,7 @@ class VehiclesController < ApplicationController
 	end
 
 	def edit
+		@car_list=brand_list
 		@vehicle=Vehicle.find(params[:id])
 	end
 
@@ -218,7 +219,7 @@ class VehiclesController < ApplicationController
 
 
 	def vehicle_params
-		params.require(:vehicle).permit(:name, :kilometers, :liters,:price ,:fuel_date, :fuel_type,:area,:user_id, :station_id)
+		params.require(:vehicle).permit(:kilometers, :liters,:price ,:fuel_date, :fuel_type,:area,:user_id, :station_id,:brand,:model)
 	end
 
 	#put elements in @prathria array
@@ -254,17 +255,23 @@ class VehiclesController < ApplicationController
 		return station_id
 	end
 
-	def fill_second_vehicle(id)
-		#compare with only vehicles that are in the station that user choose
-		temp_collection=Vehicle.where(station_id: id).pluck(:name).uniq
-		puts temp_collection
+	def fill_brands(id)
+		#compare with only brands that are in the station that user choose
+		temp_collection=Vehicle.where(station_id: id).pluck(:brand).uniq
+		puts "temp_coll #{temp_collection}"
 	    	#temp_collection.each do|vehicle| 
 				#if(!@second_vehicle.include?(vehicle.name))
 					#@second_vehicle.insert(0,vehicle.name)
 				#end
 			#end
-			@second_vehicle=temp_collection
-			@second_vehicle.insert(0,"none")
-			@second_vehicle=@second_vehicle.to_json.html_safe
+			@brand_vehicle=temp_collection
+			@brand_vehicle.insert(0,"none")
+			@brand_vehicle=@brand_vehicle.to_json.html_safe
 	end
+
+	 def brand_list
+  		list=["Audi","Bmw","Citroen","Fiat","Ford","Hyundai","Mercedes-Benz","Nissan","Opel","Peugeut","Renault","Smart","Suzuki","Toyota","Volkswagen","Daewoo","Daihatsu","Honda","Jeep","Kia","Mazda","Mitsubishi","Porsche","Saab","Volvo","Skoda"]
+  		list.sort!
+  		return list
+  	end
 end

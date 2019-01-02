@@ -1,37 +1,37 @@
 <div class="mx-auto" style="width: 650px;">
-	<h1> Νέος Σταθμός Υγρών Καυσίμων </h1>
+	<h1> Νέο Πρατήριο Υγρών Καυσίμων </h1>
 </div><br>
 
 			
-<div class="mx-auto" style="width: 300px;">
+<div class="mx-auto" style="width: 500px;">
 	<%= form_for(@station_item) do |f| %>
 		<div class="field">
-
-		<%= f.text_field :name,:required => true, :autocomplete => :off,placeholder: "Ονομα"%>
+		<%=f.label 'Επωνυμία Πρατηρίου'%>
+		<%= f.text_field :name,:required => true, :autocomplete => :off%>
 		</div>
 		
 		<div class="field">
-		<%=f.label :latitude%>
+		<%=f.label 'Γεωγραφικό Πλάτος'%>
 		<%= f.text_field :latitude, :value => @newLatLong[0],:readonly => true%>
 		</div>
 
 		<div class="field">
-		<%=f.label :longitude%>
+		<%=f.label 'Γεωγραφικό Μήκος'%>
 		<%= f.text_field :longitude,:value => @newLatLong[1],:readonly => true%>
 		</div>
 
 		<div class="field">
-		<%=f.label :area%>
+		<%=f.label 'Γεωγραφική Περιοχή'%>
 		<%= f.text_field :area,:value => @area,:readonly => true%>
 		</div>
 
 		<div class="field">
-		<%=f.label :company%>
-		<%= f.text_field :company,:required => true, :autocomplete => :off,placeholder: "Εταιρεία Καυσίμου"%>
+		<%=f.label 'Εταιρεία Καυσίμων'%>
+		<%= f.text_field :company,:required => true%>
 		</div>
 
 		<div class="actions">
-		<%=f.submit %>
+		<%=f.submit 'Δημιουργία Εγγραφής'%>
 		</div>
 
 <%end %>

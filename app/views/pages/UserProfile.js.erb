@@ -41,16 +41,28 @@ if(<%=@flagJS%>==0){
 				        text: 'Τιμή Αγοράς Λίτρων καυσίμου'
 				    },
 				    xAxis: {
-				        type: 'datetime'
+				        type: 'datetime',
+				        title: {
+				        	text: 'Χρόνος',
+				        	style: {
+	                			color: 'black'
+	            			}
+				        }	
 				    },
 				    yAxis: [{
 				        min: 0,
 				        title: {
-				            text: 'Liters(lt)'
+				            text: 'Λίτρα(lt)',
+				            style: {
+	                			color: 'black'
+	            			}
 				        }
 				    }, {
 				        title: {
-				            text: 'Euro(€)'
+				            text: 'Ευρώ(€)',
+				            style: {
+	                			color: 'black'
+	            			}
 				        },
 				        opposite: true
 				    }],
@@ -105,6 +117,7 @@ var colours=[];
 var testDate=<%=@tester%>;
 //console.log(date);
 console.log("EEEEEEEEEEEEEE"+station_list);
+
 var position=0;
 var dataSeries=[];
 
@@ -116,37 +129,48 @@ var pinakas=[];
 var name=" ";
 
 for( i =0; i < date.length-1; i++){
-	var priorDate= new Date(date[i]).getTime()+7200000;
+	var priorDate= new Date(date[i]).getTime()+7000000;
 	priorDate= new Date(priorDate);
-	var postDate= new Date(date[i+1]).getTime()+7200000;
+	var postDate= new Date(date[i+1]).getTime()+7000000;
 	postDate= new Date(postDate)
 	for ( j =0 ; j < station_list.length; j++) {
 		if(station_list[j]==station_ids[i]){
 			pinakas.push({
                     //date  
-                    x:new Date(date[i]).getTime()+7200000,
-                    x2:new Date(date[i+1]).getTime()+7200000,
-                    myData: 'Station: '+station_names[j]+', '+'Date: '+ priorDate+' - '+postDate,
+                    x:new Date(date[i]).getTime()+7000000,
+                    x2:new Date(date[i+1]).getTime()+7000000,
+                    myData: 'Πρατήριο: '+station_names[j]+', '+'Date: '+ priorDate+' - '+postDate,
                     y:0,
-                    pointWidth: 10,
+                    pointWidth: 2,
                     color: colours[j]              
             });
 		}
 		
 	}
 }
-for ( j =0 ; j < station_list.length; j++) {
+/*for ( j =0 ; j < station_list.length; j++) {
 	name=name+" "+station_names[j];
-}
+}*/
 dataSeries.push({
-	name: name,
+	name: station_names[0],
 	data: pinakas,
+	legendColor:colours[0],
 	dataLabels: {
 		enabled: false,
-
 	}
 });
+if(station_list.length>1){
+	for ( j =1 ; j < station_list.length; j++) {
+		dataSeries.push({
+			name: station_names[j],
+			dataLabels: {
+				enabled: false,
 
+			},
+			legendColor:colours[j],
+		});
+	}
+}
 
 
 
@@ -212,7 +236,14 @@ function setData(){
 		}
 
 		function highchartsGraph(array,graphDiv,title){
-
+			(function(H) {
+			    H.wrap(H.Legend.prototype, 'colorizeItem', function(proceed, item, visible) {
+			      var color = item.color;
+			      item.color = item.options.legendColor;
+			      proceed.apply(this, Array.prototype.slice.call(arguments, 1));
+			      item.color = color;
+			    });
+		  	}(Highcharts));
 			var tableData=array;
 			var color=setRandomColour();
 			
