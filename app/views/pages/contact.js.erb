@@ -168,7 +168,7 @@ var date2=<%=@second_graph%>;
 if(date2.length>1){
 	//statistics.style.visibility='hidden';
 	secondName=<%=@second_name%>;
-	second_graph_div.style.visibility='visible';
+	//second_graph_div.style.visibility='visible';
 	error.style.visibility='hidden';
 	var katanalwsh2 = <%=@katanalwsh_pinakas2%>;
 	console.log(katanalwsh2);
@@ -325,9 +325,12 @@ if(date2.length>1){
 	}
 	else{
 			//second_graph_div.style.visibility='hidden';
-			document.getElementById("error_message").innerHTML = <%=@message%>;
-			error.style.visibility='visible';
-			console.log("TROUUUUUUUUUUUUUUUUUUUUUUUUUUUBLE")
+
+			if(<%=@message%>!=-1){
+				document.getElementById("error_message").innerHTML = <%=@message%>;
+				error.style.visibility='visible';
+				console.log("TROUUUUUUUUUUUUUUUUUUUUUUUUUUUBLE")
+			}
 	}
 }
 else{
@@ -335,6 +338,7 @@ else{
 		console.log("kalhspera");
 		document.getElementById("error_message").innerHTML = <%=@message%>;
 		error.style.visibility='visible';
+		statistics.style.visibility='hidden';
 }
 function removeDoubleElements(selectID){	
 	var string='#'+selectID+' option';

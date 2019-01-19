@@ -1,4 +1,5 @@
-<h1>Hi, <%= current_user.first_name %></h1>
+
+<h1 class="title">Hi, <%= current_user.first_name %></h1>
 
 <%if (current_user.roles[0].to_s.include?("site_admin"))%>
   <%= link_to '<button class="btn btn-primary mr-5" >Σταθμοί Υγρών Καυσίμων</button>'.html_safe, stations_path%>
@@ -8,10 +9,7 @@
 <html>
   <head>
     <style>
-      #map {
-        height: 400px;
-        width: 100%;
-       }
+      #map { height : 100%; width : 100%; top : 50; left : 0; position : absolute; z-index : 200;}
     </style>
   </head>
   <body>

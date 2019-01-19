@@ -28,8 +28,10 @@
               <li class="nav-item mx-2 " > <%=link_to image_tag("login.png" , width:40 , height:40) , new_user_session_path %></li>
               <li class="nav-item mx-2 " >  <%=link_to image_tag("register.png" , width:40 , height:40),  new_user_registration_path%>  </li>
             <%else %>
-             <li class="nav-item mx-2 " ><%= link_to image_tag("logout.png" , width:40 , height:40), destroy_user_session_path, method: :delete%></li>
-             <li class="nav-item" >  <%= link_to image_tag("profile.png" , width:40 , height:40), pages_UserProfile_path%></li>
+             
+             <li class="nav-item" >  <%= link_to image_tag("stats_bars.png" , width:50 , height:50), pages_UserProfile_path%></li>
+             <li class="nav-item mx-2 " >  <%=link_to image_tag("profile.png" , width:50 , height:50),  edit_user_registration_path%>  </li>
+             <li class="nav-item mx-2 " ><%= link_to image_tag("logout.png" , width:50 , height:50), destroy_user_session_path, method: :delete%></li>
 
           <%end%>
         </ul>

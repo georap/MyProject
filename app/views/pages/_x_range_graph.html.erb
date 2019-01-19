@@ -14,42 +14,29 @@
 	</div>
 -->
 <script>
+
 var date=<%=@date_pinakas%>;
 var katanalwsh=<%=@katanalwsh_pinakas%>;
-
 var title_graph="<%=@titlos%>";
-
-
-
-highchartsGraph(katanalwsh,"graph",title_graph,"Κατανάλωση (lt/100km)");
-       
-
+highchartsGraph(katanalwsh,"graph",title_graph,"Κατανάλωση (lt/100km)");     
 var liters=<%=@litra_pinakas%>;
 var station_list=<%=@prathria_list%>;
 var station_uniq_list=<%=@prathria_uniq_list%>;
 console.log("id prathria ",station_uniq_list);
-
 var price=<%=@timh_pinakas%>;
-
-
 var hichartsArray=<%=@km_graph%>;
 highchartsGraph(hichartsArray,"kiliometers_div","Χιλιόμετρική απόσταση μεταξύ γεμισμάτων","Χιλιόμετρα (Κm)");
 hichartsArray=<%=@litra_pinakas%>;
 highchartsGraph(hichartsArray,"liters_div","Ποσότητα Γεμισμάτων","Λίτρα (lt)");
-
 highchartsGraph(price,"price_div","Tιμή Καυσίμου Γεμισμάτων",'Ευρώ (€)');
 
 function setDataToArray(first,last){
     var array=[];
     for(j=first;j<last;j++){
-                    array.push({
-                    //name
-                    //name:nameList[i],
-                    //date  
-                    x:new Date(date[j]),
-                    //katanalwsh
-                    y:katanalwsh[j]              
-                    });
+        array.push({
+            x:new Date(date[j]),
+            y:katanalwsh[j]              
+        });
                     
     } 
     return array;
@@ -63,7 +50,6 @@ function setRandomColour() {
           console.log(color);
           return color;
 }
-
 function highchartsGraph(array,graphDiv,title,text){
 	(function(H) {
 	    H.wrap(H.Legend.prototype, 'colorizeItem', function(proceed, item, visible) {
@@ -75,26 +61,24 @@ function highchartsGraph(array,graphDiv,title,text){
   	}(Highcharts));
 	var tableData=[];
 	var color=setRandomColour();
-	//katanalwsh length epeidh den upologizoume th teleutaia eggrafh litrwn kai xiliometrwn
 	for (i=0;i<katanalwsh.length;i++){
 		var priorDate= new Date(date[i]).getTime()+7000000;
 		priorDate= new Date(priorDate);
 		var postDate= new Date(date[i+1]).getTime()+7000000;
 		postDate= new Date(postDate);                
             tableData.push({
-            //date first
-            x:new Date(date[i]).getTime()+7000000,
-            //date last
-            x2:new Date(date[i+1]).getTime()+7000000,
-            myData:  priorDate+' - '+postDate,
-            //katanalwsh
-            y:array[i],
-            partialFill:  array[i].toFixed(2)  ,
-            color: color     
+	            //date first
+	            x:new Date(date[i]).getTime()+7000000,
+	            //date last
+	            x2:new Date(date[i+1]).getTime()+7000000,
+	            myData:  priorDate+' - '+postDate,
+	            //katanalwsh
+	            y:array[i],
+	            partialFill:  array[i].toFixed(2)  ,
+	            color: color     
             });
     }
     var legentTitle=text.split(" ");
-	//Highcharts.getOptions().colors = color;
 	Highcharts.chart(graphDiv, {
 		chart: {
 		    type: 'xrange',
@@ -138,27 +122,14 @@ function highchartsGraph(array,graphDiv,title,text){
 		        borderColor: '#CCC',
 		        borderWidth: 1,
 		        shadow: false,
-		       /* itemStyle: {
-		            color: '#000000',
-		            fontWeight: 'bold'
-		        }*/
 		        labelFormatter: function () {
 		            return legentTitle[0];
 		        }
 		    },
 		series: [{
-			//name: vehicleName[0],
-			// pointPadding: 0,
-		    // groupPadding: 0,
-		    //borderColor: 'gray',
 		    legendColor:color,
 			pointWidth: 20,
-			data: tableData/*[{
-		    x: utcDate1,
-		    x2: utcDate2,
-		            y: 0,
-		            partialFill: 1
-		        }]*/,
+			data: tableData,
 			dataLabels: {
 			    enabled: true,
 			    formatter: function() {
@@ -170,6 +141,4 @@ function highchartsGraph(array,graphDiv,title,text){
 			}]
 	});
 }
-
-
 </script>

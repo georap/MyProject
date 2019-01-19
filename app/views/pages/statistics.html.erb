@@ -4,9 +4,9 @@
 		<%string=params[:q] %>
 		<%@array=string.split(',') %>
 		<% if @case ==0 %>
-			<p> periptwsh <%=@case%> </p>
+			<!--<p> periptwsh <%#=@case%> </p>-->
 			<!--#upologizei ta xiliometra oloklhro to xrono!--> 
-			<%@titlos="Mέση Κατανάλωση του οχήματος #{@vehicle_list[0]} "%>
+			<%@titlos="Κατανάλωση του οχήματος #{@vehicle_list[0]} ανεξαρτήτου πρατηρίου"%>
 			
 			<!--<div id="graph" >-->
 				<%= render 'pages/x_range_graph' %>
@@ -28,7 +28,7 @@
 		<%elsif @case==1%>
 			<!--#Ypologizei xiliometra kai litra gia sugkekrimeno mhna !-->
 			<%@titlos="Κατανάλωση του οχήματος για το μήνα #{@array[0]}"%>
-			<p> periptwsh <%=@case%> </p>
+			<!--<p> periptwsh <%#=@case%> </p>-->
 			<div id="graph" >
 				<%= render 'pages/x_range_graph' %>
 			</div>
@@ -37,12 +37,12 @@
 			<%#= render 'pages/show_vehicle' %>
 			
 		<%elsif @case==2%>
-			<p> periptwsh <%=@case%> </p>
+			<!--<p> periptwsh <%#=@case%> </p>-->
 			<!--#katanalwsh gia pollapla oxhmata tou prathriou pou exei balei o xrhsths kausima!--> 
 			
-			<%@titlos="Κατανάλωση πολλαπλών οχημάτων στο πρατήριο #{@station_id.name}"%>
+			
 
-			<p style="text-align: center;"><%=@titlos%></p>
+			<!--<p style="text-align: center;"><%#=@titlos%></p>-->
 			
 				
 				<%#= render 'pages/case2' %>
@@ -62,11 +62,11 @@
 			<%#=  line_chart data ,library: { pieSliceText: 'value' },xtitle: "Οχήματα", ytitle: "Συνολική Κατανάλωση lt/km"%>
 
 		<%elsif @case==3%>
-			<p> periptwsh <%=@case%> </p>
+			<!--<p> periptwsh <%=@case%> </p>-->
 			<!--#alliws upologizei me bash to prathrio gia sugkekrimeno oxhma kai TYPO KAYSIMOY gia diaforetikous xrhstes!-->
 			
-			<%@titlos="Σύγκριση κατανάλωσης οχημάτων #{@array[1]} και #{@array[5]} στο πρατήριο #{@station_id.name}"%>
-			<p style="text-align: center;"><%=@titlos%></p>
+			
+			
 			<!--<div id="graph" >-->	
 				<%= render 'pages/case2' %>
 			<!--</div>-->
@@ -89,14 +89,11 @@
 			<%#=  column_chart data ,library: { pieSliceText: 'value' },xtitle: "User_id", ytitle: "Συνολική Κατανάλωση lt/km"%>
 
 		<%elsif @case==4%>
-			<p> periptwsh <%=@case%> </p>
+			<!--<p> periptwsh <%#=@case%> </p>-->
 			<!--# upologizw kai gia ton sugkekrimeno xrhsth sto sugkekrimeno prathrio to sugkekrimeno mhna!-->
-			<%@titlos="Κατανάλωση του οχήματος #{@array[1]} για το μήνα #{@array[0]} στο πρατήριο #{@station_id.name}"%>
+			<%@titlos="Κατανάλωση του οχήματος #{@array[1]} στο πρατήριο #{@station_id.name}"%>
 			
 				<%= render 'pages/x_range_graph' %>
-			
-			<!--<p style="text-align: center;">Συνολική κατανάλωση οχήματος για το μήνα <%=@array[0]%> στο σταθμό <%=@station_id.name%>: <%=@katanalwsh_xronou%> </p>
-			<%#= render 'pages/show_vehicle' %>-->
 		<%end%>
 
 	<% else %>

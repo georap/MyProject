@@ -2,3 +2,15 @@
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
 @import "bootstrap";
+body, html {
+  height: 100%;
+  margin: 0;
+}
+.bg{
+	background: image-url('gas_station.jpg');
+	background-size: cover;
+	
+  background-repeat: no-repeat;
+  height: 100%; 
+  
+}

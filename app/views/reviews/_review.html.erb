@@ -16,9 +16,9 @@
           </div>
           <div class="review-links">
             <% if(@flag==review.user_id)|| (@admin==true)%>
-              <%= link_to 'Delete', [review.station, review],
+              <%= link_to 'Διαγραφή', [review.station, review],
                   method: :delete, class: "button is-danger", data: { confirm: 'Are you sure?' } %>
-              <%= link_to 'Edit',  edit_station_review_path(review.station,review.id)%>
+              <%= link_to 'Επεξεργασία',  edit_station_review_path(review.station,review.id)%>
             <%end%>
           
           </div>

@@ -1,5 +1,5 @@
 
-<h1>Απεικόνιση στατιστικών στοιχείων του πρατηρίου <%=@name_station %></h1>
+<h2>Απεικόνιση στατιστικών στοιχείων του πρατηρίου <%=@name_station %></h2>
 
 <p style="width: 400px;">Στατιστικά για το πρατήριο<input type="radio" onclick="javascript:stationOrGeo();" name="yesno" id="stationCheck"></p> 
  <p style="width: 400px;">Στατιστικά για τη γεωγραφική περιοχή<input type="radio" onclick="javascript:stationOrGeo();" name="yesno" id="geographCheck"></p> 
@@ -63,13 +63,10 @@
 <br>
 <div id='statistics' style="visibility:  hidden; min-width: 400px; height: 400px; margin: 0 auto">
 
-	
-</div>
-<br>
 
-	
-	
 </div>
+<br>	
+
 <div id='error' style="visibility:  hidden; ">
 	<div id="notfound">
 		<div class="notfound">
@@ -80,12 +77,12 @@
 			<p id='error_message'> </p>
 			
 		</div>
-	</div>
-	
+	</div>	
 </div>
 
 <div id='second_graph_div' style="visibility:  hidden; min-width: 400px; height: 400px; margin: 0 auto">
 
+</div>
 
 <script>
 	//statistics.style.visibility='hidden'

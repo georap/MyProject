@@ -1,5 +1,5 @@
 
-
+var vehicleName=<%=@vehicle_name%>;
 if(<%=@flagJS%>==0){
 	console.log("hello");
 	var date=<%=@date_pinakas%>;
@@ -9,7 +9,7 @@ if(<%=@flagJS%>==0){
 				var liters=<%=@litra_pinakas%>;
 				var price=<%=@timh_pinakas%>;
 				
-				        
+				var titleLitersPrice='Τιμή αγοράς λίτρων καυσίμου οχήματος'+vehicleName;
 				//var title_graph="<%=@titlos%>";
 				var litersArray = [];
 				var priceArray = [];
@@ -35,10 +35,10 @@ if(<%=@flagJS%>==0){
 				Highcharts.chart('graph', {
 				    chart: {
 				        type: 'column',
-				        zoomType: 'xy'
+				        zoomType: 'x'
 				    },
 				    title: {
-				        text: 'Τιμή Αγοράς Λίτρων καυσίμου'
+				        text: titleLitersPrice
 				    },
 				    xAxis: {
 				        type: 'datetime',
@@ -67,8 +67,17 @@ if(<%=@flagJS%>==0){
 				        opposite: true
 				    }],
 				    legend: {
-				        shadow: false
+				        align: 'right',
+				        x: -40,
+				        verticalAlign: 'top',
+				        y: 25,
+				        floating: true,
+				        backgroundColor: (Highcharts.theme && Highcharts.theme.background2) || 'white',
+				        borderColor: '#CCC',
+				        borderWidth: 1,
+				        shadow: false,
 				    },
+
 				    tooltip: {
 				        shared: true
 				    },
@@ -139,7 +148,7 @@ for( i =0; i < date.length-1; i++){
                     //date  
                     x:new Date(date[i]).getTime()+7000000,
                     x2:new Date(date[i+1]).getTime()+7000000,
-                    myData: 'Πρατήριο: '+station_names[j]+', '+'Date: '+ priorDate+' - '+postDate,
+                    myData: 'Πρατήριο: '+station_names[j]+', '+'Hμ/νια: '+ priorDate+' - '+postDate,
                     y:0,
                     pointWidth: 2,
                     color: colours[j]              
@@ -175,7 +184,7 @@ if(station_list.length>1){
 
 
 console.log(dataSeries);
-var titleGraph='Γεμίσματα οχήματος  σε όλους τους σταθμούς';
+var titleGraph='Γεμίσματα οχήματος '+vehicleName+' σε όλους τους σταθμούς';
 highchartsGraph(dataSeries,'graph',titleGraph);
 }
 
@@ -250,7 +259,7 @@ function setData(){
 			Highcharts.chart(graphDiv, {
 				chart: {
 				    type: 'xrange',
-					zoomType: 'xy'
+					zoomType: 'x'
 				},
 				title: {
 				    text: title
@@ -276,10 +285,12 @@ function setData(){
 			          return '<b>' + this.point.myData + '</b>';
 			        }},
 			    legend: {
+			    		title:{
+			    			text:'Πρατήρια'},
 				        align: 'right',
 				        x: -25,
 				        verticalAlign: 'top',
-				        y: 25,
+				        y: 45,
 				        floating: true,
 				        backgroundColor: (Highcharts.theme && Highcharts.theme.background2) || 'white',
 				        borderColor: '#CCC',

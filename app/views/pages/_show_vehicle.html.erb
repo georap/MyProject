@@ -26,8 +26,8 @@
 				<td><%= vehicle.fuel_type %></td>
 				<td><%= Station.find_by_id(vehicle.station_id).name %></td>
 				<td><%= vehicle.area %></td>
-				<td><%= link_to "Edit", edit_vehicle_path(vehicle.id)%></td>
-				<td><%= link_to "Delete", vehicle, method: :delete, data: { confirm: 'Are you sure?' }%></td></tr>
+				<td><%= link_to "Επεξεργασία", edit_vehicle_path(vehicle.id)%></td>
+				<td><%= link_to "Διαγραφή", vehicle, method: :delete, data: { confirm: 'Are you sure?' }%></td></tr>
 			  <% end %>
 			  </tbody>
 </div>

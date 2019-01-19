@@ -1,11 +1,23 @@
 // Place all the styles related to the Vehicles controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
-/*
-body{
-    background-image: url("backround_fuel_image.jpg");
-    height: "50%";
-}*/
+
+.vehicles-index-bg{
+    
+
+   /* background-color: #7e91ad;
+    
+    background-repeat: no-repeat;
+    height: 100%; */
+}
+.vehicles-bg{
+    background-image: url("filling_gas.jpg");
+
+    background-size: cover;
+    
+    background-repeat: no-repeat;
+    height: 100%; 
+}
 .help-tip{
     position: absolute;
     top: 18px;

@@ -1,6 +1,6 @@
 <%=link_to "Νέα απεικόνιση στατιστικών στοιχείων", vehicles_path%>
 <br>
-<div id="graph" style="height: 500px; margin-top: 2em" >
+<div id="graph" >
 
 </div>
 <script>
@@ -37,8 +37,8 @@ var nameList=<%=@name_list%>;
             }   
         }
 
-        var title_graph="<%@titlos%>";
-        //console.log(katanalwsh);
+        var title_graph=<%=@title%>;
+        console.log("TITLOS"+title_graph);
         console.log(date);
 //removeA(katanalwsh, -1);
 console.log(katanalwsh);
@@ -143,12 +143,22 @@ Highcharts.chart('graph', {
         text: title_graph
     },
     xAxis: {
+        title: {
+            text: 'Χρόνος',
+            style: {
+                color: 'black'
+            }
+        },
         type:'datetime'
     },
     yAxis: {
         title: {
-            text: 'Κατανάλωση (lt/100 km)'
-        }
+            text: 'Κατανάλωση (lt/100 km)',
+            style: {
+                color: 'black'
+            }
+        },
+        
     },
     legend: {
         layout: 'vertical',

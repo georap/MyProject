@@ -1,6 +1,6 @@
 <%=link_to "Νέα απεικόνιση στατιστικών στοιχείων", vehicles_path%>
 <br>
-<div id="graph" style="height: 600px; margin-top: 2em" >
+<div id="graph" >
 
 </div>
 <div id="second_graph" >
@@ -11,7 +11,7 @@
     var katanalwsh=<%=@katanalwsh_pinakas%>;
     var katanalwsh2 = <%=@katanalwsh_pinakas2%>;
     var date2=<%=@second_graph%>;
-
+    var title_graph=<%=@title%>;
     var data=[];
     var newSeries=[];
     var firstBrand=<%=@first_brand%>;
@@ -96,7 +96,7 @@ setDataToSeries(tempForSeries,secondDataGraph,secondBrand);
                 zoomType: 'xy'
             },
             title: {
-                text:''
+                text:title_graph
             },
             rangeSelector:{
                 enabled:true

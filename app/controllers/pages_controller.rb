@@ -10,8 +10,8 @@ class PagesController < ApplicationController
   require 'net/http'
 	require 'freegeoip'
   require 'json'
-
-  def home
+  require 'benchmark'
+  def home    
     @user_auth=false
     @station_items=Station.new
     if (current_user.is_a?(GuestUser))
@@ -27,8 +27,6 @@ class PagesController < ApplicationController
     @ip=[0.0,0.0]
     if(data["city"]=="Ioannina")
       puts "no static"
-      #emfanizei tous sta8mous mono gia ta giannena
-      #@station_items=Station.where("area like ?", "%Ιωαννίνων%").or(Station.where("area like ?", "%Ιωάννινα%"))
       @station_items=Station.all
       @ip=[data[lat],data[long]]
     else
@@ -36,11 +34,8 @@ class PagesController < ApplicationController
       @station_items=Station.all
       @ip=[39.618008110280655,20.83890170776874]
     end
-    
-    
     puts @ip
   	@addresses=Array.new
-  	
   	@station_items.each do|station_item|
     	name0=station_item.name
     	longitude0=station_item.longitude
@@ -54,6 +49,7 @@ class PagesController < ApplicationController
   end
 
   def UserProfile
+
     @flagJS=-1
     @tester=Array.new
     @litra_pinakas=Array.new
@@ -66,7 +62,6 @@ class PagesController < ApplicationController
       @vehicle_list=Array.new
       @vehicle=Vehicle.where(user_id: current_user.id).order(fuel_date: :desc)
 
-      #@vehicle=@vehicle.order(fuel_date: :desc)
 
       @vehicle.each do|vehicle|
         @vehicle_list.insert(-1,vehicle.name)    
@@ -74,12 +69,12 @@ class PagesController < ApplicationController
 
       @div_vehicle=@vehicle_list.uniq
       @div_vehicle.insert(0,"Επιλογή Οχήματος")
-  end
+    end
     if(!params[:liters_price_vehicle].nil?)
       @flagJS=0
       puts "litra-price periptwsh"
-      vehicle_name=params[:liters_price_vehicle]
-      @temp_collection=Vehicle.where(user_id: current_user.id).where(name:vehicle_name).order(fuel_date: :asc)
+      @vehicle_name=params[:liters_price_vehicle]
+      @temp_collection=Vehicle.where(user_id: current_user.id).where(name:@vehicle_name).order(fuel_date: :asc)
       
       
       @temp_collection.each do|vehicle|
@@ -94,9 +89,7 @@ class PagesController < ApplicationController
 
       
 
-      #puts @date_pinakas,@litra_pinakas,@timh_pinakas,@vehicle_list,@station_list
-      #puts "EDWWWWWWWWWWW"
-      #puts @categories_list
+      @vehicle_name=@vehicle_name.to_json.html_safe
       @date_pinakas=@date_pinakas.to_json.html_safe
       @litra_pinakas=@litra_pinakas.to_json.html_safe
       @timh_pinakas=@timh_pinakas.to_json.html_safe
@@ -107,10 +100,10 @@ class PagesController < ApplicationController
     elsif (!params[:vehicle].nil?)
       puts "gemismata periptwsh"
       @flagJS=1
-      vehicle_name=params[:vehicle]
+      @vehicle_name=params[:vehicle]
      
       
-      @vehicle=Vehicle.where(user_id: current_user.id).where(name:vehicle_name).order(:fuel_date)
+      @vehicle=Vehicle.where(user_id: current_user.id).where(name:@vehicle_name).order(:fuel_date)
       @vehicle.each do|element|
         @date_pinakas.insert(-1,element.fuel_date)
         @stations_ids.insert(-1,element.station_id)
@@ -125,7 +118,7 @@ class PagesController < ApplicationController
         name=Station.find_by_id(@station_list[i]).name
         @stations_names.insert(-1,name)
       end
-
+      @vehicle_name=@vehicle_name.to_json.html_safe
       @stations_ids=@stations_ids.to_json.html_safe
       @stations_names=@stations_names.to_json.html_safe
       @station_list=@station_list.to_json.html_safe
@@ -134,16 +127,16 @@ class PagesController < ApplicationController
             format.js
       end
     end
+
   end
 
   def about
-    #https://stackoverflow.com/questions/12719354/rails-3-return-query-results-to-bottom-of-form-page?utm_medium=organic&utm_source=google_rich_qa&utm_campaign=google_rich_qa
-    #lista me oxhmata pou exei o xrhsths
-    
+
     
   end
 
   def statistics
+    
     @case=0
     @error_message=''
     @lt_per_km_monthly=Array.new
@@ -161,7 +154,7 @@ class PagesController < ApplicationController
     else
       sugkrish=false
     end
-    #prepei na pros8esw anazhtsh me perioxh
+
     if(station.include?("none"))
       #otan einai none STATION mporei na upologisei aneksarthta apo to prathrio gia sugkekrimeno xrhsth 
       if(!oxhma.include?("none"))&&(xronos.include?("all"))
@@ -334,14 +327,15 @@ class PagesController < ApplicationController
         #puts @katanalwsh_pinakas
         puts @second_graph_array
 
-
+        @title="Κατανάλωση πολλαπλών οχημάτων στο πρατήριο #{@station_id.name}"
+        @title=@title.to_json.html_safe
         @second_graph_array=@second_graph_array.to_json.html_safe
         @array_date=@array_date.uniq
         @array_date=@array_date.to_json.html_safe
         @date_pinakas=@date_pinakas.to_json.html_safe
         #puts @date_pinakas
       elsif((xronos.include?("all"))&&(!oxhma.include?("none"))&&(sugkrish)&&(!array[5].include?("none")))
-        #SYGKRISH 2 OXHMATWN oxhma kai second_vehicle GIA SUGKEKRIMENO STA8MO
+        #SYGKRISH 2 markes oxhmatwn (oxhmata kai second_vehicle) GIA SUGKEKRIMENO STA8MO kai kausimo
         @case=3
         second_vehicle=array[5]
         @station_id=Station.find_by_id(station)
@@ -393,7 +387,7 @@ class PagesController < ApplicationController
           consumption_array.clear
         end
 
-        second_array=Vehicle.where(station_id: @station_id.id).where(brand:second_vehicle).order(:fuel_date)
+        second_array=Vehicle.where(station_id: @station_id.id).where(brand:second_vehicle).where(fuel_type:fuel_type).order(:fuel_date)
         if(@vehicle.size>2)
           second_array.each do|vehicle|
             if(!@oxhmata.include?(vehicle.name))
@@ -414,6 +408,8 @@ class PagesController < ApplicationController
         end
         @first_brand=oxhma
         @second_brand=second_vehicle
+        @title="Σύγκριση μέσης κατανάλωσης οχημάτων #{@first_brand} και #{@second_brand} με καύσιμο #{fuel_type} στο πρατήριο #{@station_id.name} "
+        @title=@title.to_json.html_safe
         @first_brand=@first_brand.to_json.html_safe
         @second_brand=@second_brand.to_json.html_safe
         @graph_date=@graph_date.to_json.html_safe
@@ -502,10 +498,13 @@ class PagesController < ApplicationController
     
     
     #NA PARW TA PARAMS GIA KATHE STATION KSEXWRISTA 
+  
   end
 
 
   def contact
+
+
     @my_station=params[:my_station]
     @fuel_type=params[:fuel_type]
     @stations_ids=Array.new
@@ -951,7 +950,7 @@ class PagesController < ApplicationController
             end
         end  
     end
-
+  
   end
 
 
@@ -1481,14 +1480,7 @@ class PagesController < ApplicationController
       end
     end
     return temp_array
-    #i=0
-    #@vehicle.each do|vehicle|
-    #  for i in 0..@array_date.size-1
-    #    if(vehicle.user_id==user_id[i]&&vehicle.name==vehicle_list[i])
-#
-    #    end
-    #  end
-    #end
+
   end
 
   
