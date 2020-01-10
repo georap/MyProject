@@ -131,7 +131,7 @@ class PagesController < ApplicationController
   end
 
   def about
-
+    
     
   end
 
@@ -207,6 +207,8 @@ class PagesController < ApplicationController
             puts "REEEEEEEEEEEEEEEEEE #{litra}"
             @katanalwsh_xronou=100*litra/km
             @katanalwsh_xronou=@katanalwsh_xronou.round(3)
+        else
+
         end
         
         consumption_array=find_consumption_2(km_array,lt_array,0)
@@ -250,7 +252,7 @@ class PagesController < ApplicationController
             puts "DEN UPARXEI EGGRAFH ME TO SUGKEKRIMENO MHNA GIA TO AUTOKINHTO POU EPILEKSATE"
           end
       elsif(oxhma.include?("none")) 
-          @error_message='DEN MPOREITE NA EPILEKSETE NONE STASION KAI NONE VEHICLE'
+          @error_message='ΔΕΝ ΜΠΟΡΕΙΤΕ ΝΑ ΕΠΙΛΕΞΕΤΕ NONE ΠΡΑΤΗΡΙΟ ΚΑΙ NONE OXHMA'
           puts "DEN MPOREITE NA EPILEKSETE NONE STASION KAI NONE VEHICLE"
       end
     else
@@ -388,7 +390,7 @@ class PagesController < ApplicationController
         end
 
         second_array=Vehicle.where(station_id: @station_id.id).where(brand:second_vehicle).where(fuel_type:fuel_type).order(:fuel_date)
-        if(@vehicle.size>2)
+        if(@vehicle.size>2&&second_array.size>2)
           second_array.each do|vehicle|
             if(!@oxhmata.include?(vehicle.name))
               @oxhmata.insert(-1,vehicle.name)
@@ -405,17 +407,21 @@ class PagesController < ApplicationController
           #afairesh diploeggrafwn tou pinaka
           @second_graph=@array_date.uniq
           puts @katanalwsh_pinakas
+          @first_brand=oxhma
+          @second_brand=second_vehicle
+          @title="Σύγκριση μέσης κατανάλωσης οχημάτων #{@first_brand} και #{@second_brand} με καύσιμο #{fuel_type} στο πρατήριο #{@station_id.name} "
+          @title=@title.to_json.html_safe
+          @first_brand=@first_brand.to_json.html_safe
+          @second_brand=@second_brand.to_json.html_safe
+          @graph_date=@graph_date.to_json.html_safe
+          @katanalwsh_pinakas=@katanalwsh_pinakas.to_json.html_safe
+          @katanalwsh_pinakas2=@katanalwsh_pinakas2.to_json.html_safe
+          @second_graph=@second_graph.to_json.html_safe
+        else
+          @error_message='Δεν υπάρχει η συγκεκριμένη σύγκριση με τύπο καυσίμου '+fuel_type+' και με μάρκες '+oxhma +' '+ second_vehicle +' που επιλέξατε '
+          puts "Δεν υπάρχει η συγκεκριμένη σύγκριση με τύπο καυσίμου"
         end
-        @first_brand=oxhma
-        @second_brand=second_vehicle
-        @title="Σύγκριση μέσης κατανάλωσης οχημάτων #{@first_brand} και #{@second_brand} με καύσιμο #{fuel_type} στο πρατήριο #{@station_id.name} "
-        @title=@title.to_json.html_safe
-        @first_brand=@first_brand.to_json.html_safe
-        @second_brand=@second_brand.to_json.html_safe
-        @graph_date=@graph_date.to_json.html_safe
-        @katanalwsh_pinakas=@katanalwsh_pinakas.to_json.html_safe
-        @katanalwsh_pinakas2=@katanalwsh_pinakas2.to_json.html_safe
-        @second_graph=@second_graph.to_json.html_safe
+        
 
 
       elsif ((xronos.include?("all"))&&(!oxhma.include?("none")))
@@ -438,7 +444,7 @@ class PagesController < ApplicationController
         @litra_pinakas=Array.new
         @timh_pinakas=Array.new
         @prathria_list=Array.new
-        if(@vehicle.size>1)
+        if(@vehicle.size>2)
             @katanalwsh_pinakas=Array.new
             @date_pinakas=Array.new
             puts @katanalwsh_pinakas
@@ -484,7 +490,7 @@ class PagesController < ApplicationController
           @date_pinakas=@date_pinakas.to_json.html_safe
           @prathria_uniq_list=@prathria_list.uniq
         else
-          @error_message='DEN YPARXEI H EGGRAFH TOY OXHMATOS '+ oxhma+' STO PRATHRIO ' +station+' TON MHNA '+ xronos+' ME AYTO TON TYPO KAYSIMOU ' +fuel_type
+          @error_message='Δεν υπάρχουν αρκετά δεδομένα για το '+ oxhma+' στο πρατήριο ' +@station_id.name+' ωστε να υπολογιστει η κατανάλωση'
           puts "DEN YPARXEI H EGGRAFH TOY OXHMATOS #{oxhma} STO PRATHRIO #{station} TON MHNA #{xronos}ME AYTO TON TYPO KAYSIMOU #{fuel_type}" 
         end
       else
@@ -616,7 +622,7 @@ class PagesController < ApplicationController
       @vehicle=Vehicle.where(station_id: @my_station).where(fuel_type: @fuel_type).order(:fuel_date)
       puts @vehicle.size
 
-      if(@vehicle.size!=0)
+      if(@vehicle.size>2)
 
         @message=0
         @vehicle.each do|vehicle|

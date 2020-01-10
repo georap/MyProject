@@ -66,3 +66,8 @@ gem 'chartkick', '~> 2.3', '>= 2.3.5'
 gem 'highcharts-rails', '~> 6.0', '>= 6.0.3'
 gem 'range_tree', '~> 0.0.2'
 gem 'highstock-rails', '~> 5.0', '>= 5.0.11'
+gem 'rails-perftest'
+gem 'ruby-prof'
+gem 'minitest-rails-capybara'
+gem 'rspec-rails'
+#gem 'scout_apm' #monitoring gem for application

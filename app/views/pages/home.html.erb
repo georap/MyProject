@@ -9,7 +9,7 @@
 <html>
   <head>
     <style>
-      #map { height : 100%; width : 100%; top : 50; left : 0; position : absolute; z-index : 200;}
+      #map { height : 100%; width : 100%; /*top : 50; left : 0; position : absolute; z-index : 200;*/}
     </style>
   </head>
   <body>
@@ -17,7 +17,6 @@
     <script>
 
       function initMap() {
-
       	var locations = <%=@addresses%>;
       	var center1 = <%=@ip[0]%>;
       	var center2 = <%=@ip[1]%>;
@@ -64,10 +63,8 @@
               	position: event.latLng,
               	map: map
 
-            });
-              
-              //MAKE NEW STATION with REFERENCE posMarker has the lat and long
-              
+            }); 
+            //MAKE NEW STATION with REFERENCE posMarker has the lat and long  
             var msg="Νέος Σταθμός Υγρών Καυσίμων;";
             var result=msg.link("http://localhost:3000/stations/new?latlng="+posMarker);
             messageListener(newMarker,result);
@@ -79,13 +76,12 @@
 
     	function messageListener(marker,message){
       		var infowindow = new google.maps.InfoWindow({
-		    content: message
-		  	});
-
+		        content: message
+		  	 });
 		  	marker.addListener('click', function() {
 		    infowindow.open(marker.get('map'), marker);
 		  	});
-      	}
+      }
 
     </script>
     <script async defer
