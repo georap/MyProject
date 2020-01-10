@@ -1,24 +1,4 @@
-# README
+This is my Diploma Thesis named FuelReviews. 
+You will need to install Ruby version 2.5, Ruby on Rails (Version 5.1.6) and Databases PostgreSQL, Redis.
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
-
-Things you may want to cover:
-
-* Ruby version
-
-* System dependencies
-
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+The fuel quality is often disputed by consumers and maybe there is still some way to ensure before buying it from a gas station. The Web application that will be described in the following chapters is aimed at observing vehicle consumption of users, but also observing the average consumption of all vehicles per gas station, geographical region or Fuel Company. Also, users will have the ability to comment on gas stations that they chose to buy fuel. Consumption data will be visualized through graphs. This application was developed in MVC environment using the well known MVC Ruby on Rails and programming languages such as Ruby, HTML, JavaScript, Bootstrap and scss.
