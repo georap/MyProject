@@ -5,7 +5,7 @@ class PagesController < ApplicationController
   #access all: [:home,:about,:contact], user: :all, site_admin: :all
   before_action :check_guest_user, only: [:UserProfile,:statistics]
 
-  
+  #some working changes
 	#IP panepisthmiou 195.130.121.45 ----> request.location
   require 'net/http'
 	require 'freegeoip'
