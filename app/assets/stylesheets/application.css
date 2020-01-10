@@ -13,7 +13,7 @@
  *= require_tree .
  *= require_self
  */
- HEAD
+
 @import "bootstrap";
 
 /*
@@ -25,4 +25,4 @@ custom styles*/
 .auth-links a{
 	color:blue;
 }
- master
+

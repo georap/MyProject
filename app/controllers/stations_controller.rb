@@ -34,11 +34,11 @@ class StationsController < ApplicationController
 	def show
 		@station_item=Station.includes(:reviews).find(params[:id])
 		@review=Review.new
- HEAD
+
 		@flag=current_user.id
 		@admin=is_admin
 		#print "the reviews for current_user #{@station_item.reviews.where(user_id: 4).inspect()}"
- master
+
 
 	end
 
