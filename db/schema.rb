@@ -10,20 +10,12 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
+ HEAD
 ActiveRecord::Schema.define(version: 20181227130210) do
+ master
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
-
-  create_table "reviews", force: :cascade do |t|
-    t.text "content"
-    t.bigint "user_id"
-    t.bigint "station_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["station_id"], name: "index_reviews_on_station_id"
-    t.index ["user_id"], name: "index_reviews_on_user_id"
-  end
 
   create_table "stations", force: :cascade do |t|
     t.string "name"
@@ -50,11 +42,11 @@ ActiveRecord::Schema.define(version: 20181227130210) do
     t.inet "last_sign_in_ip"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.string "roles"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
+ HEAD
   create_table "vehicles", force: :cascade do |t|
     t.string "name"
     t.integer "kilometers"
@@ -77,4 +69,5 @@ ActiveRecord::Schema.define(version: 20181227130210) do
   add_foreign_key "reviews", "users"
   add_foreign_key "vehicles", "stations"
   add_foreign_key "vehicles", "users"
+ master
 end

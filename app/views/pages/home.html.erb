@@ -1,12 +1,15 @@
 
 <h1 class="title">Hi, <%= current_user.first_name %></h1>
 
+ HEAD
 <%if (current_user.roles[0].to_s.include?("site_admin"))%>
   <%= link_to '<button class="btn btn-primary mr-5" >Σταθμοί Υγρών Καυσίμων</button>'.html_safe, stations_path%>
 <%end%>
 
+>>>>>>> master
 <!DOCTYPE html>
 <html>
+<a href="link" class='dynamicLink'>link</a>
   <head>
     <style>
       #map { height : 100%; width : 100%; /*top : 50; left : 0; position : absolute; z-index : 200;*/}
@@ -18,6 +21,7 @@
 
       function initMap() {
       	var locations = <%=@addresses%>;
+ HEAD
       	var center1 = <%=@ip[0]%>;
       	var center2 = <%=@ip[1]%>;
         if(center1==37.9667 && center2==23.7167){
@@ -25,21 +29,22 @@
           center2= 20.840828031368915;
         }
         var authenticate= <%=@user_auth%>;
+master
         var userPos = {lat: center1, lng: center2};
         var map = new google.maps.Map(document.getElementById('map'), {
           zoom: 15,
           center: userPos
         });
-        
-    		var iconBase = 'https://maps.google.com/mapfiles/kml/shapes/';
-    		var markerUser = new google.maps.Marker({
-    			position: userPos,
-    		    map: map,
-    		    icon: iconBase + 'arrow.png'
-    		});
-		    //Initialize the Stations from database
+		var iconBase = 'https://maps.google.com/mapfiles/kml/shapes/';
+		var markerUser = new google.maps.Marker({
+			position: userPos,
+		    map: map,
+		    icon: iconBase + 'arrow.png'
+		});
+		//Initialize the Stations from database
         var marker, i;
         for (i = 0; i < locations.length; i++) { 
+HEAD
   	    	var latit=locations[i].latitude;
   	    	var long=locations[i].longitude;
   	    	var tmp={lat: latit, lng: long};
@@ -68,9 +73,10 @@
             var msg="Νέος Σταθμός Υγρών Καυσίμων;";
             var result=msg.link("http://localhost:3000/stations/new?latlng="+posMarker);
             messageListener(newMarker,result);
+ master
 
-            });
-        }
+        });
+        
 
       }
 

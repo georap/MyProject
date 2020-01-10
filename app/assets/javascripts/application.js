@@ -10,10 +10,7 @@
 // Read Sprockets README (https://github.com/rails/sprockets#sprockets-directives) for details
 // about supported directives.
 //
-//= require jquery
-//= require jquery_ujs
-//= require cocoon
-//= require cable
+//= require rails-ujs
 //= require turbolinks
 //= require Chart.bundle
 //= require highcharts
@@ -21,6 +18,3 @@
 //= require highcharts/modules/xrange.js
 //= require chartkick
 //= require_tree .
-//= require popper
-//= require popover_config
-//= require bootstrap-sprockets
