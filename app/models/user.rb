@@ -5,10 +5,10 @@ class User < ApplicationRecord
          :recoverable, :rememberable, :trackable, :validatable
 
   validates_presence_of :name
- HEAD
+
   has_many :reviews, dependent: :destroy
   has_many :vehicles, dependent: :destroy
- master
+
   def first_name
   	self.name.split.first
   end

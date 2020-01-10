@@ -55,7 +55,7 @@ gem 'redis', '~> 3.3', '>= 3.3.3'
 gem 'geocoder'
 gem 'json_pure', '~> 2.1'
 gem 'freegeoip-ruby'
- HEAD
+
 gem 'devise', '~> 4.4', '>= 4.4.3'
 gem 'jquery-ui-rails'
 gem 'jquery-rails'
@@ -73,4 +73,4 @@ gem 'minitest-rails-capybara'
 gem 'rspec-rails'
 #gem 'scout_apm' #monitoring gem for application
 
- master
+

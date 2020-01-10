@@ -1,5 +1,5 @@
 class PagesController < ApplicationController
- HEAD
+ 
   include ApplicationHelper
   require 'range_tree'
   require 'date'
@@ -36,7 +36,7 @@ class PagesController < ApplicationController
       @ip=[39.618008110280655,20.83890170776874]
     end
     puts @ip
- master
+
   	@addresses=Array.new
   	@station_items.each do|station_item|
     	name0=station_item.name

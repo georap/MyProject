@@ -21,7 +21,7 @@
 
       function initMap() {
       	var locations = <%=@addresses%>;
- HEAD
+
       	var center1 = <%=@ip[0]%>;
       	var center2 = <%=@ip[1]%>;
         if(center1==37.9667 && center2==23.7167){
@@ -29,7 +29,7 @@
           center2= 20.840828031368915;
         }
         var authenticate= <%=@user_auth%>;
-master
+
         var userPos = {lat: center1, lng: center2};
         var map = new google.maps.Map(document.getElementById('map'), {
           zoom: 15,
@@ -44,7 +44,7 @@ master
 		//Initialize the Stations from database
         var marker, i;
         for (i = 0; i < locations.length; i++) { 
-HEAD
+
   	    	var latit=locations[i].latitude;
   	    	var long=locations[i].longitude;
   	    	var tmp={lat: latit, lng: long};
@@ -73,7 +73,7 @@ HEAD
             var msg="Νέος Σταθμός Υγρών Καυσίμων;";
             var result=msg.link("http://localhost:3000/stations/new?latlng="+posMarker);
             messageListener(newMarker,result);
- master
+
 
         });
         
