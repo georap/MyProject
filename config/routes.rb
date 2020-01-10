@@ -1,4 +1,8 @@
 Rails.application.routes.draw do
+ HEAD
+
+  resources :vehicles
+ master
   devise_for :users, path: '', path_names: {sign_in:'login', sign_out: 'logout', sign_up: 'register'}
   get 'pages/home'
 
@@ -7,8 +11,11 @@ Rails.application.routes.draw do
   get 'pages/about'
 
   get 'pages/contact'
+  get 'pages/statistics'
 
-  resources :stations
+  resources :stations do
+  	resources :reviews
+  end
 
   root to: 'pages#home'
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html

@@ -1,2 +1,97 @@
-<h1>Pages#UserProfile</h1>
-<p>Find me in app/views/pages/UserProfile.html.erb</p>
+<h1>Πίνακας Γεμισμάτων</h1>
+
+<div id='statistics' style="margin-right: : px">	
+	<%=link_to "Απεικόνιση στατιστικών στοιχείων", vehicles_path%>
+</div>
+<div >		
+	<select id='graph_type' name="graph_type">
+		<option value="none">Επιλογή Γραφήματος</option>
+		<option value="Euro-liter">Τιμή-Λίτρα</option>
+  		<option value="Stations">Απεικόνιση γεμισμάτων στους σταθμούς</option>
+	</select>
+</div>
+
+<div id="liters_price_div" style="display:none;">	
+	<select id='liters_price_vehicle' name="liters_price_vehicle">
+		<% @div_vehicle.each do |name| %>
+			<option ><%= name %></option>
+		<% end %>
+	</select>
+</div>
+
+<div id="vehicle_div" style="display:none;">	
+	<select id='vehicle_type' name="vehicle_type">
+		<% @div_vehicle.each do |name| %>
+			<option ><%= name %></option>
+		<% end %>
+	</select>
+</div>
+
+<div id="graph" style="display:none; height: 400px; margin-top: 2em" >
+	
+	<script> 
+		//console.log($("#graph_type").val());
+		$("#graph_type").change(function (){
+			
+			
+			if($("#graph_type").val()==="Euro-liter"){
+				document.getElementById('graph').style.display = 'none';
+				document.getElementById('liters_price_div').style.display = 'block';
+				document.getElementById('vehicle_div').style.display = 'none';
+				document.getElementById('vehicle_type').value="Επιλογή Οχήματος";
+				$("#liters_price_vehicle").change(function (){
+					var liters_price_vehicle=$('select[name="' + "liters_price_vehicle" + '"]').val();
+					$.ajax({
+						url: '/pages/UserProfile',
+						type: 'GET',
+						data: {"liters_price_vehicle":liters_price_vehicle},
+						success: function(graph){
+							console.log("Hello darkness");
+						},
+						error: function(){
+							console.log("ERROR 1");
+
+						}
+					});	
+				});				
+			}
+			else if($("#graph_type").val()==="Stations"){
+				
+				document.getElementById('graph').style.display = 'none'
+				document.getElementById('vehicle_div').style.display = 'block';
+				document.getElementById('liters_price_div').style.display = 'none';
+				document.getElementById('liters_price_vehicle').value="Επιλογή Οχήματος";
+
+				$("#vehicle_type").change(function (){
+					var vehicle_type=$('select[name="' + "vehicle_type" + '"]').val();
+					$.ajax({
+						url: '/pages/UserProfile',
+						type: 'GET',
+						data: {"vehicle":vehicle_type},
+						success: function(graph){
+							console.log("HIP HIP HOORAY");
+						},
+						error: function(){
+							console.log("ERROR 2");
+
+						}
+					});	
+				});
+
+			}
+			else{
+				document.getElementById('graph').style.display = 'none';
+				document.getElementById('vehicle_div').style.display = 'none';
+				document.getElementById('vehicle_type').value="Επιλογή Οχήματος";
+				document.getElementById('liters_price_div').style.display = 'none';
+				document.getElementById('liters_price_vehicle').value="Επιλογή Οχήματος";
+			}
+
+		});
+
+		
+	</script>
+</div>
+<br>
+<p>Τα οχήματα μου και οι καταχωρήσεις μου</p>
+<%= render 'pages/show_vehicle' %>

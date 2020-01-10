@@ -1,2 +1,240 @@
-<h1>Pages#contact</h1>
-<p>Find me in app/views/pages/contact.html.erb</p>
+
+<h2>Απεικόνιση στατιστικών στοιχείων του πρατηρίου <%=@name_station %></h2>
+
+<p style="width: 400px;">Στατιστικά για το πρατήριο<input type="radio" onclick="javascript:stationOrGeo();" name="yesno" id="stationCheck"></p> 
+ <p style="width: 400px;">Στατιστικά για τη γεωγραφική περιοχή<input type="radio" onclick="javascript:stationOrGeo();" name="yesno" id="geographCheck"></p> 
+<p style="width: 400px;">Στατιστικά για την μάρκα καυσίμου <%=Station.find_by_id(params[:my_station]).company%><input type="radio" onclick="javascript:stationOrGeo();" name="yesno" id="companyCheck"></p> 
+<br>
+<div class="mx-auto" style="width: 450px;">
+
+	<div id='first_fuel_selector' style="display:none;">
+			Επιλέξτε Καύσιμο
+			<select id='fuel_type' name="fuel_type" >
+				<option value=" "> </option>
+				<option value="Πετρέλαιο">Πετρέλαιο</option>
+	  			<option value="Βενζίνη">Βενζίνη</option>
+	  			<option value="Αέριο">Αέριο</option>
+			</select>
+	</div>
+
+	<div id='second_station_selector' style="display:none;">
+			Επιλέξτε Δεύτερο Πρατήριο
+			<select id='second_station'  name="second_station">
+				
+			</select>
+	</div>
+
+
+	<div id='first_fuel_area_selector' style="display:none;">
+			Επιλέξτε Καύσιμο Περιοχής
+			<select id='fuel_area' name="fuel_area" >
+				<option value=" "> </option>
+				<option value="Πετρέλαιο">Πετρέλαιο</option>
+	  			<option value="Βενζίνη">Βενζίνη</option>
+	  			<option value="Αέριο">Αέριο</option>
+			</select>
+	</div>
+
+	<div id='second_area_selector' style="display:none;">
+			Επιλέξτε Δεύτερη Περιοχή
+			<select id='second_area' name="second_area">
+						
+			</select>
+	</div>
+
+	<div id='first_fuel_company_selector' style="display:none;">
+			Επιλέξτε Καύσιμο
+			<select id='fuel_company' name="fuel_company" >
+				<option value=" "> </option>
+				<option value="Πετρέλαιο">Πετρέλαιο</option>
+	  			<option value="Βενζίνη">Βενζίνη</option>
+	  			<option value="Αέριο">Αέριο</option>
+			</select>
+	</div>
+
+	<div id='second_company_selector' style="display:none;">
+			Επιλέξτε Δεύτερη Eταιρεία 
+			<select id='second_company' name="second_company">
+						
+			</select>
+	</div>
+</div>
+<!--<button id="Search_button" type="button" class="btn btn-primary">Αναζήτηση</button>-->
+<br>
+<div id='statistics' style="visibility:  hidden; min-width: 400px; height: 400px; margin: 0 auto">
+
+
+</div>
+<br>	
+
+<div id='error' style="visibility:  hidden; ">
+	<div id="notfound">
+		<div class="notfound">
+			<div class="notfound-404">
+				<h1>4<span></span>4</h1>
+			</div>
+			<h2>Δυστυχως</h2>
+			<p id='error_message'> </p>
+			
+		</div>
+	</div>	
+</div>
+
+<div id='second_graph_div' style="visibility:  hidden; min-width: 400px; height: 400px; margin: 0 auto">
+
+</div>
+
+<script>
+	//statistics.style.visibility='hidden'
+	//document.getElementById("Search_button").addEventListener("click", Search);
+	function stationOrGeo(){
+		document.getElementById('second_graph_div').style.visibility='hidden';
+		document.getElementById('statistics').style.visibility='hidden';
+		document.getElementById('error').style.visibility='hidden';
+		if (document.getElementById('stationCheck').checked) {
+			document.getElementById('first_fuel_selector').style.display='block';
+			document.getElementById('first_fuel_area_selector').style.display='none';
+			document.getElementById('second_area_selector').style.display='none';
+			document.getElementById('first_fuel_company_selector').style.display='none';
+			document.getElementById('second_company_selector').style.display='none';
+			document.getElementById('fuel_area').value = " ";
+			document.getElementById('second_area').value = " ";
+			document.getElementById('fuel_company').value = " ";
+			document.getElementById('second_company').value = " ";
+			//document.getElementById('second_graph_div').style.visibility='hidden';
+			//document.getElementById('statistics').style.visibility='hidden';
+
+		}
+		else if(document.getElementById('geographCheck').checked){
+			document.getElementById('first_fuel_selector').style.display='none';
+			document.getElementById('second_station_selector').style.display='none';
+			document.getElementById('first_fuel_area_selector').style.display='block';
+			document.getElementById('first_fuel_company_selector').style.display='none';
+			document.getElementById('second_company_selector').style.display='none';
+			document.getElementById('fuel_type').value = " ";
+			document.getElementById('second_station').value = " ";
+			document.getElementById('fuel_company').value = " ";
+			document.getElementById('second_company').value = " ";
+			//document.getElementById('second_graph_div').style.visibility='hidden';
+			//document.getElementById('statistics').style.visibility='hidden';
+		}
+		else if(document.getElementById('companyCheck').checked){
+			document.getElementById('first_fuel_selector').style.display='none';
+			document.getElementById('second_station_selector').style.display='none';
+			document.getElementById('first_fuel_area_selector').style.display='none';
+			document.getElementById('second_area_selector').style.display='none';
+			document.getElementById('first_fuel_company_selector').style.display='block';
+			document.getElementById('fuel_area').value = " ";
+			document.getElementById('second_area').value = " ";
+			document.getElementById('fuel_type').value = " ";
+			document.getElementById('second_station').value = " ";
+
+		}
+
+	}
+	//station
+	$("#fuel_type").change(function (){
+		fuel_type=$('select[name="' + "fuel_type" + '"]').val();
+		$.ajax({
+      		url: '/pages/contact',
+      		type: 'GET',
+      		data: {"fuel_type": fuel_type, "my_station": <%=params[:my_station]%>},
+      		success: function(graph){
+      			console.log("success PRWTO"); 
+      			//value change for the second station
+      			document.getElementById('second_station').value = " ";
+      			document.getElementById('second_station_selector').style.display = 'block';
+      			//ajax call if user choose second station from selector
+				$("#second_station").change(function (){
+					var second_station=$('select[name="' + "second_station" + '"]').val();
+					var second_station_id=stations_ids[second_station];
+					//second_station= stations[second_station];
+					$.ajax({
+						url: '/pages/contact',
+						type: 'GET',
+						data: {"fuel_type": fuel_type,"second_station": second_station_id,"my_station": <%=params[:my_station]%>},
+						success: function(graph){
+							 console.log("success DEUTERO");
+							 //value change for the first station
+  							document.getElementById('fuel_type').value = " ";
+  							document.getElementById('second_station_selector').style.display = 'none';
+						}
+					});
+				});
+      		}
+    	});
+
+	});
+	//area
+	$("#fuel_area").change(function (){
+		fuel_area=$('select[name="' + "fuel_area" + '"]').val();
+		
+		$.ajax({
+						url: '/pages/contact',
+						type: 'GET',
+						data: {"fuel_area": fuel_area, "my_station": <%=params[:my_station]%>},
+						//dataType: 'script',
+						success: function(graph){
+							//value change for the second area
+      						document.getElementById('second_area').value = " ";
+							document.getElementById('second_area_selector').style.display = 'block';
+							console.log("success TRITO");
+							$("#second_area").change(function (){
+								var second_area=$('select[name="' + "second_area" + '"]').val();
+								second_area= areas[second_area];
+								$.ajax({
+									url: '/pages/contact',
+									type: 'GET',
+									data: {"fuel_area": fuel_area,"second_area": second_area,"my_station": <%=params[:my_station]%>},
+									success: function(graph){
+										//value change for the first area
+      									document.getElementById('fuel_area').value = " ";
+										 console.log("success TETARTO");
+										 document.getElementById('second_area_selector').style.display = 'none';  			
+									}
+								});
+							});
+						},
+						error: function(){
+							console.log("ERROR 3");
+
+						}
+					});
+	});
+	//company
+	$("#fuel_company").change(function (){
+		fuel_company=$('select[name="' + "fuel_company" + '"]').val();
+		$.ajax({
+      		url: '/pages/contact',
+      		type: 'GET',
+      		data: {"fuel_company": fuel_company, "my_station": <%=params[:my_station]%>},
+      		success: function(graph){
+      			console.log("success PEMPTO"); 
+      			//value change for the second station
+      			document.getElementById('fuel_company').value = " ";
+      			document.getElementById('second_company_selector').style.display = 'block';
+      			//ajax call if user choose second station from selector
+				$("#second_company").change(function (){
+					var second_company=$('select[name="' + "second_company" + '"]').val();
+					second_company= companies[second_company];
+					$.ajax({
+						url: '/pages/contact',
+						type: 'GET',
+						data: {"fuel_company": fuel_company,"second_company": second_company,"my_station": <%=params[:my_station]%>},
+						success: function(graph){
+							 console.log("success EKTO");
+							 //value change for the first station
+  							document.getElementById('fuel_company').value = " ";
+  							document.getElementById('second_company_selector').style.display = 'none';
+						},
+						error: function(){
+							console.log("ERROR 6");
+
+						}
+					});
+				});
+      		}
+    	});
+	});
+</script>
+

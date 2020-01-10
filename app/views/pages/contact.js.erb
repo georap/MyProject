@@ -1,0 +1,384 @@
+//var message=<%#=@message%>;
+//console.log("EEEEEEEEEEEEEE"+message);
+
+//put stations or geograph_locations in second_station selector
+
+
+
+var flagFront=<%=@flag_JS%>;
+console.log(flagFront);
+if(flagFront==1){
+	var stations=<%=@prathrio%>;
+	var stations_ids=<%=@stations_ids%>;
+	for (i=0;i<stations.length;i++){
+		console.log(stations[i]);
+		var secondStationSelect = document.getElementById("second_station");
+		secondStationSelect.options[secondStationSelect.options.length] = new Option(stations[i], i);
+	
+	}
+}
+else if(flagFront==2){
+	var areas=<%=@geograph_area%>;
+	for (i=0;i<areas.length;i++){
+
+		var secondAreaSelector = document.getElementById("second_area");
+		secondAreaSelector.options[secondAreaSelector.options.length] = new Option(areas[i], i);	
+	}
+
+}
+else if(flagFront==3){
+	var companies=<%=@company_selector%>;
+	console.log(companies);
+	for (i=0;i<companies.length;i++){
+
+		var secondCompanySelector = document.getElementById("second_company");
+		secondCompanySelector.options[secondCompanySelector.options.length] = new Option(companies[i], i);	
+	}
+
+}
+removeDoubleElements("second_station");
+removeDoubleElements("second_area_selector");
+removeDoubleElements("second_company");
+var firstName,secondName;
+
+
+	
+
+	var date=<%=@graph_date%>;
+	var katanalwsh=<%=@katanalwsh_pinakas%>;
+	console.log(katanalwsh);
+	console.log(date);
+	var series=[];
+	//removeA(katanalwsh, -1);
+	console.log(katanalwsh);
+	var pivot=0;
+	firstName=<%=@first_name%>;
+
+if(date.length>1){
+	error.style.visibility='hidden';
+	for (i=0;i<katanalwsh.length;i++){
+  		var priorDate= new Date(date[i]).getTime()+7000000;
+		priorDate= new Date(priorDate);
+		var postDate= new Date(date[i+1]).getTime()+7000000;
+		postDate= new Date(postDate);
+		if(katanalwsh[i]!=-1){
+			
+	            series.push({
+	            //date first
+	            x:new Date(date[i]).getTime()+7000000,
+	            //date last
+	            x2:new Date(date[i+1]).getTime()+7000000,
+	            //katanalwsh
+	            y:katanalwsh[i],
+	            myData: firstName+ ', Date: '+ priorDate+' - '+postDate+' = '+katanalwsh[i].toFixed(2),
+	            partialFill:  katanalwsh[i].toFixed(2),  
+	            color:'blue'          
+	            });
+	         	
+	         	//pivot+=2;
+	    }             
+	}
+
+	var firstTitle=<%=@title_graph%>;
+	console.log(firstTitle);
+	    //Highcharts.getOptions().colors = ['blue']; 
+
+	 
+	    statistics.style.visibility='visible';  
+		Highcharts.chart('statistics', {
+			chart: {
+			    type: 'spline',
+			    zoomType: 'xy'
+			},
+			title: {
+			    text: firstTitle
+			},
+			rangeSelector:{
+                enabled:true
+            },
+			xAxis: {
+			    type: 'datetime',
+			    title: {
+					text: 'Χρόνος',
+					style: {
+		                color: 'black'
+		        	}
+				}
+		   },
+			yAxis: {
+				title: {
+				    text: 'Κατανάλωση (lt/100 km)',
+				    style: {
+	                	color: 'black'
+	            	}
+				},
+				reversed: false
+			},
+			legend:{
+				align: 'right',
+		        x: -30,
+		        verticalAlign: 'top',
+		        y: 25,
+		        floating: true,
+		        backgroundColor: (Highcharts.theme && Highcharts.theme.background2) || 'white',
+		        borderColor: '#CCC',
+		        borderWidth: 1,
+		        shadow: false,
+				labelFormatter: function () {
+			            return firstName;
+			    }
+		    },
+		    tooltip: {
+			        formatter: function() {
+			          return '<b>' + this.point.myData + '</b>';
+			}},
+		    plotOptions: {
+		        series: {
+		            label: {
+		                connectorAllowed: false
+		            },
+		            //pointStart: 2010,
+		            marker: {
+		                enabled: true
+		            }
+		        }
+		    },
+			series: [{
+				name: '',
+				// pointPadding: 0,
+			    // groupPadding: 0,
+			    //borderColor: 'gray',
+				pointWidth: 20,
+				data: series,
+				dataLabels: {
+				    enabled: false,
+				    formatter: function() {
+			          var percents = this.point.partialFill;
+			          console.log(percents);
+			          return percents ? percents  + '' : ''
+			      	}
+				}
+				}]
+		});
+
+//second graph at page
+
+var date2=<%=@second_graph%>;	
+
+if(date2.length>1){
+	//statistics.style.visibility='hidden';
+	secondName=<%=@second_name%>;
+	//second_graph_div.style.visibility='visible';
+	error.style.visibility='hidden';
+	var katanalwsh2 = <%=@katanalwsh_pinakas2%>;
+	console.log(katanalwsh2);
+	//removeA(katanalwsh2, -1);
+	console.log(katanalwsh2);
+	var data=[];
+	var newSeries=[];
+	for (i=0;i<katanalwsh.length;i++){
+		var priorDate= new Date(date[i]).getTime()+7000000;
+		priorDate= new Date(priorDate);
+		var postDate= new Date(date[i+1]).getTime()+7000000;
+		postDate= new Date(postDate);   
+		if(katanalwsh[i]!=-1){
+	            newSeries.push({
+
+	            myData: firstName+ ', Date: '+ priorDate+' - '+postDate+' = '+katanalwsh[i].toFixed(2),
+	            //date first
+	            x:new Date(date[i]).getTime()+7000000,
+	            //date last
+	            x2:new Date(date[i+1]).getTime()+7000000,
+	            //katanalwsh
+	            y:katanalwsh[i],
+	            partialFill:  katanalwsh[i].toFixed(2),   
+	            color: 'blue',
+        
+	            });
+		         	
+		         	//pivot+=2;
+	    }
+
+	}
+	var tempForSeries=[];	
+
+	tempForSeries.push({
+		name: firstName,
+				// pointPadding: 0,
+			    // groupPadding: 0,
+			    //borderColor: 'gray',
+				pointWidth: 10,
+				data: newSeries,
+				dataLabels: {
+				    enabled: false,
+				    formatter: function() {
+			          var percents = this.point.partialFill;
+			          console.log(percents);
+			          return percents ? percents  + '' : ''
+			      	}
+				}
+	});
+//setDataToSeries(tempForSeries,newSeries,firstName);
+	var secondDataGraph=[];
+	for (i=0;i<katanalwsh2.length;i++){
+		priorDate= new Date(date2[i]).getTime()+7000000;
+		priorDate= new Date(priorDate);
+		postDate= new Date(date2[i+1]).getTime()+7000000;
+		postDate= new Date(postDate);   
+		if(katanalwsh2[i]!=-1){
+	            secondDataGraph.push({
+
+	            myData: secondName+', Date: '+ priorDate+' - '+postDate+' = '+katanalwsh2[i].toFixed(2),
+	            //date first
+	            x:new Date(date2[i]).getTime()+7000000,
+	            //date last
+	            x2:new Date(date2[i+1]).getTime()+7000000,
+	            //katanalwsh
+	            y:katanalwsh2[i],
+	            partialFill:  katanalwsh2[i].toFixed(2),  
+	            color:'red'          
+	            });
+	         	
+	         	//pivot+=2;
+	    }             
+	}
+
+	setDataToSeries(tempForSeries,secondDataGraph,secondName);
+
+	var secondTitle=<%=@title_graph2%>;
+	console.log(secondTitle);
+
+
+	Highcharts.chart('statistics', {
+			chart: {
+			    type: 'spline',//x-range
+			    zoomType: 'xy'
+			},
+			title: {
+			    text: secondTitle
+			},
+			rangeSelector:{
+                enabled:true
+            },
+			xAxis: {
+			    type: 'datetime',
+			    title: {
+					text: 'Χρόνος',
+					style: {
+		                color: 'black'
+		        	}
+				}
+		   },
+			yAxis: {
+				title: {
+				    text: 'Κατανάλωση (lt/100 km)',
+				    style: {
+	                	color: 'black'
+	            	}
+				},
+				reversed: false
+			},
+			legend: {
+		        align: 'right',
+		        x: -30,
+		        verticalAlign: 'top',
+		        y: 25,
+		        floating: true,
+		        backgroundColor: (Highcharts.theme && Highcharts.theme.background2) || 'white',
+		        borderColor: '#CCC',
+		        borderWidth: 1,
+		        shadow: false,
+		    },
+    		tooltip: {
+			        formatter: function() {
+			          return '<b>' + this.point.myData + '</b>';
+			}},
+			plotOptions: {
+		        series: {
+		            label: {
+		                connectorAllowed: false
+		            },
+		            //pointStart: 2010,
+		            marker: {
+		                enabled: true
+		            }
+		        }
+		    },
+			series:tempForSeries /*data*/
+				/*[{
+				name: '',
+				// pointPadding: 0,
+			    // groupPadding: 0,
+			    //borderColor: 'gray',
+				pointWidth: 10,
+				data: newSeries,
+				dataLabels: {
+				    enabled: true,
+				    formatter: function() {
+			          var percents = this.point.partialFill;
+			          console.log(percents);
+			          return percents ? percents  + '' : ''
+			      	}
+				}
+				}]*/
+		});
+	}
+	else{
+			//second_graph_div.style.visibility='hidden';
+
+			if(<%=@message%>!=-1){
+				document.getElementById("error_message").innerHTML = <%=@message%>;
+				error.style.visibility='visible';
+				console.log("TROUUUUUUUUUUUUUUUUUUUUUUUUUUUBLE")
+			}
+	}
+}
+else{
+		//second_graph_div.style.visibility='hidden';
+		console.log("kalhspera");
+		document.getElementById("error_message").innerHTML = <%=@message%>;
+		error.style.visibility='visible';
+		statistics.style.visibility='hidden';
+}
+function removeDoubleElements(selectID){	
+	var string='#'+selectID+' option';
+	var optionValues =[];
+	$(string).each(function(){
+	   if($.inArray(this.value, optionValues) >-1){
+	      $(this).remove()
+	   }else{
+	      optionValues.push(this.value);
+	   }
+});
+}
+
+function setDataToSeries(array,series,seriesName){
+
+	array.push({
+		name: seriesName,
+				// pointPadding: 0,
+			    // groupPadding: 0,
+			    //borderColor: 'gray',
+				pointWidth: 10,
+				data: secondDataGraph,
+				dataLabels: {
+				    enabled: false,
+				    formatter: function() {
+			          var percents = this.point.partialFill;
+			          console.log(percents);
+			          return percents ? percents  + '' : ''
+			      	}
+				}
+	});
+
+}
+function removeA(arr) {
+    var what, a = arguments, L = a.length, ax;
+    while (L > 1 && arr.length) {
+        what = a[--L];
+        while ((ax= arr.indexOf(what)) !== -1) {
+            arr.splice(ax, 1);
+        }
+    }
+    return arr;
+}

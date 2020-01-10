@@ -1,0 +1,19 @@
+
+  <%= form_for @review, url: '#' do |f| %>
+    <div class="form-group">
+      <%#= f.label :content %>
+      <%= f.text_area :content, class: 'form-control',placeholder: "Γράψτε μία κριτική" %>
+    </div>
+    <% if current_user.is_a? GuestUser %>
+    	<button id="Post_button" type="button" class="btn btn-primary">Δημοσίευση</button>
+    <% else %>
+    	<%= f.submit 'Δημοσίευση Κριτικής', class: 'btn btn-primary' %>
+    <% end %>
+  <% end %>
+
+<script>
+	document.getElementById("Post_button").addEventListener("click", Post);
+	function Post(){
+		alert("Παρακαλούμε για την διασφάλιση της ποιότητας κάντε εγγραφή ή σύνδεση στο σύστημα");
+	}
+</script>

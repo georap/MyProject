@@ -1,0 +1,144 @@
+<%=link_to "Νέα απεικόνιση στατιστικών στοιχείων", vehicles_path%>
+
+<div id="graph" style="height: 300px; margin-top: 2em" >
+	</div>
+
+<div id="kiliometers_div" style="height: 300px; margin-top: 2em" >
+	</div>
+<div id="liters_div" style="height: 300px; margin-top: 2em" >
+	</div>
+<div id="price_div" style="height: 300px; margin-top: 2em" >
+	</div>
+<!--	
+	<div id="euro_liter_graph" style="height: 300px; margin-top: 2em" >
+	</div>
+-->
+<script>
+
+var date=<%=@date_pinakas%>;
+var katanalwsh=<%=@katanalwsh_pinakas%>;
+var title_graph="<%=@titlos%>";
+highchartsGraph(katanalwsh,"graph",title_graph,"Κατανάλωση (lt/100km)");     
+var liters=<%=@litra_pinakas%>;
+var station_list=<%=@prathria_list%>;
+var station_uniq_list=<%=@prathria_uniq_list%>;
+console.log("id prathria ",station_uniq_list);
+var price=<%=@timh_pinakas%>;
+var hichartsArray=<%=@km_graph%>;
+highchartsGraph(hichartsArray,"kiliometers_div","Χιλιόμετρική απόσταση μεταξύ γεμισμάτων","Χιλιόμετρα (Κm)");
+hichartsArray=<%=@litra_pinakas%>;
+highchartsGraph(hichartsArray,"liters_div","Ποσότητα Γεμισμάτων","Λίτρα (lt)");
+highchartsGraph(price,"price_div","Tιμή Καυσίμου Γεμισμάτων",'Ευρώ (€)');
+
+function setDataToArray(first,last){
+    var array=[];
+    for(j=first;j<last;j++){
+        array.push({
+            x:new Date(date[j]),
+            y:katanalwsh[j]              
+        });
+                    
+    } 
+    return array;
+}
+function setRandomColour() {
+          var letters = '0123456789ABCDEF';
+          var color = '#';
+          for (i = 0; i < 6; i++) {
+            color += letters[Math.floor(Math.random() * 16)];
+          }
+          console.log(color);
+          return color;
+}
+function highchartsGraph(array,graphDiv,title,text){
+	(function(H) {
+	    H.wrap(H.Legend.prototype, 'colorizeItem', function(proceed, item, visible) {
+	      var color = item.color;
+	      item.color = item.options.legendColor;
+	      proceed.apply(this, Array.prototype.slice.call(arguments, 1));
+	      item.color = color;
+	    });
+  	}(Highcharts));
+	var tableData=[];
+	var color=setRandomColour();
+	for (i=0;i<katanalwsh.length;i++){
+		var priorDate= new Date(date[i]).getTime()+7000000;
+		priorDate= new Date(priorDate);
+		var postDate= new Date(date[i+1]).getTime()+7000000;
+		postDate= new Date(postDate);                
+            tableData.push({
+	            //date first
+	            x:new Date(date[i]).getTime()+7000000,
+	            //date last
+	            x2:new Date(date[i+1]).getTime()+7000000,
+	            myData:  priorDate+' - '+postDate,
+	            //katanalwsh
+	            y:array[i],
+	            partialFill:  array[i].toFixed(2)  ,
+	            color: color     
+            });
+    }
+    var legentTitle=text.split(" ");
+	Highcharts.chart(graphDiv, {
+		chart: {
+		    type: 'xrange',
+			zoomType: 'xy'
+		},
+		title: {
+		    text: title
+		},
+		rangeSelector:{
+                enabled:true
+            },
+		xAxis: {
+		    type: 'datetime',
+		    title: {
+				text: 'Χρόνος',
+				style: {
+	                color: 'black'
+	        	}
+			}
+	   },
+		yAxis: {
+			title: {
+			    text: text,
+			    style: {
+	                	color: 'black'
+	            }
+			},
+			reversed: false
+		},
+		tooltip: {
+			        formatter: function() {
+			          return '<b>' + this.point.myData + '</b>';
+			}},
+		legend: {
+		        align: 'right',
+		        x: -30,
+		        verticalAlign: 'top',
+		        y: 25,
+		        floating: true,
+		        backgroundColor: (Highcharts.theme && Highcharts.theme.background2) || 'white',
+		        borderColor: '#CCC',
+		        borderWidth: 1,
+		        shadow: false,
+		        labelFormatter: function () {
+		            return legentTitle[0];
+		        }
+		    },
+		series: [{
+		    legendColor:color,
+			pointWidth: 20,
+			data: tableData,
+			dataLabels: {
+			    enabled: true,
+			    formatter: function() {
+		          var percents = this.point.partialFill;
+		          console.log(percents);
+		          return percents ? percents  + '' : ''
+		      	}
+			}
+			}]
+	});
+}
+</script>

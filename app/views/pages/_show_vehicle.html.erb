@@ -1,0 +1,33 @@
+<div>
+<table class="table table-dark">
+<thead>
+
+	
+    		<tr>
+	    		<th scope="col">Όνομα Οχήματος</th>
+		      	<th scope="col">Τιμή(€)</th>
+		    	<th scope="col">Χιλιόμετρα</th>
+		    	<th scope="col">Λίτρα</th>
+		    	<th scope="col">Ημερομηνία</th>
+		    	<th scope="col">Τύπος Καυσίμου</th>
+		    	<th scope="col">Πρατήριο</th>
+		    	<th scope="col">Περιοχή</th>
+	    	</tr>
+</thead>
+			 <tbody>
+			 	<%@vehicle=@vehicle.where(user_id: current_user.id).order(:fuel_date)%>
+			  <% @vehicle.each do|vehicle| %>
+			    <tr>
+				<td><%= vehicle.name %></td>
+			   	<td><%= vehicle.price %></td>
+				<td><%= vehicle.kilometers %></td>
+				<td><%= vehicle.liters %></td>
+				<td><%= vehicle.fuel_date.strftime("%d/%m/%Y") %></td>
+				<td><%= vehicle.fuel_type %></td>
+				<td><%= Station.find_by_id(vehicle.station_id).name %></td>
+				<td><%= vehicle.area %></td>
+				<td><%= link_to "Επεξεργασία", edit_vehicle_path(vehicle.id)%></td>
+				<td><%= link_to "Διαγραφή", vehicle, method: :delete, data: { confirm: 'Are you sure?' }%></td></tr>
+			  <% end %>
+			  </tbody>
+</div>

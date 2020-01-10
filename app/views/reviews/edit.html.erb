@@ -1,0 +1,17 @@
+<div class="mx-auto" style="width: 400px;">
+	<h1> Επεξεργασία Κριτικής </h1>
+</div>
+<br>
+<div class="mx-auto" style="width: 200px;">
+	<%= form_for([@review.station, @review]) do |f| %>
+		<div class="field">
+
+			<%= f.text_field :content,placeholder: "Σχόλιο"%>
+		</div>
+		<br>
+		<div class="actions">
+			<%=f.submit 'Δημοσίευση Κριτικής'%>
+		</div>
+
+<%end %>
+</div>

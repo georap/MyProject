@@ -1,5 +1,35 @@
-<h1><%= @station_item.name %></h1>
+ HEAD
+<html>
+<body>
+<div class="bg">
+	<div class="col-sm-8 " >
+		<h1>Πρατήριο: <%= @station_item.name %></h1>
 
-<em>Address:  <%= @station_item.address %></em>
-<p>Latitde:  <%= @station_item.latitude %></p>
-<p>Longitude:  <%= @station_item.longitude %></p>
+		<p><em>Διεύθυνση:  <%= @station_item.address %></em></p>
+		<% if (!@station_item.company.nil?) %>
+			<p><em>Εταιρεία Καυσίμου:  <%= @station_item.company %></em></p>
+		<% end%>
+		<% unless current_user.is_a? GuestUser %>
+				
+				<%= link_to '<button class="btn btn-primary mr-5" >Bάλατε Καύσιμα σε αυτόν τον σταθμό;</button>'.html_safe, new_vehicle_path(:my_station => @station_item)%>
+				
+		<% end%>
+		<%= link_to '<button class="btn btn-primary mr-5" >Στατιστικά Στοιχεία Σταθμού</button>'.html_safe, pages_contact_path(:my_station => @station_item,:location => @station_item.address)%>
+		<br>
+		<br>
+		<!-- reviews form-->
+		<%= render 'reviews/review_form' %>
+
+		<br>
+		<div id="above">
+	 	</div>
+	 	<div id="reviews" data-station-id="<%= @station_item.id%>">
+
+			<%=render @station_item.reviews.order(created_at: :desc) %>
+		</div>
+
+	</div>
+</div>
+</body>
+</html>
+ master

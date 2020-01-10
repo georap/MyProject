@@ -6,12 +6,21 @@
         </div>
 
         <div class="col-md-10">
+          
           <div>
             <%= review.content %>
           </div>
 
           <div class="review-attribution">
             Review posted by <span class="review-name"><%= review.user.first_name %></span> <%= distance_of_time_in_words(review.created_at, Time.now) %> ago
+          </div>
+          <div class="review-links">
+            <% if(@flag==review.user_id)|| (@admin==true)%>
+              <%= link_to 'Διαγραφή', [review.station, review],
+                  method: :delete, class: "button is-danger", data: { confirm: 'Are you sure?' } %>
+              <%= link_to 'Επεξεργασία',  edit_station_review_path(review.station,review.id)%>
+            <%end%>
+          
           </div>
         </div>
       </div>

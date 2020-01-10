@@ -13,3 +13,16 @@
  *= require_tree .
  *= require_self
  */
+ HEAD
+@import "bootstrap";
+
+/*
+custom styles*/
+.card-block{
+	color:black;
+	text-align: left;
+}
+.auth-links a{
+	color:blue;
+}
+ master

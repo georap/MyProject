@@ -1,0 +1,58 @@
+<div class=vehicles-bg>
+<div class="mx-auto" style="width: 650px;">
+<h1> Επεξεργασία Εγγραφής Οχήματος </h1>
+</div>
+<br>
+<div class="mx-auto" style="width: 300px;">
+<%= form_for(@vehicle) do |f| %>
+	<div class="field">
+		<%=f.label :Μάρκα%>
+		<%= f.select :brand,@car_list%>
+	</div>
+
+	<div class="field">
+
+	<%= f.text_field :model,:required => true,placeholder: "Μοντέλο"%>
+	</div>
+
+	<div class="field">
+
+		<%= f.text_field :price,:required => true,placeholder: "Τιμή"%>
+	</div>
+
+	<div class="field">
+
+	<%= f.text_field :kilometers,:required => true,placeholder: "Χιλιόμετρα"%>
+	</div>
+
+	<div class="field">
+
+	<%= f.text_field :liters,:required => true,placeholder: "Λίτρα"%>
+	</div>
+
+	<div class="field">
+
+
+	<%= f.text_field :fuel_date,:required => true,placeholder: "Ημερομηνία dd/mm/yyyy"%>
+	</div>
+
+	<div class="field">
+
+	<%= f.select :fuel_type,["Βενζίνη", "Πετρέλαιο", "Αέριο"]%>
+	</div>
+
+	<div class="field">
+
+	<%= f.text_field :area%>
+	</div>
+	<%= f.hidden_field :user_id %>
+	<%= f.hidden_field :station_id %>
+	
+	<br>
+	<div class="actions">
+	<%=f.submit 'Καταχώρηση Εγγραφής'%>
+	</div>
+
+<%end %>
+</div>
+</div>

@@ -1,0 +1,43 @@
+<script>
+    if(<%=@case%>==0||<%=@case%>==1||<%=@case%>==4){
+        var date=<%=@date_pinakas%>;
+        var katanalwsh=<%=@katanalwsh_pinakas%>;
+        //var title_graph="Κατανάλωση του οχήματος για το μήνα <%=@array[0]%>";
+        var title_graph="<%=@titlos%>";
+        
+        var series = [];
+        for (i=0;i<katanalwsh.length;i++){               
+            series.push({
+            //date  
+            x:new Date(date[i]),
+            //katanalwsh
+            y:katanalwsh[i]              
+            });
+        }
+    }
+    console.log(series);
+    Highcharts.chart('graph', {
+        chart:{
+           type:'line'
+        },
+        title: {
+            text: title_graph
+        },
+        xAxis: {
+            type: 'datetime'
+        },
+
+        yAxis: {
+            title: {
+                text: 'Λίτρα ανά 100 Χιλιόμετρα'
+            }
+        },
+
+        series: [{
+            name: 'Κατανάλωση Καυσίμου',
+          
+            data: series
+        }],
+    });
+
+</script>

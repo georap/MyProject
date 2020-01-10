@@ -1,6 +1,7 @@
 module LocationFinder
 	extend ActiveSupport::Concern
 	
+=begin 
 	def location
 	  if params[:location].blank?
 	    if Rails.env.test? || Rails.env.development?
@@ -13,5 +14,6 @@ module LocationFinder
 	    @location ||= Geocoder.search(params[:location]).first
 	    @location
 	  end
-	end
+	end 
+=end
 end

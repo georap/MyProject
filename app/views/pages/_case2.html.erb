@@ -1,0 +1,187 @@
+<%=link_to "Νέα απεικόνιση στατιστικών στοιχείων", vehicles_path%>
+<br>
+<div id="graph" >
+
+</div>
+<div id="second_graph" >
+</div>    
+<script >
+
+    var date=<%=@graph_date%>;
+    var katanalwsh=<%=@katanalwsh_pinakas%>;
+    var katanalwsh2 = <%=@katanalwsh_pinakas2%>;
+    var date2=<%=@second_graph%>;
+    var title_graph=<%=@title%>;
+    var data=[];
+    var newSeries=[];
+    var firstBrand=<%=@first_brand%>;
+    var secondBrand=<%=@second_brand%>;
+    console.log(secondBrand)
+    for (i=0;i<katanalwsh.length;i++){
+        var priorDate= new Date(date[i]).getTime()+7000000;
+        priorDate= new Date(priorDate);
+        var postDate= new Date(date[i+1]).getTime()+7000000;
+        postDate= new Date(postDate);   
+        if(katanalwsh[i]!=-1){
+                newSeries.push({
+
+                myData: firstBrand+ ', Date: '+ priorDate+' - '+postDate+' = '+katanalwsh[i].toFixed(2),
+                //date first
+                x:new Date(date[i]).getTime()+7000000,
+                //date last
+                x2:new Date(date[i+1]).getTime()+7000000,
+                //katanalwsh
+                y:katanalwsh[i],
+                partialFill:  katanalwsh[i].toFixed(2),   
+                color: 'blue',
+        
+                });
+                    
+                    //pivot+=2;
+        }
+
+    }
+
+    var tempForSeries=[];   
+
+    tempForSeries.push({
+        name: firstBrand,
+                // pointPadding: 0,
+                // groupPadding: 0,
+                //borderColor: 'gray',
+                pointWidth: 10,
+                data: newSeries,
+                dataLabels: {
+                    enabled: false,
+                    formatter: function() {
+                      var percents = this.point.partialFill;
+                      console.log(percents);
+                      return percents ? percents  + '' : ''
+                    }
+                }
+    });
+
+var secondDataGraph=[];
+for (i=0;i<katanalwsh2.length;i++){
+        priorDate= new Date(date2[i]).getTime()+7000000;
+        priorDate= new Date(priorDate);
+        postDate= new Date(date2[i+1]).getTime()+7000000;
+        postDate= new Date(postDate);   
+        if(katanalwsh2[i]!=-1){
+                secondDataGraph.push({
+
+                myData: secondBrand+', Date: '+ priorDate+' - '+postDate+' = '+katanalwsh2[i].toFixed(2),
+                //date first
+                x:new Date(date2[i]).getTime()+7000000,
+                //date last
+                x2:new Date(date2[i+1]).getTime()+7000000,
+                //katanalwsh
+                y:katanalwsh2[i],
+                partialFill:  katanalwsh2[i].toFixed(2),  
+                color:'red'          
+                });
+                
+                //pivot+=2;
+        }             
+    }
+setDataToSeries(tempForSeries,secondDataGraph,secondBrand);
+
+
+
+
+
+        Highcharts.chart('graph', {
+            chart: {
+                type: 'spline',//x-range
+                zoomType: 'xy'
+            },
+            title: {
+                text:title_graph
+            },
+            rangeSelector:{
+                enabled:true
+            },
+            xAxis: {
+                type: 'datetime',
+                title: {
+                    text: 'Χρόνος',
+                    style: {
+                        color: 'black'
+                    }
+                }
+           },
+            yAxis: {
+                title: {
+                    text: 'Κατανάλωση (lt/100 km)',
+                    style: {
+                        color: 'black'
+                    }
+                },
+                reversed: false
+            },
+            legend: {
+                align: 'right',
+                x: -30,
+                verticalAlign: 'top',
+                y: 25,
+                floating: true,
+                backgroundColor: (Highcharts.theme && Highcharts.theme.background2) || 'white',
+                borderColor: '#CCC',
+                borderWidth: 1,
+                shadow: false,
+            },
+            tooltip: {
+                    formatter: function() {
+                      return '<b>' + this.point.myData + '</b>';
+            }},
+            plotOptions: {
+                series: {
+                    label: {
+                        connectorAllowed: false
+                    },
+                    //pointStart: 2010,
+                    marker: {
+                        enabled: true
+                    }
+                }
+            },
+            series:tempForSeries /*data*/
+                /*[{
+                name: '',
+                // pointPadding: 0,
+                // groupPadding: 0,
+                //borderColor: 'gray',
+                pointWidth: 10,
+                data: newSeries,
+                dataLabels: {
+                    enabled: true,
+                    formatter: function() {
+                      var percents = this.point.partialFill;
+                      console.log(percents);
+                      return percents ? percents  + '' : ''
+                    }
+                }
+                }]*/
+        });
+
+function setDataToSeries(array,series,seriesName){
+
+    array.push({
+        name: seriesName,
+                // pointPadding: 0,
+                // groupPadding: 0,
+                //borderColor: 'gray',
+                pointWidth: 10,
+                data: secondDataGraph,
+                dataLabels: {
+                    enabled: false,
+                    formatter: function() {
+                      var percents = this.point.partialFill;
+                      console.log(percents);
+                      return percents ? percents  + '' : ''
+                    }
+                }
+    });
+
+}
+</script>

@@ -1,0 +1,57 @@
+<div class=vehicles-bg>
+<div class="mx-auto" style="width: 800px;">
+<h3> Γέμισμα Οχήματος με καύσιμο - Καταχώρηση Εγγραφής </h3>
+</div>
+<br>
+<div class="mx-auto" style="width: 300px;">
+
+<%= form_for(@vehicle) do |f| %>
+	<div class="field">
+	<%=f.label :Μάρκα%>
+	<%= f.select :brand,@car_list%>
+	</div>
+
+	<div class="field">
+
+	<%= f.text_field :model,:required => true,placeholder: "Μοντέλο"%>
+	</div>
+
+	<div class="field">
+
+		<%= f.text_field :price,:required => true,placeholder: "Τιμή"%>
+	</div>
+
+	<div class="field">
+
+	<%= f.text_field :kilometers,:required => true,placeholder: "Χιλιόμετρα"%>
+	</div>
+
+	<div class="field">
+
+	<%= f.text_field :liters,:required => true,placeholder: "Λίτρα"%>
+	</div>
+
+	<div class="field">
+
+	<%= f.text_field :fuel_date,:required => true,placeholder: "Ημερομηνία dd/mm/yyyy"%>
+	</div>
+
+	<div class="field">
+
+	<%= f.select :fuel_type,["Βενζίνη", "Πετρέλαιο", "Αέριο"]%>
+	</div>
+
+	<div class="field">
+
+	<%= f.text_field :area,:value => @area,:readonly => true%>
+	</div>
+	<%= f.hidden_field :user_id, :value => current_user.id %>
+	<%= f.hidden_field :station_id, :value => params[:my_station] %>
+	<br>
+	<div class="actions">
+	<%=f.submit 'Δημιουργία Εγγραφής'%>
+	</div>
+
+<%end %>
+</div>
+</div>

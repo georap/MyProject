@@ -45,6 +45,7 @@ group :development do
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   gem 'spring'
   gem 'spring-watcher-listen', '~> 2.0.0'
+  gem 'rails-erd'
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
@@ -54,4 +55,22 @@ gem 'redis', '~> 3.3', '>= 3.3.3'
 gem 'geocoder'
 gem 'json_pure', '~> 2.1'
 gem 'freegeoip-ruby'
+ HEAD
 gem 'devise', '~> 4.4', '>= 4.4.3'
+gem 'jquery-ui-rails'
+gem 'jquery-rails'
+gem 'bootstrap', '~> 4.0.0.alpha6'
+gem 'popper_js'
+gem 'cocoon', '~> 1.2', '>= 1.2.11'
+gem 'petergate', '~> 1.8', '>= 1.8.1'
+gem 'chartkick', '~> 2.3', '>= 2.3.5'
+gem 'highcharts-rails', '~> 6.0', '>= 6.0.3'
+gem 'range_tree', '~> 0.0.2'
+gem 'highstock-rails', '~> 5.0', '>= 5.0.11'
+gem 'rails-perftest'
+gem 'ruby-prof'
+gem 'minitest-rails-capybara'
+gem 'rspec-rails'
+#gem 'scout_apm' #monitoring gem for application
+
+ master

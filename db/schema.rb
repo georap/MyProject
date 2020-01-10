@@ -10,7 +10,9 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180414142630) do
+ HEAD
+ActiveRecord::Schema.define(version: 20181227130210) do
+ master
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -22,6 +24,8 @@ ActiveRecord::Schema.define(version: 20180414142630) do
     t.float "longitude"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "area"
+    t.string "company"
   end
 
   create_table "users", force: :cascade do |t|
@@ -42,4 +46,28 @@ ActiveRecord::Schema.define(version: 20180414142630) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
+ HEAD
+  create_table "vehicles", force: :cascade do |t|
+    t.string "name"
+    t.integer "kilometers"
+    t.float "liters"
+    t.date "fuel_date"
+    t.string "fuel_type"
+    t.string "area"
+    t.bigint "user_id"
+    t.bigint "station_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.float "price"
+    t.string "brand"
+    t.string "model"
+    t.index ["station_id"], name: "index_vehicles_on_station_id"
+    t.index ["user_id"], name: "index_vehicles_on_user_id"
+  end
+
+  add_foreign_key "reviews", "stations"
+  add_foreign_key "reviews", "users"
+  add_foreign_key "vehicles", "stations"
+  add_foreign_key "vehicles", "users"
+ master
 end
