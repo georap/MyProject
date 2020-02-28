@@ -112,7 +112,7 @@ GEM
       activerecord (> 4.0.0)
     pg (1.0.0)
     popper_js (1.12.9)
-    puma (3.11.3)
+    puma (3.12.3)
     rack (2.0.4)
     rack-test (1.0.0)
       rack (>= 1.0, < 3)
@@ -225,7 +225,7 @@ DEPENDENCIES
   petergate (~> 1.8, >= 1.8.1)
   pg (>= 0.18, < 2.0)
   popper_js
-  puma (~> 3.7)
+  puma (~> 3.12)
   rails (~> 5.1.6)
   rails-erd
   range_tree (~> 0.0.2)
