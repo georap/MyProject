@@ -49,7 +49,7 @@ GEM
       sass (>= 3.5.2)
     builder (3.2.3)
     byebug (10.0.2)
-    chartkick (2.3.5)
+    chartkick (3.4.0)
     choice (0.2.0)
     cocoon (1.2.11)
     coffee-rails (4.2.2)
@@ -209,7 +209,7 @@ PLATFORMS
 DEPENDENCIES
   bootstrap (~> 4.0.0.alpha6)
   byebug
-  chartkick (~> 2.3, >= 2.3.5)
+  chartkick (~> 3.4)
   cocoon (~> 1.2, >= 1.2.11)
   coffee-rails (~> 4.2)
   devise (~> 4.4, >= 4.4.3)
